@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2005
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomMate.Database", "RoomMate.Database\RoomMate.Database.csproj", "{72A3FD08-7D13-494B-B85D-E5EBDDB326C1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomMate.Repository", "RoomMate.Repository\RoomMate.Repository.csproj", "{7B2090A7-EC6E-44D6-A281-2A57E84D9341}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomMate.Domain", "RoomMate.Domain\RoomMate.Domain.csproj", "{3525557C-C118-44A9-96EB-B09AFF3D77F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomMate.Api", "RoomMate.Api\RoomMate.Api.csproj", "{989E3D0C-C223-4FA1-9421-6658F23A5EF3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomMate.Api.Test", "RoomMate.Api.Test\RoomMate.Api.Test.csproj", "{3FD93E44-9844-4D4F-9986-DF2C7D275820}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomMate.Domain.Test", "RoomMate.Domain.Test\RoomMate.Domain.Test.csproj", "{41726777-DBD2-493D-A5CD-8A440E3081A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{72A3FD08-7D13-494B-B85D-E5EBDDB326C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72A3FD08-7D13-494B-B85D-E5EBDDB326C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72A3FD08-7D13-494B-B85D-E5EBDDB326C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72A3FD08-7D13-494B-B85D-E5EBDDB326C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B2090A7-EC6E-44D6-A281-2A57E84D9341}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B2090A7-EC6E-44D6-A281-2A57E84D9341}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B2090A7-EC6E-44D6-A281-2A57E84D9341}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B2090A7-EC6E-44D6-A281-2A57E84D9341}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3525557C-C118-44A9-96EB-B09AFF3D77F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3525557C-C118-44A9-96EB-B09AFF3D77F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3525557C-C118-44A9-96EB-B09AFF3D77F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3525557C-C118-44A9-96EB-B09AFF3D77F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{989E3D0C-C223-4FA1-9421-6658F23A5EF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{989E3D0C-C223-4FA1-9421-6658F23A5EF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{989E3D0C-C223-4FA1-9421-6658F23A5EF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{989E3D0C-C223-4FA1-9421-6658F23A5EF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FD93E44-9844-4D4F-9986-DF2C7D275820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FD93E44-9844-4D4F-9986-DF2C7D275820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FD93E44-9844-4D4F-9986-DF2C7D275820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FD93E44-9844-4D4F-9986-DF2C7D275820}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41726777-DBD2-493D-A5CD-8A440E3081A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41726777-DBD2-493D-A5CD-8A440E3081A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41726777-DBD2-493D-A5CD-8A440E3081A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41726777-DBD2-493D-A5CD-8A440E3081A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1410D0FA-E36D-439B-BE2F-8CDE99C7D74A}
+	EndGlobalSection
+EndGlobal
