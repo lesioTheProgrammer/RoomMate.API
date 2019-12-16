@@ -19,7 +19,6 @@ namespace RoomMate.Api.Controllers
         {
             this.loginService = loginService;
             this.registerService = registerService;
-
         }
 
 
@@ -29,10 +28,11 @@ namespace RoomMate.Api.Controllers
         [HttpPost]
         public IActionResult Register([FromBody]RegisterDto registerDto)
         {
-            if (registerService.RegisterUser(registerDto) && registerDto.IsValid())
+            if (registerDto.IsValid() && registerService.RegisterUser(registerDto))
             {
-                return this.Ok();
+                return this.Ok(true);
             }
+            //zwracac ok false
             return this.BadRequest();
         }
 

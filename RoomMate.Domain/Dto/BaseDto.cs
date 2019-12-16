@@ -8,11 +8,11 @@ namespace RoomMate.Domain.Dto
 
         public bool Active { get; set; }
 
-        public int CreatedBy { get; set; }
+        public int? CreatedBy { get; set; } = null;
 
         public DateTime CreatedDate { get; set; }
 
-        public int ModificatedBy { get; set; }
+        public int? ModificatedBy { get; set; } = null;
 
         public DateTime ModificatedDate { get; set; }
 

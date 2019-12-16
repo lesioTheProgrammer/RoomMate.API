@@ -18,53 +18,51 @@ namespace RoomMate.Domain.Services.Implements
         }
 
 
-
         public bool RegisterUser(RegisterDto registerDto)
         {
-
+            //check unique values of login and email
+            if (IsUserTaken(registerDto.Login, registerDto.Email))
+            {
+                return false;
+            }
             //tu mielonka dto przekazuje z register dto i potem wale tym do repo?
             //w repo jeszcze robie czysty obiekt do inserta do tabeli
-
-            bool isRegistered = false;
             //crypting password
             var crypto = new SimpleCrypto.PBKDF2();
-            var encrpPass = crypto.Compute(password); //pass
-            var salt = crypto.Salt; //salt
-
-            //check unique values of login and email
-
-
-
-
+            registerDto.Password = crypto.Compute(registerDto.Password); //crypted pass
+            registerDto.PasswordSalt = crypto.Salt; //salt
+            
+            //add missing parts of user to registerDto and pass it to the convertToTarget
+            registerDto.Active = true;
+            registerDto.Code = ""; //usefull on reset password only
+            registerDto.CreatedBy = null;
+            registerDto.CreatedDate = DateTime.Now;
+            registerDto.ModificatedDate = DateTime.Now;
+            registerDto.ModificatedBy = null;
 
             //add user to db
             try
             {
                 var user = this.ConvertToTarget(registerDto);
                 this._userRepository.InsertOrUpdate(user);
+                return true;
+
             }
             catch (Exception ex)
             {
                 return false;
             }
-
-
-
-
-            return isRegistered;
         }
 
 
 
-        public bool CheckAvialabilityOfLoginEmail(string login, string email)
+        public bool IsUserTaken(string login, string email)
         {
-            bool taken = true;
-
+            bool taken = false;
             var user = _userRepository.GetFirst(x => x.Login == login || x.Email == email);
-
-            if (user != null)
+            if (user != null && user.Active == true)
             {
-                taken = false;
+                taken = true;
             }
             return taken;
         }
@@ -73,14 +71,20 @@ namespace RoomMate.Domain.Services.Implements
 
         public User ConvertToTarget(RegisterDto registerDto)
         {
-
-            //add missing parts of user
-
             return new User
             {
-                Active = true,
-                //add more fields here 
-
+                Active = registerDto.Active,
+                Code = registerDto.Code,
+                CreatedDate = registerDto.CreatedDate,
+                CreatedBy = registerDto.CreatedBy,
+                Email = registerDto.Email,
+                Login = registerDto.Login,
+                ModificatedBy = registerDto.ModificatedBy,
+                ModificatedDate = registerDto.ModificatedDate,
+                Name = registerDto.Name,
+                Password = registerDto.Password,
+                PasswordSalt = registerDto.PasswordSalt,
+                Surname = registerDto.Surname
             };
         }
 
