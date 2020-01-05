@@ -18,11 +18,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<LoginComponent>,
-    //trzeba wstrzyknac serwis
     public loginService: UserManagementService,
-    //kolejny serwis zeby przeslac login data do dashboardu?
-    //cookies:
-    public cookie: CookieService
   ) {}
 
   ngOnInit() {}
@@ -30,20 +26,14 @@ export class LoginComponent implements OnInit {
   closeModal(): void {
     this.dialogRef.close();
   }
-  //mam serwis i co tera
-  //wrzucam dto i metode wywoluje tez
+
   login() {
     this.loginService.login(this.loginDto).subscribe(response => {
-      if (response) {
+      if (response.token !== '') {
         this.isLogged = true;
+        localStorage.setItem('login', JSON.stringify(this.loginDto.login));
+        localStorage.setItem("jwt",   JSON.stringify( response.token));
         this.loginEvent.emit(this.isLogged);
-        //login
-        var login = this.loginDto.login;
-        //cookies:
-        this.cookie.set('login', login);
-        //local storage:
-        sessionStorage.setItem('login', JSON.stringify(login));
-        debugger;
         this.closeModal();
         }
       },
@@ -64,6 +54,5 @@ export class LoginComponent implements OnInit {
   //     }
   //   );
   // }
-
 
 }

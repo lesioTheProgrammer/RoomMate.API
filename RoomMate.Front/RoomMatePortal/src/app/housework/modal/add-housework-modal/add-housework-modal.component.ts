@@ -22,7 +22,7 @@ export class AddHouseworkModalComponent implements OnInit {
 
   ngOnInit() {
    //po co dto
-    if(this.data.houseworkDto != null){
+    if(this.data != null && this.data.houseworkDto != null){
       this.houseworkDto = this.data.houseworkDto;
     }
     this.dataLoaded = true;

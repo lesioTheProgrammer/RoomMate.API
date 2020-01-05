@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using RoomMate.Domain.Dto;
 using RoomMate.Domain.Services.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace RoomMate.Api.Controllers
@@ -41,29 +45,15 @@ namespace RoomMate.Api.Controllers
         {
             if (loginService.Login(loginDto.Login, loginDto.Password))
             {
-                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.
-                AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
-
-                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, loginDto.Login));
-                identity.AddClaim(new Claim(ClaimTypes.Name, loginDto.Login));
-
-                var principal = new ClaimsPrincipal(identity);
-
-                var props = new AuthenticationProperties
-                {
-                    AllowRefresh = true,
-                    ExpiresUtc = DateTimeOffset.Now.AddDays(1),
-                    IsPersistent = true
-                };
-
-
-
-
-                await HttpContext.SignInAsync(
-             CookieAuthenticationDefaults.
-                             AuthenticationScheme, principal, props);
-
-                return this.Ok(true);
+                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("StachuLesiuProgramista@345"));
+                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                var tokenOptions = new JwtSecurityToken(
+                    issuer: "http://localhost:59570",
+                    audience: "http://localhost:59570",
+                    claims: new List<Claim>(),
+                    signingCredentials: signinCredentials
+                );
+                return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(tokenOptions) });
             }
             return this.BadRequest();
         }

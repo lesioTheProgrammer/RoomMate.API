@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using RoomMate.Domain;
 using RoomMate.Domain.Services.Implements;
 using RoomMate.Domain.Services.Interfaces;
@@ -14,6 +16,7 @@ using SimpleInjector;
 using SimpleInjector.Integration.AspNetCore.Mvc;
 using SimpleInjector.Lifestyles;
 using System;
+using System.Text;
 
 namespace RoomMate.Api
 {
@@ -30,7 +33,6 @@ namespace RoomMate.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDistributedMemoryCache();
-
             services.AddSession(options =>
             {
                 // Set a short timeout for easy testing.
@@ -40,8 +42,6 @@ namespace RoomMate.Api
                 options.Cookie.IsEssential = true;
             });
 
-
-
             services.AddCors(options => options.AddPolicy("Cors", builder =>
             {
                 builder
@@ -49,34 +49,25 @@ namespace RoomMate.Api
                 .AllowAnyMethod()
                 .AllowAnyHeader();
             }));
-            //login cookies
 
-            //services.AddAuthentication(options => {
-            //    options.DefaultScheme = "Cookies";
-            //}).AddCookie("Cookies", options => {
-            //    options.Cookie.Name = "auth_cookie";
-            //    options.Cookie.SameSite = SameSiteMode.None;
-            //    options.Events = new CookieAuthenticationEvents
-            //    {
-            //        OnRedirectToLogin = redirectContext =>
-            //        {
-            //            redirectContext.HttpContext.Response.StatusCode = 401;
-            //            return Task.CompletedTask;
-            //        }
-            //    };
-            //});
-
-            //^
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie();
-
-
-
-
+            services.AddAuthentication(opt => {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "http://localhost:59570",
+                    ValidAudience = "http://localhost:59570",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("StachuLesiuProgramista@345"))
+                };
+            }); ;
 
             services.AddMvc();
-
 
             IntegrateSimpleInjector(services);
         }
@@ -99,36 +90,14 @@ namespace RoomMate.Api
         // Configure is called after ConfigureServices is called.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //pajet   
-            //if (env.IsDevelopment())
-            //    app.UseDeveloperExceptionPage();
-            //else
-            //    app.UseHsts();
-            //app.UseHttpsRedirection();
-            //app.UseStaticFiles();
-            //app.UseCookiePolicy(new CookiePolicyOptions
-            //{
-            //    MinimumSameSitePolicy = SameSiteMode.Strict,
-            //    HttpOnly = HttpOnlyPolicy.Always,
-            //    Secure = CookieSecurePolicy.Always
-            //});
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
-            //if (env.IsDevelopment())
-            //    app.UseCors(x => x
-            //        .WithOrigins("https://localhost:3000")
-            //        .AllowCredentials()
-            //        .AllowAnyMethod()
-            //        .AllowAnyHeader());
-
-
-            //moje
             InitializeContainer(app);
             container.Verify();
-            //app.UseCors(builder => builder.AllowAnyOrigin());
-
             app.UseCors("Cors");
-            // ASP.NET default stuff here
-            //login cookies
             app.UseCors(policy =>
             {
                 policy.AllowAnyHeader();
@@ -139,22 +108,6 @@ namespace RoomMate.Api
 
             app.UseAuthentication();
 
-            //app.UseCookieAuthentication(new CookieAuthenticationOptions()
-            //{
-            //    AuthenticationScheme = "PutANameHere",
-            //    LoginPath = new PathString("/Account/Login/"),
-            //    AutomaticAuthenticate = true,
-            //    AutomaticChallenge = true
-            //});
-
-            //
-            //login v2 cookies obsolete
-            //app.UseCookieAuthentication(options =>
-            //{
-            //    options.AutomaticAuthenticate = true;
-            //    options.AutomaticChallenge = true;
-            //    options.LoginPath = "/Home/Login";
-            //});
             app.UseSession();
             app.UseMvc();
         }

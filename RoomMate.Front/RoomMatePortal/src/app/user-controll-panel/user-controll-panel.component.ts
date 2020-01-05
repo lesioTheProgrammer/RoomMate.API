@@ -10,32 +10,26 @@ import { PassBetweenComponService } from '../PassBetweenComponService';
   styleUrls: ['./user-controll-panel.component.css']
 })
 export class UserControllPanelComponent implements OnInit {
-  isLoggex: boolean = false;
-  isRegistered: boolean = false;
-  isLoginNamex: string = '';
-
+  isLoggex = false;
+  isRegistered = false;
+  isLoginNamex = '';
 
   constructor(public dialog: MatDialog, private data: PassBetweenComponService) {}
 
   ngOnInit(  ) {
     this.data.currentLoginState.subscribe(isLoggex => this.isLoggex = isLoggex);
-    // this.data.currenLoginName.subscribe(isLoginNamex => this.isLoginNamex = isLoginNamex);
   }
 
   public showLoginField() {
     const dialogRef = this.dialog.open(LoginComponent, {
       width: '1000px'
     });
+
     dialogRef.componentInstance.loginEvent.subscribe(result => {
-      debugger;
       this.isLoggex = result;
-      //ten subskrajb ustawia wartosc islogges (currentLoginState) na result??
       this.data.sendLoginState(this.isLoggex);
-
-
-      // this.data.sendLoginName(this.isLoginNamex);
     });
-    console.log('The dialog was closed');
+
   }
   public showRegisterField() {
     const dialogRef = this.dialog.open(RegisterComponent, {
@@ -43,7 +37,6 @@ export class UserControllPanelComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       this.isRegistered = result;
-      console.log('The dialog was closed');
     });
   }
 }

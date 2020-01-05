@@ -1,36 +1,32 @@
-
-<div *ngIf="isLoggex">
 <div class="card shadow" style="width:49%;">
+  <div class="card-body">
+    <span style="text-align: center">
+      <h4>Zarządzaj</h4>
+    </span>
+    <button class="btn btn-lg btn-dark" (click)="showModalToAdd()">
+      Dodaj
+    </button>
+  </div>
+</div>
+<br>
+
+<div class="row">
+  <div class="card shadow" style="width:48%; margin:10px">
     <div class="card-body">
       <span style="text-align: center">
-        <h4>Zarządzaj</h4>
+        <h4>Sprzątanie</h4>
       </span>
-      <button class="btn btn-lg btn-dark" (click)="showModalToAdd()">
-        Dodaj
-      </button>
-    </div>
-  </div>
-  <br>
-
-  <div class="row">
-    <div class="card shadow" style="width:48%; margin:10px">
-      <div class="card-body">
-        <span style="text-align: center">
-          <h4>Sprzątanie</h4>
-        </span>
-        <app-housework></app-housework>
-      </div>
-    </div>
-
-    <div class="card shadow" style="width:48%; margin:10px">
-      <div class="card-body">
-        <span style="text-align: center">
-          <h4>Zakupy</h4>
-        </span>
-        <app-shopping></app-shopping>
-      </div>
-
+      <app-housework></app-housework>
     </div>
   </div>
 
+  <div class="card shadow" style="width:48%; margin:10px">
+    <div class="card-body">
+      <span style="text-align: center">
+        <h4>Zakupy</h4>
+      </span>
+      <app-shopping></app-shopping>
+    </div>
+
+  </div>
 </div>
