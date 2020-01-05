@@ -1,0 +1,6 @@
+.topbar {
+  width:100%;
+  display: flex;
+  padding: 15px;
+  border-bottom: black solid 1px;
+}

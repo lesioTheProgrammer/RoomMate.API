@@ -1,0 +1,34 @@
+<h1 mat-dialog-title>Dodaj nową akcje</h1>
+<div mat-dialog-content>
+  <div class="mb-3" *ngIf="errorShow">
+    <div class="alert alert-danger" role="alert">
+      <strong>Błąd!</strong> Wystąpił błąd podczas zapisu.
+    </div>
+  </div>
+  <div class="mb-3" >
+    <label for="workType">Typ akcji</label>
+    <select class="form-control" id="workType" [(ngModel)]="houseworkDto.workType">
+      <option value="0">-</option>
+      <option value="1">Sprzątanie</option>
+      <option value="2">Zakupy</option>
+    </select>
+  </div>
+  <div *ngIf="houseworkDto.workType != 0">
+    <div class="mb-3">
+      <label for="houseworkDate">Kiedy</label>
+      <input type="date" id="houseworkDate" class="form-control" [ngModel]="houseworkDto.houseWorkDate | date:'yyyy-MM-dd' ">
+    </div>
+    <div class="mb-3">
+      <label for="description">Opis</label>
+      <input type="text" id="description" class="form-control" [(ngModel)]="houseworkDto.description">
+    </div>
+    <div class="mb-3" *ngIf="houseworkDto.workType == 2">
+      <label for="prices">Koszty</label>
+      <input type="number" id="prices" class="form-control" [(ngModel)]="houseworkDto.prices">
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions style="float:right">
+  <button mat-button (click)="closeModal()">Anuluj</button>
+  <button mat-button cdkFocusInitial (click)="addHousework()">Dodaj</button>
+</div>

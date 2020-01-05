@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Log in</h1>
+<div mat-dialog-content>
+  <div class="mb-3" *ngIf="errorShow">
+    <div class="alert alert-danger" role="alert">
+      <strong>Błąd!</strong> Wystąpił błąd podczas loginu. Sprawdź swoje dane logowania.
+    </div>
+  </div>
+    <div class="mb-3">
+      <label for="login">Login</label>
+      <input type="login" id="login" class="form-control" [(ngModel)]="loginDto.login">
+    </div>
+    <div class="mb-3">
+      <label for="password">Password</label>
+      <input type="password" id="password" class="form-control" [(ngModel)]="loginDto.password">
+    </div>
+  </div>
+<div mat-dialog-actions style="float:right">
+  <button mat-button (click)="closeModal()">Anuluj</button>
+  <button mat-button cdkFocusInitial (click)="login()">Zaloguj</button>
+</div>

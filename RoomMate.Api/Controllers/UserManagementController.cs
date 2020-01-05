@@ -32,8 +32,7 @@ namespace RoomMate.Api.Controllers
             {
                 return this.Ok(true);
             }
-            //zwracac ok false
-            return this.BadRequest();
+            return this.Ok(false);
         }
 
         [Route("Login")]

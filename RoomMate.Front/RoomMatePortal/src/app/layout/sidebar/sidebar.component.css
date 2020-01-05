@@ -1,0 +1,40 @@
+.sidebar-header {
+  text-align: center;
+  margin-top: 5%;
+  margin-bottom: 20%;
+}
+
+.sidebar {
+
+  color: rgb(107, 107, 107);
+  background-color: white;
+  flex-direction: column;
+  display: flex;
+  overflow: hidden;
+  height: 100%;
+  width: 8vh;
+  padding: 10px;
+  border-right: solid black 1px;
+}
+
+.nav {
+  flex-wrap: nowrap !important;
+}
+
+.profilePhoto {
+  margin-bottom: 2%;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.one {
+  background-image: url('https://image.freepik.com/free-icon/male-user-profile-picture_318-37825.jpg');
+}
+
+.nav-link{
+  color:rgb(107, 107, 107);;
+}

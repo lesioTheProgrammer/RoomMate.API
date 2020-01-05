@@ -1,0 +1,19 @@
+
+  <table class="table table-hover table-responsive-lg">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Kiedy</th>
+        <th>Kto</th>
+        <th>Pomieszczenie</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let work of houseworkList; let i = index" (click)="editHouseWork(work)">
+        <td>{{i +1}}</td>
+        <td>{{work.houseWorkDate | date: 'dd.MM.yyy'}}</td>
+        <td>{{work.username}}</td>
+        <td>{{work.description}}</td>
+      </tr>
+    </tbody>
+  </table>
