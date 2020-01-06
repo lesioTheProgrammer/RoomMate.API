@@ -13,5 +13,8 @@ export class PassBetweenComponService {
     if (getToken) {
       this.loginSource.next(true);
     }
+    else{
+      this.loginSource.next(false);
+    }
   }
 }

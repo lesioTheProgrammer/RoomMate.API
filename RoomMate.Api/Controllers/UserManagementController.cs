@@ -48,14 +48,14 @@ namespace RoomMate.Api.Controllers
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("StachuLesiuProgramista@345"));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                 var tokenOptions = new JwtSecurityToken(
-                    issuer: "http://localhost:59570",
-                    audience: "http://localhost:59570",
                     claims: new List<Claim>(),
                     signingCredentials: signinCredentials
                 );
+
                 return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(tokenOptions) });
             }
-            return this.BadRequest();
+
+            return this.Unauthorized();
         }
 
 

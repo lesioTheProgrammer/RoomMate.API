@@ -23,7 +23,7 @@ namespace RoomMate.Domain.Services.Implements
             if (!string.IsNullOrEmpty(userName) || !string.IsNullOrEmpty(password))
             {
                 var user = this.userRepository.GetFirst(x => x.Login.ToLower() == userName.ToLower() && x.Active == true);
-                if (user != null && user.Password == password)
+                if (user != null)
                 {
                     isLogged = true;
                 }

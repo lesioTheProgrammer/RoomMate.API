@@ -57,15 +57,25 @@ namespace RoomMate.Api
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "http://localhost:59570",
-                    ValidAudience = "http://localhost:59570",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("StachuLesiuProgramista@345"))
                 };
-            }); ;
+                options.Events = new JwtBearerEvents()
+                {
+                    OnAuthenticationFailed = c =>
+                    {
+                        c.NoResult();
+
+                        c.Response.StatusCode = 401;
+                        c.Response.ContentType = "text/plain";
+
+                        return c.Response.WriteAsync(c.Exception.ToString());
+                    }
+                };
+            });
 
             services.AddMvc();
 
