@@ -1,35 +1,33 @@
 <div *ngIf="!isLoggex">
+  <div style="float:right; position: fixed; width: 100%; height: 100%;margin-top: 15%; ">
+    <div class="row" style="width:100%; height:100%; ">
+      <div class=" col-lg-6">
+        <div style="text-align: center; margin-top: 2%;">
+          <span style="font-size: 60pt;font-weight: bolder;">
+            <i class="material-icons" style="font-size: 40pt;">
+              home
+            </i>
+            RoomMate Portal</span>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card-body">
+          <div style="text-align:center;">
+            <button class="btn btn-lg btn-dark" (click)="showLoginField()">
+              Sign in
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div style="text-align:center;">
+            <button class="btn btn-lg btn-dark" (click)="showRegisterField()">
+              Register
+            </button>
+          </div>
+        </div>
+      </div>
 
-  <div style="float:right; position: fixed; width: 100%; height: 100%; ">
-    <div class="card shadow" style="width:100%; height:100%; ">
-      <div style="text-align: center;">
-        <br>
-        <h1>Room Mate Portal</h1>
-      </div>
-      <br>
-      <br>
-      <br>
-      <br>
-      <div class="card-body" style="float:left">
-        <span style="text-align: center">
-          <h4>Sign in</h4>
-        </span>
-        <div style="text-align:center;">
-        <button class="btn btn-lg btn-dark" (click)="showLoginField()">
-          Sign in
-        </button>
-        </div>
-      </div>
-      <div class="card-body" style="float:left">
-        <span style="text-align: center;">
-          <h4>Register</h4>
-        </span>
-        <div style="text-align:center;">
-            <button class="btn btn-lg btn-lg"  (click)="showRegisterField()">
-                Register
-              </button>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>

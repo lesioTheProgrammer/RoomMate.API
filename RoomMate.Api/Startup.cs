@@ -136,6 +136,7 @@ namespace RoomMate.Api
 
             //// Tutaj dodawać nowe serwisy
             /// TODO: Dodać automat na to, żeby przeszło klasy dziedziczące po Serwisie
+            container.Register<ITokenService, TokenService>(Lifestyle.Scoped);
             container.Register<IFlatService, FlatService>(Lifestyle.Scoped);
             container.Register<IHouseworkService, HouseworkService>(Lifestyle.Scoped);
             container.Register<ILoginService, LoginService>(Lifestyle.Scoped);

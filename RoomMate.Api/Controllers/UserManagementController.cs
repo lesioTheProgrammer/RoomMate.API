@@ -18,16 +18,18 @@ namespace RoomMate.Api.Controllers
     {
         private readonly ILoginService loginService;
         private readonly IRegisterService registerService;
+        private readonly ITokenService tokenService;
 
-        public UserManagementController(ILoginService loginService, IRegisterService registerService)
+        public UserManagementController(
+            ILoginService loginService, 
+            IRegisterService registerService,
+            ITokenService tokenService)
         {
             this.loginService = loginService;
             this.registerService = registerService;
+            this.tokenService = tokenService;
         }
 
-
-        //sam post wystarczy
-        //get w angularze formatka i elo
         [Route("Register")]
         [HttpPost]
         public IActionResult Register([FromBody]RegisterDto registerDto)
@@ -45,14 +47,7 @@ namespace RoomMate.Api.Controllers
         {
             if (loginService.Login(loginDto.Login, loginDto.Password))
             {
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("StachuLesiuProgramista@345"));
-                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                var tokenOptions = new JwtSecurityToken(
-                    claims: new List<Claim>(),
-                    signingCredentials: signinCredentials
-                );
-
-                return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(tokenOptions) });
+                return Ok(this.tokenService.GenerateToken());
             }
 
             return this.Unauthorized();

@@ -7,8 +7,6 @@ namespace RoomMate.Domain.Services.Implements
 {
     public class LoginService: ILoginService
     {
-
-
         private readonly IRepository<User> userRepository;
 
         public LoginService(IRepository<User> userRepository)
