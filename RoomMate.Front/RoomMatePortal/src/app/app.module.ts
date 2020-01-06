@@ -53,6 +53,7 @@ const routes: Routes =  [
     CommonModule,
     MatDialogModule,
     AppMaterialModules,
+    ReactiveFormsModule
   ],
   entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent],
   providers: [[DashboardService], [

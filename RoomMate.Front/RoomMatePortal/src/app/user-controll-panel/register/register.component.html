@@ -1,14 +1,19 @@
 <h1 mat-dialog-title>Register here</h1>
 <div mat-dialog-content>
-  <div class="mb-3" *ngIf="errorShow">
+  <div class="mb-3" *ngIf="errorShow || !isRegistered">
     <div class="alert alert-danger" role="alert">
       <strong>Błąd!</strong> Wystąpił błąd podczas rejestracji. Sprawdź swoje dane rejestracyjne.
     </div>
   </div>
-  <div class="mb-3">
+
+
+
+  <div class="mb-3 form-group">
     <label for="name">Name</label>
     <input type="name" id="name" class="form-control" [(ngModel)]="registerDto.name">
   </div>
+
+
   <div class="mb-3">
     <label for="surname">Surname</label>
     <input type="surname" id="surname" class="form-control" [(ngModel)]="registerDto.surname">
@@ -26,7 +31,9 @@
       <input type="password" id="password" class="form-control" [(ngModel)]="registerDto.password">
     </div>
   </div>
+
+
 <div mat-dialog-actions style="float:right">
   <button mat-button (click)="closeModal()">Anuluj</button>
-  <button mat-button cdkFocusInitial (click)="register()">Zarejestruj</button>
+  <button mat-button cdkFocusInitial (click)="register()" type="submit">Zarejestruj</button>
 </div>

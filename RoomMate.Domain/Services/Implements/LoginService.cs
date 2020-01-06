@@ -23,9 +23,12 @@ namespace RoomMate.Domain.Services.Implements
             if (!string.IsNullOrEmpty(userName) || !string.IsNullOrEmpty(password))
             {
                 var user = this.userRepository.GetFirst(x => x.Login.ToLower() == userName.ToLower() && x.Active == true);
-                if (user != null && user.Password == password)
+                //check the password only if user exsists (time saving)
+                if (user != null)
                 {
-                    isLogged = true;
+                    var crypto = new SimpleCrypto.PBKDF2();
+                    string passwordToCheck = crypto.Compute(password, user.PasswordSalt);  //entered password and salt drom db
+                    isLogged = crypto.Compare(user.Password, passwordToCheck);  // T of F 
                 }
             }
             
