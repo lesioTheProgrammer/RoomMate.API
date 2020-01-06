@@ -23,13 +23,21 @@ import { LoginComponent } from './user-controll-panel/login/login.component';
 import { RegisterComponent } from './user-controll-panel/register/register.component';
 import { PassBetweenComponService } from './PassBetweenComponService';
 import {CookieService} from 'ngx-cookie-service';
+import { JwtModule } from "@auth0/angular-jwt";
+import { AuthGuard } from './core/auth-guard.service';
+import { AccessDeniedComponent } from './access-denied/access-denied.component';
 
 const routes: Routes =  [
   { path: '', component: MyRoomComponent},
-  { path: 'myRoom', component: MyRoomComponent},
-  { path: 'dashboard', component: DashboardComponent}
-
+  { path: 'myRoom', component: MyRoomComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  { path: 'accessDebnied', component: AccessDeniedComponent}
 ];
+
+export function tokenGetter() {
+  return localStorage.getItem("jwt");
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,10 +51,18 @@ const routes: Routes =  [
     UserControllPanelComponent,
     LoginComponent,
     RegisterComponent,
+    AccessDeniedComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes, {useHash: true}),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: [],
+        blacklistedRoutes: []
+      }
+    }),
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
@@ -56,13 +72,12 @@ const routes: Routes =  [
     ReactiveFormsModule
   ],
   entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent],
-  providers: [[DashboardService], [
-    {
-      provide: MatDialogRef,
-      useValue: {}
-    }
+  providers: [[DashboardService],
+   [{provide: MatDialogRef, useValue: {}}
  ],
- [PassBetweenComponService], [CookieService]
+ [PassBetweenComponService],
+ [CookieService],
+ [AuthGuard],
 ],
   bootstrap: [AppComponent]
 })

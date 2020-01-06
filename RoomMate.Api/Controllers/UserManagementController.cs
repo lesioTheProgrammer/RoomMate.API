@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using RoomMate.Domain.Dto;
 using RoomMate.Domain.Services.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace RoomMate.Api.Controllers
@@ -14,16 +18,18 @@ namespace RoomMate.Api.Controllers
     {
         private readonly ILoginService loginService;
         private readonly IRegisterService registerService;
+        private readonly ITokenService tokenService;
 
-        public UserManagementController(ILoginService loginService, IRegisterService registerService)
+        public UserManagementController(
+            ILoginService loginService, 
+            IRegisterService registerService,
+            ITokenService tokenService)
         {
             this.loginService = loginService;
             this.registerService = registerService;
+            this.tokenService = tokenService;
         }
 
-
-        //sam post wystarczy
-        //get w angularze formatka i elo
         [Route("Register")]
         [HttpPost]
         public IActionResult Register([FromBody]RegisterDto registerDto)
@@ -41,31 +47,10 @@ namespace RoomMate.Api.Controllers
         {
             if (loginService.Login(loginDto.Login, loginDto.Password))
             {
-                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.
-                AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
-
-                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, loginDto.Login));
-                identity.AddClaim(new Claim(ClaimTypes.Name, loginDto.Login));
-
-                var principal = new ClaimsPrincipal(identity);
-
-                var props = new AuthenticationProperties
-                {
-                    AllowRefresh = true,
-                    ExpiresUtc = DateTimeOffset.Now.AddDays(1),
-                    IsPersistent = true
-                };
-
-
-
-
-                await HttpContext.SignInAsync(
-             CookieAuthenticationDefaults.
-                             AuthenticationScheme, principal, props);
-
-                return this.Ok(true);
+                return Ok(this.tokenService.GenerateToken());
             }
-            return this.BadRequest();
+
+            return this.Unauthorized();
         }
 
 

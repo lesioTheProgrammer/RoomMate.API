@@ -6,6 +6,7 @@ namespace RoomMate.Api.Controllers
 {
     
     [Route("api/Flat")]
+    [Authorize]
     public class FlatController : Controller
     {
         private readonly IFlatService flatService;

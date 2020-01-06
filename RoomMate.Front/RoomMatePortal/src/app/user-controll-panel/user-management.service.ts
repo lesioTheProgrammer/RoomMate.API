@@ -5,6 +5,7 @@ import { LoginDto } from './login/dto/login-dto';
 import { RegisterDto} from './register/dto/register-dto';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { TokenDto } from './login/dto/token-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +19,9 @@ export class UserManagementService extends RequestHelperService {
     super(httpClient);
   }
 //pajpow nie pisac, observejbel po to zeby api wiedzial co zwroce
-  public login(loginDto: LoginDto): Observable<boolean> {
+  public login(loginDto: LoginDto): Observable<TokenDto> {
     //login metoda juz z api hehe, przy poscie sam ogarniw
-    return this.createPostRequest('Login', loginDto).pipe(map(data => <boolean>data));
+    return this.createPostRequest('Login', loginDto).pipe(map(data => <TokenDto>data));
   }
 
   public register(RegisterDto: RegisterDto): Observable<boolean> {

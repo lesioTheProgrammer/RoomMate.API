@@ -1,13 +1,12 @@
 
 <div>
-    <app-user-controll-panel style="position:fixed;"></app-user-controll-panel>
-    <div class="wrapper">
+    <app-user-controll-panel *ngIf="!isLogged" style="position:fixed;"></app-user-controll-panel>
+    <div class="wrapper" *ngIf="isLogged">
         <app-sidebar></app-sidebar>
         <div class="contentWrapper">
           <app-topbar></app-topbar>
-          <div ckass ="content">
+          <div class ="content">
             <router-outlet></router-outlet>
-<!-- <app-dashboard></app-dashboard> -->
           </div>
         </div>
       </div>

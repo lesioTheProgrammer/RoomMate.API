@@ -15,8 +15,7 @@ export class DashboardComponent implements OnInit {
   constructor(public dialog: MatDialog, private data: PassBetweenComponService) {}
 
   ngOnInit()  {
-    //ten subskrajb bierze na inicie dashborda wartosc currenloginstate
-    this.data.currentLoginState.subscribe(isLoggex => this.isLoggex = isLoggex);
+
   }
 
   public showModalToAdd() {

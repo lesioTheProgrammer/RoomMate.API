@@ -13,16 +13,13 @@ export class AddHouseworkModalComponent implements OnInit {
   errorShow: boolean = false;
   dataLoaded: boolean = false;
   constructor(
-    //serwisy co to jest lol
     public dashboardService: DashboardService,
     public dialogRef: MatDialogRef<AddHouseworkModalComponent>,
-    //co to robi zeby dialog wyswietlic
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit() {
-   //po co dto
-    if(this.data.houseworkDto != null){
+    if(this.data != null && this.data.houseworkDto != null){
       this.houseworkDto = this.data.houseworkDto;
     }
     this.dataLoaded = true;
@@ -36,7 +33,6 @@ export class AddHouseworkModalComponent implements OnInit {
     this.dashboardService.addHouseWork(this.houseworkDto).subscribe(
       response => {
         if (response) {
-          debugger;
           this.closeModal();
         }
       },

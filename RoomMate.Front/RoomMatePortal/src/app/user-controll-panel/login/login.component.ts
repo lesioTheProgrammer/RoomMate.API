@@ -3,6 +3,7 @@ import { LoginDto } from "./dto/login-dto";
 import { MatDialogRef } from "@angular/material";
 import { UserManagementService } from "../user-management.service";
 import { CookieService } from "ngx-cookie-service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-login",
@@ -12,17 +13,14 @@ import { CookieService } from "ngx-cookie-service";
 export class LoginComponent implements OnInit {
   errorShow: boolean = false;
   dataLoaded: boolean = false;
-  isLogged: boolean =  false;
+  isLogged: boolean = false;
   loginDto: LoginDto = new LoginDto();
   @Output() loginEvent = new EventEmitter<boolean>();
 
   constructor(
     public dialogRef: MatDialogRef<LoginComponent>,
-    //trzeba wstrzyknac serwis
     public loginService: UserManagementService,
-    //kolejny serwis zeby przeslac login data do dashboardu?
-    //cookies:
-    public cookie: CookieService
+    public route: Router
   ) {}
 
   ngOnInit() {}
@@ -30,25 +28,21 @@ export class LoginComponent implements OnInit {
   closeModal(): void {
     this.dialogRef.close();
   }
-  //mam serwis i co tera
-  //wrzucam dto i metode wywoluje tez
+
   login() {
-    this.loginService.login(this.loginDto).subscribe(response => {
-      if (response) {
-        this.isLogged = true;
-        this.loginEvent.emit(this.isLogged);
-        //login
-        var login = this.loginDto.login;
-        //cookies:
-        this.cookie.set('login', login);
-        //local storage:
-        sessionStorage.setItem('login', JSON.stringify(login));
-        debugger;
-        this.closeModal();
+    this.loginService.login(this.loginDto).subscribe(
+      response => {
+        if (response.token !== "") {
+          this.isLogged = true;
+          localStorage.setItem("login", JSON.stringify(this.loginDto.login));
+          localStorage.setItem("jwt", response.token);
+          this.loginEvent.emit(this.isLogged);
+          this.closeModal();
+          this.route.navigate(["/dashboard"]);
         }
       },
-    error => {
-      this.errorShow = true;
+      error => {
+        this.errorShow = true;
       }
     );
   }
@@ -64,6 +58,4 @@ export class LoginComponent implements OnInit {
   //     }
   //   );
   // }
-
-
 }
