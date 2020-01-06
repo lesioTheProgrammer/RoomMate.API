@@ -34,14 +34,24 @@ export class RegisterComponent implements OnInit {
       Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]}),
       login: new FormControl('', {validators: [Validators.required, Validators.pattern('[A-Za-z0-9_]*'), Validators.minLength(2)]}),
       password: new FormControl('', {validators: [Validators.required, Validators.minLength(6)]}),
-      })
+      });
   }
 
   closeModal(): void {
     this.dialogRef.close();
   }
 
+   // convenience getter for easy access to form fields
+   get f() { return this.form.controls; }
+
   register() {
+    this.registerDto.name = this.form.value.name;
+    this.registerDto.surname = this.form.value.surname;
+    this.registerDto.email = this.form.value.email;
+    this.registerDto.login = this.form.value.login;
+    this.registerDto.password = this.form.value.password;
+    debugger;
+
     this.registerService.register(this.registerDto).subscribe(response => {
       if (response) {
         this.isRegistered = true;
@@ -49,6 +59,7 @@ export class RegisterComponent implements OnInit {
         this.closeModal();
       }
       else {
+        debugger;
         this.isRegistered = false;
         this.registerEvent.emit(this.isRegistered);
       }

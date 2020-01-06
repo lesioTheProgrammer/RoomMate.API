@@ -2,38 +2,95 @@
 <div mat-dialog-content>
   <div class="mb-3" *ngIf="errorShow || !isRegistered">
     <div class="alert alert-danger" role="alert">
-      <strong>Błąd!</strong> Wystąpił błąd podczas rejestracji. Sprawdź swoje dane rejestracyjne.
+      <strong>Błąd!</strong> Wystąpił błąd podczas rejestracji. Sprawdź swoje
+      dane rejestracyjne.
     </div>
   </div>
+  <form [formGroup]="form">
+    <div class="mb-3 form-group">
+      <label for="name">Name</label>
+      <input
+        type="name"
+        id="name"
+        class="form-control"
+        formControlName="name"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': !isRegistered && f.name.errors }"
+      />
+      <div *ngIf="!isRegistered && f.name.errors" class="invalid-feedback">
+        <div *ngIf="f.name.errors.required">Name is required.</div>
+        <div *ngIf="f.name.errors.minlength">Minimum name length is 2 characters.</div>
+      </div>
+    </div>
 
+    <div class="mb-3 form-group">
+      <label for="surname">Surname</label>
+      <input
+        type="text"
+        id="surname"
+        class="form-control"
+        formControlName="surname"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': !isRegistered && f.surname.errors }"
+      />
+      <div *ngIf="!isRegistered && f.surname.errors" class="invalid-feedback">
+        <div *ngIf="f.surname.errors.required">Surname is required.</div>
+        <div *ngIf="f.surname.errors.minlength">Minimum surname length is 2 characters.</div>
+      </div>
+    </div>
 
+    <div class="mb-3 form-group">
+      <label for="email">Email adress</label>
+      <input
+        type="email"
+        id="email"
+        class="form-control"
+        formControlName="email"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': !isRegistered && f.email.errors }"
+      />
+      <div *ngIf="!isRegistered && f.email.errors" class="invalid-feedback">
+        <div *ngIf="f.email.errors.required">Email is required.</div>
+        <div *ngIf="f.email.hasError('pattern')">Enter email in correct format.</div>
+      </div>
+    </div>
 
-  <div class="mb-3 form-group">
-    <label for="name">Name</label>
-    <input type="name" id="name" class="form-control" [(ngModel)]="registerDto.name">
-  </div>
-
-
-  <div class="mb-3">
-    <label for="surname">Surname</label>
-    <input type="surname" id="surname" class="form-control" [(ngModel)]="registerDto.surname">
-  </div>
-  <div class="mb-3">
-    <label for="email">Email adress</label>
-    <input type="email" id="email" class="form-control" [(ngModel)]="registerDto.email">
-  </div>
-    <div class="mb-3">
+    <div class="mb-3 form-group">
       <label for="login">Login</label>
-      <input type="login" id="login" class="form-control" [(ngModel)]="registerDto.login">
+      <input
+        type="text"
+        id="login"
+        class="form-control"
+        formControlName="login"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': !isRegistered && f.login.errors }"
+      />
+      <div *ngIf="!isRegistered && f.login.errors" class="invalid-feedback">
+        <div *ngIf="f.login.errors.required">Login is required.</div>
+        <div *ngIf="f.login.hasError('pattern')">Enter login in correct format (no white spaces allowed).</div>
+      </div>
     </div>
-    <div class="mb-3">
+
+    <div class="mb-3 form-group">
       <label for="password">Password</label>
-      <input type="password" id="password" class="form-control" [(ngModel)]="registerDto.password">
+      <input
+        type="password"
+        id="password"
+        class="form-control"
+        formControlName="password"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': !isRegistered && f.password.errors }"
+      />
+      <div *ngIf="!isRegistered && f.password.errors" class="invalid-feedback">
+        <div *ngIf="f.password.errors.required">Password is required.</div>
+        <div *ngIf="f.password.errors.minlength">Minimum password length is 6 characters.</div>
+      </div>
     </div>
+  </form>
+  <div mat-dialog-actions style="float:right">
+    <button mat-button (click)="closeModal()">Anuluj</button>
+    <button mat-button cdkFocusInitial (click)="register()" type="submit">
+      Zarejestruj
+    </button>
   </div>
-
-
-<div mat-dialog-actions style="float:right">
-  <button mat-button (click)="closeModal()">Anuluj</button>
-  <button mat-button cdkFocusInitial (click)="register()" type="submit">Zarejestruj</button>
 </div>
