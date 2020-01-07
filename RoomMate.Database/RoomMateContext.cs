@@ -7,7 +7,7 @@ namespace RoomMate.Domain
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=RoomMate;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=localhost;Database=RoomMate;Trusted_Connection=True;");
         }
 
         public DbSet<Address> Addresses { get; set; }
@@ -16,5 +16,6 @@ namespace RoomMate.Domain
         public DbSet<Housework> Houseworks { get; set; }
         public DbSet<WorkPrice> WorkPrices { get; set; }
         public DbSet<WorkType> WorkTypes { get; set; }
+        public DbSet<RoleType> RoleTypes { get; set; }
     }
 }

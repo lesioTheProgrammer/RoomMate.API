@@ -71,6 +71,7 @@ export function tokenGetter() {
     CommonModule,
     MatDialogModule,
     AppMaterialModules,
+    ReactiveFormsModule
   ],
   entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent],
   providers: [[DashboardService],
