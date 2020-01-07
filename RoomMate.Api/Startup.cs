@@ -141,6 +141,7 @@ namespace RoomMate.Api
             container.Register<IHouseworkService, HouseworkService>(Lifestyle.Scoped);
             container.Register<ILoginService, LoginService>(Lifestyle.Scoped);
             container.Register<IRegisterService, RegisterService>(Lifestyle.Scoped);
+            container.Register<IUserService, UserService>(Lifestyle.Scoped);
 
 
             // Allow Simple Injector to resolve services from ASP.NET Core.

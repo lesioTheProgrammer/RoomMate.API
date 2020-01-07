@@ -12,15 +12,18 @@ namespace RoomMate.Api.Controllers
         private readonly ILoginService loginService;
         private readonly IRegisterService registerService;
         private readonly ITokenService tokenService;
+        private readonly IUserService userService;
 
         public UserManagementController(
             ILoginService loginService, 
             IRegisterService registerService,
-            ITokenService tokenService)
+            ITokenService tokenService,
+            IUserService userService)
         {
             this.loginService = loginService;
             this.registerService = registerService;
             this.tokenService = tokenService;
+            this.userService = userService;
         }
 
         
@@ -58,6 +61,13 @@ namespace RoomMate.Api.Controllers
         public IActionResult UpdateUser()
         {
             return this.Ok();
+        }
+
+        [HttpGet]
+        [Route("GetUserByFlatId")]
+        public IActionResult GetUserByFlatId(int flatId)
+        {
+            return this.Ok(this.userService.GetUserByFlatId(flatId));
         }
     }
 }

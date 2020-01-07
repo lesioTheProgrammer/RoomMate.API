@@ -1,0 +1,23 @@
+<h2 style="text-align: center;">User in flat <span *ngIf="userList"> - {{userList.length}} </span></h2>
+<table class="table table-hover table-responsive-lg" *ngIf="userList; else spinner">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Surname</th>
+      <th>Login</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of userList; let i = index">
+      <td>{{i +1}}</td>
+      <td>{{user.name }}</td>
+      <td>{{user.surname}}</td>
+      <td>{{user.login}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #spinner style="text-align: center;">
+  <mat-spinner></mat-spinner>
+</ng-template>
