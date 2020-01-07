@@ -1,15 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Mvc;
 using RoomMate.Domain.Dto;
 using RoomMate.Domain.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
+
 
 namespace RoomMate.Api.Controllers
 {
@@ -29,6 +22,9 @@ namespace RoomMate.Api.Controllers
             this.registerService = registerService;
             this.tokenService = tokenService;
         }
+
+        
+
 
         [Route("Register")]
         [HttpPost]

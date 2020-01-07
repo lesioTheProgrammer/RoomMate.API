@@ -2,7 +2,8 @@ import { Component, OnInit,  Output, EventEmitter } from '@angular/core';
 import {RegisterDto} from './dto/register-dto';
 import { MatDialogRef } from '@angular/material';
 import { UserManagementService } from "../user-management.service";
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray, Form } from '@angular/forms';
+import { RolesEnum } from '../dto/RolesEnum';
 
 @Component({
   selector: 'app-register',
@@ -26,6 +27,11 @@ export class RegisterComponent implements OnInit {
     //no cookies
   ) { }
 
+    //here working wirh enum:
+    keys = Object.keys; //key has name as label and symbol as value
+    roles = RolesEnum;
+
+
   ngOnInit() {
     this.form = new FormGroup({
       name: new FormControl('', {validators: [Validators.required, Validators.minLength(2)]}),
@@ -34,8 +40,10 @@ export class RegisterComponent implements OnInit {
       Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]}),
       login: new FormControl('', {validators: [Validators.required, Validators.pattern('[A-Za-z0-9_]*'), Validators.minLength(2)]}),
       password: new FormControl('', {validators: [Validators.required, Validators.minLength(6)]}),
+      role: new FormControl(1),
       });
   }
+
 
   closeModal(): void {
     this.dialogRef.close();
@@ -50,6 +58,7 @@ export class RegisterComponent implements OnInit {
     this.registerDto.email = this.form.value.email;
     this.registerDto.login = this.form.value.login;
     this.registerDto.password = this.form.value.password;
+    this.registerDto.role = this.form.value.role;
     debugger;
 
     this.registerService.register(this.registerDto).subscribe(response => {
@@ -68,6 +77,17 @@ export class RegisterComponent implements OnInit {
       this.errorShow = true;
     });
   }
+
+
+
+
+
+
+
+
+
+
+
 }
 
 //pspspsp

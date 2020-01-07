@@ -8,14 +8,16 @@ namespace RoomMate.Database.Models
     {
         public string FlatName { get; set; }
 
-        public int? FlatAddressId { get; set; }
+        public int? AddressId { get; set; }
 
         public int RoomCount { get; set; }
 
         public int Area { get; set; }
 
-        public virtual Address FlatAddress { get; set; }
+        public virtual Address Address { get; set; }
 
         public virtual ICollection<UserFlat> UserFlats { get; set; }
     }
 }
+
+

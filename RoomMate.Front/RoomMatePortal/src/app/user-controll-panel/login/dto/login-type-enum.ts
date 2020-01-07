@@ -1,4 +1,5 @@
 export enum LogintypeEnum {
-  User,
-  Admin,
+  Landlord,
+  Flatmate,
+  FlatMateAdmin
 }

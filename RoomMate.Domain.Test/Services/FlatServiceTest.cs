@@ -28,7 +28,7 @@ namespace RoomMate.Domain.Test.Services
                 Area = 50,
                 CreatedBy= 1,
                 CreatedDate = DateTime.Now,
-                FlatAddressId = null,
+                AddressId = null,
                 FlatName = "Gwiaździsta",
                 Id = 1,
                 ModificatedBy = 1,
