@@ -26,6 +26,7 @@ import {CookieService} from 'ngx-cookie-service';
 import { JwtModule } from "@auth0/angular-jwt";
 import { AuthGuard } from './core/auth-guard.service';
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
+import { UserListComponent } from './user-list/user-list.component';
 
 const routes: Routes =  [
   { path: '', component: MyRoomComponent},
@@ -52,6 +53,7 @@ export function tokenGetter() {
     LoginComponent,
     RegisterComponent,
     AccessDeniedComponent,
+    UserListComponent,
   ],
   imports: [
     BrowserModule,
