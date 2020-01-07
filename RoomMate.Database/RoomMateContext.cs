@@ -16,5 +16,6 @@ namespace RoomMate.Domain
         public DbSet<Housework> Houseworks { get; set; }
         public DbSet<WorkPrice> WorkPrices { get; set; }
         public DbSet<WorkType> WorkTypes { get; set; }
+        public DbSet<RoleType> RoleTypes { get; set; }
     }
 }
