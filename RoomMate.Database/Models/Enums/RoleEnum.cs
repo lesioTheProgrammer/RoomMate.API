@@ -5,8 +5,7 @@ namespace RoomMate.Database.Models.Enums
 {
     public enum RoleTypeEnum
     {
-        Landlord = 0,
-        Flatmate = 1,
+        Flatmate = 0,
         [Description("Flatmate Admin")]
         FlatMateAdmin = 2
     }
