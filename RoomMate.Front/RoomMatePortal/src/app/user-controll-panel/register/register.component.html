@@ -99,9 +99,9 @@
 
     <div class="form-group">
       <label form="role">Select Role:</label>
-      <select formControlName="role">
-        <option *ngFor="let role of keys(roles)" [value]="roles[role]">
-          {{ role }}
+      <select formControlName="role" (change)="onChange($event)">
+        <option *ngFor="let role of keys(roles)" [ngValue]="roles[role]">
+          {{role}}
         </option>
       </select>
     </div>

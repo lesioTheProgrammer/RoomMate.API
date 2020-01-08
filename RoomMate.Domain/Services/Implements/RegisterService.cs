@@ -84,15 +84,9 @@ namespace RoomMate.Domain.Services.Implements
                 Name = registerDto.Name,
                 Password = registerDto.Password,
                 PasswordSalt = registerDto.PasswordSalt,
-                Surname = registerDto.Surname
+                Surname = registerDto.Surname,
+                RoleType = registerDto.RoleType
             };
         }
-
-        
-
-
-
-
-
     }
 }

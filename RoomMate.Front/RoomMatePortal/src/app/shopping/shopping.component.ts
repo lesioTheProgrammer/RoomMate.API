@@ -22,6 +22,7 @@ export class ShoppingComponent implements OnInit {
   }
 
   editHouseWork(houseworkDto : HouseworkDto){
+    debugger;
     const dialogRef = this.dialog.open(AddHouseworkModalComponent, {
       width: "450px",
       data:{houseworkDto : houseworkDto }

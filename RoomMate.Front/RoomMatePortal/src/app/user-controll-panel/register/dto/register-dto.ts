@@ -1,3 +1,4 @@
+import { RolesEnum } from "../../dto/RolesEnum";
 
 export class RegisterDto {
   public login: string;
@@ -5,6 +6,6 @@ export class RegisterDto {
   public surname: string;
   public password: string;
   public email: string;
-  public role: number;
+  public role: RolesEnum;
 }
 

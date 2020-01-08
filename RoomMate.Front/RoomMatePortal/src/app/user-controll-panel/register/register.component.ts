@@ -2,7 +2,7 @@ import { Component, OnInit,  Output, EventEmitter } from '@angular/core';
 import {RegisterDto} from './dto/register-dto';
 import { MatDialogRef } from '@angular/material';
 import { UserManagementService } from "../user-management.service";
-import { FormGroup, FormControl, Validators, FormArray, Form } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RolesEnum } from '../dto/RolesEnum';
 
 @Component({
@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
       Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]}),
       login: new FormControl('', {validators: [Validators.required, Validators.pattern('[A-Za-z0-9_]*'), Validators.minLength(2)]}),
       password: new FormControl('', {validators: [Validators.required, Validators.minLength(6)]}),
-      role: new FormControl(1),
+      role: new FormControl(RolesEnum.Flatmate),
       });
   }
 
@@ -58,17 +58,19 @@ export class RegisterComponent implements OnInit {
     this.registerDto.email = this.form.value.email;
     this.registerDto.login = this.form.value.login;
     this.registerDto.password = this.form.value.password;
-    this.registerDto.role = this.form.value.role;
     debugger;
-
+    this.onChange(event);
+    debugger;
+    let xd = this.registerDto;
     this.registerService.register(this.registerDto).subscribe(response => {
       if (response) {
+        debugger;
         this.isRegistered = true;
         this.registerEvent.emit(this.isRegistered);
         this.closeModal();
       }
       else {
-        debugger;
+        // debugger;
         this.isRegistered = false;
         this.registerEvent.emit(this.isRegistered);
       }
@@ -78,16 +80,10 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-
-
-
-
-
-
-
-
-
+  onChange($event): void {
+    debugger;
+    let newVar = $event.target.value;
+    this.registerDto.role = newVar;
+  }
 
 }
-
-//pspspsp
