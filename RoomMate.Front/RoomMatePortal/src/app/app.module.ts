@@ -27,12 +27,16 @@ import { JwtModule } from "@auth0/angular-jwt";
 import { AuthGuard } from './core/auth-guard.service';
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
 import { UserListComponent } from './user-list/user-list.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { RemoveAccountComponent } from './user-profile/remove-account/remove-account.component';
 
 const routes: Routes =  [
   { path: '', component: MyRoomComponent},
   { path: 'myRoom', component: MyRoomComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
-  { path: 'accessDebnied', component: AccessDeniedComponent}
+  { path: 'accessDebnied', component: AccessDeniedComponent},
+  { path: 'userProfile/:id', component: UserProfileComponent}
+
 ];
 
 export function tokenGetter() {
@@ -54,6 +58,8 @@ export function tokenGetter() {
     RegisterComponent,
     AccessDeniedComponent,
     UserListComponent,
+    UserProfileComponent,
+    RemoveAccountComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,7 +79,7 @@ export function tokenGetter() {
     AppMaterialModules,
     ReactiveFormsModule
   ],
-  entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent],
+  entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent],
   providers: [[DashboardService],
    [{provide: MatDialogRef, useValue: {}}
  ],

@@ -1,6 +1,6 @@
 import { Component, OnInit,  Output, EventEmitter } from '@angular/core';
 import {RegisterDto} from './dto/register-dto';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { UserManagementService } from "../user-management.service";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RolesEnum } from '../dto/RolesEnum';
@@ -12,6 +12,7 @@ import { RolesEnum } from '../dto/RolesEnum';
 })
 export class RegisterComponent implements OnInit {
   //properties
+  disabledButton = false;
   errorShow: boolean = false;
   dataLoaded: boolean = false;
   isRegistered: boolean = true;
@@ -23,9 +24,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<RegisterComponent>,
-    //injecting services
     public registerService: UserManagementService,
-    //no cookies
+    private _snackBar: MatSnackBar,
   ) { }
 
     //here working wirh enum:
@@ -54,6 +54,7 @@ export class RegisterComponent implements OnInit {
    get f() { return this.form.controls; }
 
   register() {
+    this.disabledButton = true;
     this.registerDto.name = this.form.value.name;
     this.registerDto.surname = this.form.value.surname;
     this.registerDto.email = this.form.value.email;
@@ -68,17 +69,28 @@ export class RegisterComponent implements OnInit {
         debugger;
         this.isRegistered = true;
         this.registerEvent.emit(this.isRegistered);
+        this.openSnackBar('Register success', 'Ok');
         this.closeModal();
       }
       else {
         this.isRegistered = false;
         this.registerEvent.emit(this.isRegistered);
+
+        this.openSnackBar('Register fail', 'Ok');
       }
+      this.disabledButton = false;
     },
     error => {
       this.errorShow = true;
     });
   }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
+
 
   onChange(event: any) {
     this.registerVariable = event.target.value;
