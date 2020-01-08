@@ -3,6 +3,7 @@ import {RegisterDto} from './dto/register-dto';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { UserManagementService } from "../user-management.service";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { RolesEnum } from '../dto/RolesEnum';
 
 @Component({
   selector: 'app-register',
@@ -17,6 +18,7 @@ export class RegisterComponent implements OnInit {
   isRegistered: boolean = true;
   registerDto: RegisterDto = new RegisterDto();
   form: FormGroup;
+  registerVariable: any;
 
   @Output() registerEvent = new EventEmitter<boolean>();
 
@@ -26,6 +28,11 @@ export class RegisterComponent implements OnInit {
     private _snackBar: MatSnackBar,
   ) { }
 
+    //here working wirh enum:
+    keys = Object.keys; //key has name as label and symbol as value
+    roles = RolesEnum;
+
+
   ngOnInit() {
     this.form = new FormGroup({
       name: new FormControl('', {validators: [Validators.required, Validators.minLength(2)]}),
@@ -34,8 +41,10 @@ export class RegisterComponent implements OnInit {
       Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]}),
       login: new FormControl('', {validators: [Validators.required, Validators.pattern('[A-Za-z0-9_]*'), Validators.minLength(2)]}),
       password: new FormControl('', {validators: [Validators.required, Validators.minLength(6)]}),
+      roletype: new FormControl(RolesEnum.Flatmate),
       });
   }
+
 
   closeModal(): void {
     this.dialogRef.close();
@@ -51,9 +60,13 @@ export class RegisterComponent implements OnInit {
     this.registerDto.email = this.form.value.email;
     this.registerDto.login = this.form.value.login;
     this.registerDto.password = this.form.value.password;
-
+    this.registerDto.roletype = this.registerVariable;
+    debugger;
+    let xd = this.registerDto;
     this.registerService.register(this.registerDto).subscribe(response => {
       if (response) {
+        xd = this.registerDto;
+        debugger;
         this.isRegistered = true;
         this.registerEvent.emit(this.isRegistered);
         this.openSnackBar('Register success', 'Ok');
@@ -78,6 +91,9 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-}
 
-//pspspsp
+  onChange(event: any) {
+    this.registerVariable = event.target.value;
+    this.registerDto.roletype = this.registerVariable;
+  }
+}

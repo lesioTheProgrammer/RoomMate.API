@@ -30,6 +30,7 @@ export class AddHouseworkModalComponent implements OnInit {
   }
 
   addHousework() {
+    debugger;
     this.dashboardService.addHouseWork(this.houseworkDto).subscribe(
       response => {
         if (response) {

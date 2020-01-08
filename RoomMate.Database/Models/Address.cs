@@ -9,5 +9,7 @@
         public string HouseNumber { get; set; }
 
         public string FlatNumber { get; set; }
+
+        public virtual  Flat Flat { get; set; }
     }
 }

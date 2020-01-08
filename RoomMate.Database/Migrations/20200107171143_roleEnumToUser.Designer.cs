@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomMate.Domain;
 
 namespace RoomMate.Database.Migrations
 {
     [DbContext(typeof(RoomMateContext))]
-    partial class RoomMateContextModelSnapshot : ModelSnapshot
+    [Migration("20200107171143_roleEnumToUser")]
+    partial class roleEnumToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,13 +58,13 @@ namespace RoomMate.Database.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<int?>("AddressId");
-
                     b.Property<int>("Area");
 
                     b.Property<int?>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
+
+                    b.Property<int?>("FlatAddressId");
 
                     b.Property<string>("FlatName");
 
@@ -74,9 +76,7 @@ namespace RoomMate.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId")
-                        .IsUnique()
-                        .HasFilter("[AddressId] IS NOT NULL");
+                    b.HasIndex("FlatAddressId");
 
                     b.ToTable("Flats");
                 });
@@ -245,9 +245,9 @@ namespace RoomMate.Database.Migrations
 
             modelBuilder.Entity("RoomMate.Database.Models.Flat", b =>
                 {
-                    b.HasOne("RoomMate.Database.Models.Address", "Address")
-                        .WithOne("Flat")
-                        .HasForeignKey("RoomMate.Database.Models.Flat", "AddressId");
+                    b.HasOne("RoomMate.Database.Models.Address", "FlatAddress")
+                        .WithMany()
+                        .HasForeignKey("FlatAddressId");
                 });
 
             modelBuilder.Entity("RoomMate.Database.Models.Housework", b =>
