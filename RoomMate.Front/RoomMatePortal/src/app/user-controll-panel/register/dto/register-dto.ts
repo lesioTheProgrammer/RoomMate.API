@@ -6,6 +6,6 @@ export class RegisterDto {
   public surname: string;
   public password: string;
   public email: string;
-  public role: RolesEnum;
+  public roletype: RolesEnum;
 }
 

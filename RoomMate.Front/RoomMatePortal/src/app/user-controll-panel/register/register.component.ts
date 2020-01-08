@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
   isRegistered: boolean = true;
   registerDto: RegisterDto = new RegisterDto();
   form: FormGroup;
+  registerVariable: any;
 
   @Output() registerEvent = new EventEmitter<boolean>();
 
@@ -40,7 +41,7 @@ export class RegisterComponent implements OnInit {
       Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]}),
       login: new FormControl('', {validators: [Validators.required, Validators.pattern('[A-Za-z0-9_]*'), Validators.minLength(2)]}),
       password: new FormControl('', {validators: [Validators.required, Validators.minLength(6)]}),
-      role: new FormControl(RolesEnum.Flatmate),
+      roletype: new FormControl(RolesEnum.Flatmate),
       });
   }
 
@@ -58,19 +59,18 @@ export class RegisterComponent implements OnInit {
     this.registerDto.email = this.form.value.email;
     this.registerDto.login = this.form.value.login;
     this.registerDto.password = this.form.value.password;
-    debugger;
-    this.onChange(event);
+    this.registerDto.roletype = this.registerVariable;
     debugger;
     let xd = this.registerDto;
     this.registerService.register(this.registerDto).subscribe(response => {
       if (response) {
+        xd = this.registerDto;
         debugger;
         this.isRegistered = true;
         this.registerEvent.emit(this.isRegistered);
         this.closeModal();
       }
       else {
-        // debugger;
         this.isRegistered = false;
         this.registerEvent.emit(this.isRegistered);
       }
@@ -80,10 +80,8 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  onChange($event): void {
-    debugger;
-    let newVar = $event.target.value;
-    this.registerDto.role = newVar;
+  onChange(event: any) {
+    this.registerVariable = event.target.value;
+    this.registerDto.roletype = this.registerVariable;
   }
-
 }
