@@ -22,7 +22,7 @@ export class HouseworkComponent implements OnInit {
     });
   }
 
-  editHouseWork(houseworkDto : HouseworkDto){
+  editHouseWork(houseworkDto: HouseworkDto){
     const dialogRef = this.dialog.open(AddHouseworkModalComponent, {
       width: "450px",
       data:{houseworkDto : houseworkDto }

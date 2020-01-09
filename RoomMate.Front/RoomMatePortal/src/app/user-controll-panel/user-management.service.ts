@@ -7,6 +7,7 @@ import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { TokenDto } from "./login/dto/token-dto";
 import { UserListDto } from "./dto/user-list-dto";
+import { AddressDto } from "../address/dto/address-dto";
 
 @Injectable({
   providedIn: "root"
@@ -37,5 +38,10 @@ export class UserManagementService extends RequestHelperService {
     return this.createGetRequestByParams("GetUserByFlatId", {
       flatId: flatId
     });
+  }
+
+  public getCityByTwoLetters(letters: string): Observable<AddressDto[]>{
+    return this.createGetRequestByParams<AddressDto[]>('GetCities', letters)
+    .pipe(map(data => <AddressDto[]>data));
   }
 }

@@ -7,6 +7,6 @@ namespace RoomMate.Database.Models.Enums
     {
         Flatmate = 0,
         [Description("Flatmate Admin")]
-        FlatMateAdmin = 2
+        FlatMateAdmin = 1
     }
 }

@@ -3,6 +3,8 @@ using RoomMate.Domain.Dto;
 using RoomMate.Domain.Services.Interfaces;
 using RoomMate.Repository;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RoomMate.Domain.Services.Implements
 {
@@ -10,11 +12,17 @@ namespace RoomMate.Domain.Services.Implements
     public class RegisterService : IRegisterService
     {
         private readonly IRepository<User> _userRepository;
+        private readonly IRepository<Address> _addressRepository;
+        private readonly IRepository<City> _cityRepository;
 
 
-        public RegisterService(IRepository<User> userRepository)
+        public RegisterService(IRepository<User> userRepository,
+            IRepository<City> cityRepository,
+            IRepository<Address> addressRepository)
         {
             this._userRepository = userRepository;
+            this._addressRepository = addressRepository;
+            this._cityRepository = cityRepository;
         }
 
 
@@ -31,7 +39,6 @@ namespace RoomMate.Domain.Services.Implements
             var crypto = new SimpleCrypto.PBKDF2();
             registerDto.Password = crypto.Compute(registerDto.Password); //crypted pass
             registerDto.PasswordSalt = crypto.Salt; //salt
-            
             //add missing parts of user to registerDto and pass it to the convertToTarget
             registerDto.Active = true;
             registerDto.Code = ""; //usefull on reset password only
@@ -39,7 +46,6 @@ namespace RoomMate.Domain.Services.Implements
             registerDto.CreatedDate = DateTime.Now;
             registerDto.ModificatedDate = DateTime.Now;
             registerDto.ModificatedBy = null;
-
             //add user to db
             try
             {
@@ -53,8 +59,6 @@ namespace RoomMate.Domain.Services.Implements
                 return false;
             }
         }
-
-
 
         public bool IsUserTaken(string login, string email)
         {
@@ -87,6 +91,64 @@ namespace RoomMate.Domain.Services.Implements
                 Surname = registerDto.Surname,
                 RoleType = registerDto.RoleType
             };
+        }
+
+        public AddressDto ConvertToAddrDto(Address address)
+        {
+            return new AddressDto()
+            {
+                CityId = address.CityId,
+                CityName = address.City.CityName,
+                Street = address.Street,
+                HouseNumber = address.HouseNumber,
+                FlatNumber = address.FlatNumber
+            };
+        }
+
+        public CityDto ConvertToCityDto(City city)
+        {
+            return new CityDto()
+            {
+                CityId = city.Id,
+                CityName = city.CityName
+            };
+        }
+
+        public List<CityDto> GetCitiesByTwoLett(string letters)
+        {
+            //what with tolower?
+            var cityDtoList = new List<CityDto>();
+            var lowerCityLett = letters.ToLower();
+            var citiesList = _cityRepository.GetList(x => x.CityName.ToLower().Contains(lowerCityLett)
+            && x.CityName.ToLower().StartsWith(lowerCityLett));
+
+            if (citiesList.Any())
+            {
+                foreach (var city in citiesList)
+                {
+                    cityDtoList.Add(this.ConvertToCityDto(city));
+                }
+            }
+            return cityDtoList;
+        }
+
+        public IList<AddressDto> GetAddrByCityID(int id, string streetLetters)
+        {
+            var addresDtoList = new List<AddressDto>();
+            var lowerStrLetters = streetLetters.ToLower();
+            //take all addreses by cityID and startingLetters
+            //include cityName as I wish
+            var listOfAddreses = _addressRepository.GetListWithInclude(x => x.CityId == id && 
+            x.Street.ToLower().Contains(lowerStrLetters) && x.Street.ToLower().StartsWith(lowerStrLetters), c=>c.City);
+
+            if (listOfAddreses.Any())
+            {
+                foreach (var address in listOfAddreses)
+                {
+                    addresDtoList.Add(ConvertToAddrDto(address));
+                }
+            }
+            return addresDtoList;
         }
     }
 }
