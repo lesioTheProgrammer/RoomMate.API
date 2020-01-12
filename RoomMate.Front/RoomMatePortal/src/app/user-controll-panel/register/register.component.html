@@ -9,7 +9,14 @@
   <form [formGroup]="form" (keyup.enter)="register()">
     <div class="mb-3 form-group">
       <label for="name">Name</label>
-      <input type="name" id="name" class="form-control" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': !isRegistered && f.name.errors }" />
+      <input
+        type="name"
+        id="name"
+        class="form-control"
+        formControlName="name"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': !isRegistered && f.name.errors }"
+      />
       <div *ngIf="!isRegistered && f.name.errors" class="invalid-feedback">
         <div *ngIf="f.name.errors.required">Name is required.</div>
         <div *ngIf="f.name.errors.minlength">
@@ -20,7 +27,14 @@
 
     <div class="mb-3 form-group">
       <label for="surname">Surname</label>
-      <input type="text" id="surname" class="form-control" formControlName="surname" class="form-control" [ngClass]="{ 'is-invalid': !isRegistered && f.surname.errors }" />
+      <input
+        type="text"
+        id="surname"
+        class="form-control"
+        formControlName="surname"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': !isRegistered && f.surname.errors }"
+      />
       <div *ngIf="!isRegistered && f.surname.errors" class="invalid-feedback">
         <div *ngIf="f.surname.errors.required">Surname is required.</div>
         <div *ngIf="f.surname.errors.minlength">
@@ -31,7 +45,14 @@
 
     <div class="mb-3 form-group">
       <label for="email">Email adress</label>
-      <input type="email" id="email" class="form-control" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': !isRegistered && f.email.errors }" />
+      <input
+        type="email"
+        id="email"
+        class="form-control"
+        formControlName="email"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': !isRegistered && f.email.errors }"
+      />
       <div *ngIf="!isRegistered && f.email.errors" class="invalid-feedback">
         <div *ngIf="f.email.errors.required">Email is required.</div>
         <div *ngIf="f.email.hasError('pattern')">
@@ -42,7 +63,14 @@
 
     <div class="mb-3 form-group">
       <label for="login">Login</label>
-      <input type="text" id="login" class="form-control" formControlName="login" class="form-control" [ngClass]="{ 'is-invalid': !isRegistered && f.login.errors }" />
+      <input
+        type="text"
+        id="login"
+        class="form-control"
+        formControlName="login"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': !isRegistered && f.login.errors }"
+      />
       <div *ngIf="!isRegistered && f.login.errors" class="invalid-feedback">
         <div *ngIf="f.login.errors.required">Login is required.</div>
         <div *ngIf="f.login.hasError('pattern')">
@@ -53,7 +81,14 @@
 
     <div class="mb-3 form-group">
       <label for="password">Password</label>
-      <input type="password" id="password" class="form-control" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': !isRegistered && f.password.errors }" />
+      <input
+        type="password"
+        id="password"
+        class="form-control"
+        formControlName="password"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': !isRegistered && f.password.errors }"
+      />
       <div *ngIf="!isRegistered && f.password.errors" class="invalid-feedback">
         <div *ngIf="f.password.errors.required">Password is required.</div>
         <div *ngIf="f.password.errors.minlength">
@@ -61,19 +96,69 @@
         </div>
       </div>
     </div>
-
+    <!-- autocomplete city -->
+    <mat-form-field class="example-full-width">
+      <br>
+      <input
+        #inputField
+        type="text"
+        placeholder="Select the city"
+        aria-label="City"
+        matInput
+        [formControl]="autoComplForm"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let option of citiesFromApi | async"
+          [value]="option"
+        >
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <!-- autocomplete end -->
+    <!-- autocomplete address -->
+    <!-- <div></div>
+    <mat-form-field class="example-full-width">
+      <br>
+      <input
+        #inputField
+        type="text"
+        placeholder="Select the address"
+        aria-label="Address"
+        matInput
+        [formControl]="autoComplForm"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let city of citiesFromApi | async"
+          [value]="city"
+        >
+          {{ city }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field> -->
+    <!-- autocomplete end -->
     <div class="form-group">
       <label form="roletype">Select Role:</label>
-      <select formControlName="roletype"  (change)="onChange($event)">
+      <select formControlName="roletype" (change)="onChange($event)">
         <option *ngFor="let role of keys(roles)" [value]="roles[role]">
-          {{role}}
+          {{ role }}
         </option>
       </select>
     </div>
   </form>
   <div mat-dialog-actions style="float:right">
     <button mat-button (click)="closeModal()">Anuluj</button>
-    <button mat-button cdkFocusInitial (click)="register()" type="submit" [disabled]="disabledButton">
+    <button
+      mat-button
+      cdkFocusInitial
+      (click)="register()"
+      type="submit"
+      [disabled]="disabledButton"
+    >
       Zarejestruj
     </button>
   </div>

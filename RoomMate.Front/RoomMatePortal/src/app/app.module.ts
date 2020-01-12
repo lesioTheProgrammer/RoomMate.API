@@ -7,7 +7,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { MatNativeDateModule, MatDialogModule, MatDialogRef } from '@angular/material';
+import { MatNativeDateModule, MatDialogModule, MatDialogRef, MatAutocompleteModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModules } from './material-module/material.module';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
@@ -79,7 +79,8 @@ export function tokenGetter() {
     CommonModule,
     MatDialogModule,
     AppMaterialModules,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatAutocompleteModule
   ],
   entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent],
   providers: [[DashboardService],

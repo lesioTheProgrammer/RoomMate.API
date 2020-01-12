@@ -1,4 +1,4 @@
 export class CityDto {
-  public cityid: number;
-  public cityname: string;
+  public cityId: number;
+  public cityName: string;
 }
