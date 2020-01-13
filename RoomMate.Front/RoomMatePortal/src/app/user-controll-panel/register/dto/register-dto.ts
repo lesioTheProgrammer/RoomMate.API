@@ -7,5 +7,6 @@ export class RegisterDto {
   public password: string;
   public email: string;
   public roletype: RolesEnum;
+  public cityId: number;
 }
 
