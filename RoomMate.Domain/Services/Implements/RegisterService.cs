@@ -114,7 +114,7 @@ namespace RoomMate.Domain.Services.Implements
             };
         }
 
-        public List<CityDto> GetCitiesByTwoLett(string letters)
+        public List<CityDto> GetCitiesByName(string letters)
         {
             //what with tolower?
             var cityDtoList = new List<CityDto>();
@@ -132,7 +132,7 @@ namespace RoomMate.Domain.Services.Implements
             return cityDtoList;
         }
 
-        public IList<AddressDto> GetAddrByCityID(int id, string streetLetters)
+        public IList<AddressDto> GetAddressByCityId(int id, string streetLetters)
         {
             var addresDtoList = new List<AddressDto>();
             var lowerStrLetters = streetLetters.ToLower();

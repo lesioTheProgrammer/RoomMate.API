@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RoomMate.Database.Models.Enums;
 using RoomMate.Domain.Dto;
 using RoomMate.Domain.Services.Interfaces;
 
 namespace RoomMate.Api.Controllers
 {
-    
+
     [Route("api/Dashboard")]
     public class DashboardController : Controller
     {
@@ -33,9 +32,7 @@ namespace RoomMate.Api.Controllers
             {
                 return this.Ok(true);
             }
-
             return this.BadRequest();
-            //
         }
     }
 }

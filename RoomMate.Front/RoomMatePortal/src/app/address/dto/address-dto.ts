@@ -1,8 +1,8 @@
 
  export class AddressDto{
-  public cityid: number;
-  public cityname: string;
+  public cityId: number;
+  public cityName: string;
   public street: string;
-  public housenumber: string;
-  public flatnumber: string;
+  public houseNumber: string;
+  public flatNumber: string;
 }

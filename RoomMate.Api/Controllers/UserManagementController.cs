@@ -25,21 +25,19 @@ namespace RoomMate.Api.Controllers
             this.tokenService = tokenService;
             this.userService = userService;
         }
-        //cities with address at once?
-        //NOOOOOOOOOOOOOO
         [Route("GetCities")]
         [HttpGet]
-        public IActionResult GetCitiesByTwoLett(string letters)
+        public IActionResult GetCitiesByName(string letters)
         {
-            return this.Ok(this.registerService.GetCitiesByTwoLett(letters));
+            return this.Ok(this.registerService.GetCitiesByName(letters));
         }
 
 
         [Route("GetAddress")]
         [HttpGet]
-        public IActionResult GetAddrByCityID(int id, string streetLetters)
+        public IActionResult GetAddressByCityId(int id, string streetLetters)
         {
-            return this.Ok(this.registerService.GetAddrByCityID(id, streetLetters));
+            return this.Ok(this.registerService.GetAddressByCityId(id, streetLetters));
         }
 
 
