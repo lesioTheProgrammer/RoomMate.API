@@ -97,26 +97,7 @@
       </div>
     </div>
     <!-- autocomplete city -->
-    <mat-form-field class="example-full-width">
-      <br>
-      <input
-        #inputField
-        type="text"
-        placeholder="Select the city"
-        aria-label="City"
-        matInput
-        [formControl]="autoComplForm"
-        [matAutocomplete]="auto"
-      />
-      <mat-autocomplete #auto="matAutocomplete">
-        <mat-option
-          *ngFor="let option of citiesFromApi | async"
-          [value]="option"
-        >
-          {{ option }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+
     <!-- autocomplete end -->
     <!-- autocomplete address -->
     <!-- <div></div>
@@ -150,6 +131,36 @@
       </select>
     </div>
   </form>
+
+
+  <mat-form-field class="example-full-width">
+    <br>
+    <input
+      #inputField
+      type="text"
+      placeholder="Enter the city name"
+      aria-label="City"
+      matInput
+      [formControl]="autoComplForm"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete"
+
+    [displayWith]="displayFn"
+
+    (optionSelected)='getAddress($event)'>
+      <mat-option
+        *ngFor="let city of citiesFromApi | async"
+        [value]="city.cityName"
+      >
+        {{ city.cityName }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+
+
+
   <div mat-dialog-actions style="float:right">
     <button mat-button (click)="closeModal()">Anuluj</button>
     <button

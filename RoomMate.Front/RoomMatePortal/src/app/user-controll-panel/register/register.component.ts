@@ -7,7 +7,7 @@ import { RolesEnum } from '../dto/RolesEnum';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { CityDto } from 'src/app/address/dto/city-dto';
-import { forEach } from '@angular/router/src/utils/collection';
+
 
 @Component({
   selector: 'app-register',
@@ -24,15 +24,11 @@ export class RegisterComponent implements OnInit {
   form: FormGroup;
   registerVariable: any;
 
-  options = [
-    'One',
-    'Two',
-    'Three'
-  ];
+  pusheditems: CityDto[] = [];  //empty arr
 
-  arrCities: string [] = [];
+  citiesFromApi: Observable<CityDto[]>;
 
-  citiesFromApi: Observable<string[]>;
+  cityName: string;
 
   @Output() registerEvent = new EventEmitter<boolean>();
 
@@ -69,15 +65,6 @@ export class RegisterComponent implements OnInit {
         map(letters => letters.length >= 2 ? this.getCities(letters) : [])
       );
   }
-
-//filter nie trzeba bo api filtruje
-  filter(val: string): string[] {
-    return this.options.filter(option =>
-      option.toLowerCase().indexOf(val.toLowerCase()) === 0);
-  }
-
-
-
 
   closeModal(): void {
     this.dialogRef.close();
@@ -127,24 +114,35 @@ export class RegisterComponent implements OnInit {
   }
 
 
-  getCities(letters: string): string[] {
+  getCities(letters: string):  CityDto[]  {
     this.registerService.getCityByTwoLetters(letters)
       .subscribe(response => {
         if (response != null){
           response.forEach(element => {
-            this.arrCities.push(element.cityName);
+            let newcity = new CityDto;
+            newcity.cityId = element.cityId;
+            newcity.cityName = element.cityName;
+            this.pusheditems.push(newcity);
           });
         }
       });
-      return this.arrCities;
+      return this.pusheditems;
   }
 
+  //what to do after selecting city? pass cityId to adress
+  getAddress(event: any): void {
+    debugger;
+    let cityIDdd = event.target.value;
+    debugger;
 
+    console.log(cityIDdd);
+  }
+
+//
+  displayFn(city?: CityDto): number | undefined {
+    debugger;
+    let xdd = city.cityId;
+    debugger;
+    return city ? city.cityId : undefined;
+  }
 }
-
-
-
-
-
-
-

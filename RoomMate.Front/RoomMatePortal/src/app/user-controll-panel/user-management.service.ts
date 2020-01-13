@@ -42,7 +42,6 @@ export class UserManagementService extends RequestHelperService {
   }
 
   public getCityByTwoLetters(letters: string): Observable<CityDto[]>{
-    debugger;
     return this.createGetRequestByParams<CityDto[]>('GetCities', {letters})
     .pipe(map(data => <CityDto[]>data));
   }
