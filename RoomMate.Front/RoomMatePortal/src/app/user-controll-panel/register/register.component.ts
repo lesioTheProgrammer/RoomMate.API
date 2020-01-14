@@ -28,7 +28,6 @@ export class RegisterComponent implements OnInit {
   cityName: string;
   autoComplForm: FormControl = new FormControl();
   // here working wirh enum:
-  keys = Object.keys; // key has name as label and symbol as value
   roles = RolesEnum;
 
   cityGetSuccess: boolean = false;
@@ -36,6 +35,8 @@ export class RegisterComponent implements OnInit {
   addressFromApi: Observable<AddressDto[]>;
   pushedAddrItems: AddressDto[] = []; // empty arr
   addresCtrl: FormControl;
+  addrSelectSuccess: boolean = false;
+
 
 
   @Output() registerEvent = new EventEmitter<boolean>();
@@ -71,10 +72,7 @@ export class RegisterComponent implements OnInit {
       password: new FormControl('', {
         validators: [Validators.required, Validators.minLength(6)]
       }),
-      roletype: new FormControl(RolesEnum.Flatmate)
     });
-
-
 
     this.citiesFromApi = this.autoComplForm.valueChanges.pipe(
       startWith(''),
@@ -133,11 +131,6 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  onChange(event: any) {
-    this.registerVariable = event.target.value;
-    this.registerDto.roletype = this.registerVariable;
-  }
-
   getCities(letters: string): CityDto[] {
     /// Pierwsze co to wykona się to o:
     this.pusheditems = new Array<CityDto>();
@@ -154,11 +147,11 @@ export class RegisterComponent implements OnInit {
     return this.pusheditems;
   }
 
-  // metoda wywolywana jak bede wpisywac city
+  // method called when user selects the city
   getAddress(streetLetters: string): AddressDto[] {
+    debugger;
     this.pushedAddrItems = new Array<AddressDto>();
-
-    this.registerService.getAddressByCityIdStreet(this.registerDto.cityId, streetLetters)
+    this.registerService.getAddressByCityIdStreet(this.registerDto.addressDto.cityId, streetLetters)
     .subscribe(response => {
       if (response != null) {
         response.forEach(element => {
@@ -176,13 +169,37 @@ export class RegisterComponent implements OnInit {
   }
 
   passCitytoAddr(cityId: number) {
-    this.registerDto.cityId = cityId;
+    debugger; // tu o sie wypierdala <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    this.registerDto.addressDto.cityId = cityId;
     this.cityGetSuccess = true;
+  }
+
+  //assign role
+  //if user cant find flat - admin
+  //otherwise - flatmate
+
+  //inform that selection has been done
+  passAddrSelectState() {
+    this.addrSelectSuccess = true;
+  }
+
+  selectRole(addrSelectSuccess: boolean) {
+    if (addrSelectSuccess) {
+      debugger;
+      this.registerVariable = RolesEnum.Flatmate;
+      this.registerDto.addressDto.isFromGetReq = true; //inform that get req addres is from get
+    }
+    else {
+     debugger;
+      this.registerVariable = RolesEnum.FlatMateAdmin;
+      this.registerDto.addressDto.isFromGetReq = false;
+
+
+    }
   }
 
 
 
-  //post request do bazy z tym adresem co wybral
 
 
 }

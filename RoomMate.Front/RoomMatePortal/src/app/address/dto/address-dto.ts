@@ -5,4 +5,5 @@
   public street: string;
   public houseNumber: string;
   public flatNumber: string;
+  public isFromGetReq: boolean;
 }

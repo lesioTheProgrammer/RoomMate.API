@@ -20,7 +20,8 @@ namespace RoomMate.Domain.Dto
 
         public  RoleTypeEnum RoleType { get; set; }
 
-        public int CityId { get; set; }
+        public AddressDto AddressDto { get; set; }
+
 
         public bool IsValid()
         {

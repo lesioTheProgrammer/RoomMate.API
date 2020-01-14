@@ -98,17 +98,17 @@
     </div>
 
 
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label form="roletype">Select Role:</label>
       <select formControlName="roletype" (change)="onChange($event)">
         <option *ngFor="let role of keys(roles)" [value]="roles[role]">
           {{ role }}
         </option>
       </select>
-    </div>
+    </div> -->
   </form>
 
-
+<!-- autocompllete city -->
   <mat-form-field class="example-full-width">
     <br />
     <input
@@ -132,7 +132,7 @@
   </mat-form-field>
 
   <!-- autocomplete address -->
-  <mat-form-field class="example-full-width2">
+  <mat-form-field class="example-full-width2" *ngIf="cityGetSuccess">
     <br />
     <input
       #inputField
@@ -148,6 +148,7 @@
       <mat-option
         *ngFor="let address of addressFromApi | async"
         [value]="address.street"
+        (onSelectionChange)="passAddrSelectState()"
       >
       ul.{{address.street}} {{address.houseNumber}}/{{address.flatNumber}}
       </mat-option>
