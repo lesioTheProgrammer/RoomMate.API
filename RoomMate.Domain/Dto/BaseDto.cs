@@ -15,9 +15,5 @@ namespace RoomMate.Domain.Dto
         public int? ModificatedBy { get; set; } 
 
         public DateTime ModificatedDate { get; set; }
-
-        public bool IsFromGetReq { get; set; }
-
-
     }
 }

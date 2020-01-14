@@ -45,7 +45,7 @@ namespace RoomMate.Api.Controllers
         [Route("Register")]
         [HttpPost]
         public IActionResult Register([FromBody]RegisterDto registerDto)
-        {
+       {
             if (registerDto.IsValid() && registerService.RegisterUser(registerDto))
             {
                 return this.Ok(true);

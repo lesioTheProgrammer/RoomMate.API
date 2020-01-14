@@ -147,16 +147,14 @@
     <mat-autocomplete #address="matAutocomplete">
       <mat-option
         *ngFor="let address of addressFromApi | async"
-        [value]="address.street"
-        (onSelectionChange)="passAddrSelectState()"
+        [value]="address.allAddress"
+        (onSelectionChange)="passAddrSelectState(address.id)"
       >
-      ul.{{address.street}} {{address.houseNumber}}/{{address.flatNumber}}
+      ul.{{address.allAddress}}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
   <!-- autocomplete end -->
-
-
 
 
   <div mat-dialog-actions style="float:right">

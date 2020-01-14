@@ -96,6 +96,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
+    this.selectRole(this.addrSelectSuccess);
     this.disabledButton = true;
     this.registerDto.name = this.form.value.name;
     this.registerDto.surname = this.form.value.surname;
@@ -149,7 +150,6 @@ export class RegisterComponent implements OnInit {
 
   // method called when user selects the city
   getAddress(streetLetters: string): AddressDto[] {
-    debugger;
     this.pushedAddrItems = new Array<AddressDto>();
     this.registerService.getAddressByCityIdStreet(this.registerDto.addressDto.cityId, streetLetters)
     .subscribe(response => {
@@ -161,6 +161,8 @@ export class RegisterComponent implements OnInit {
           newAddress.flatNumber = element.flatNumber;
           newAddress.houseNumber = element.houseNumber;
           newAddress.street = element.street;
+          newAddress.allAddress = element.allAddress;
+          newAddress.id = element.id;
           this.pushedAddrItems.push(newAddress);
         });
       }
@@ -169,37 +171,28 @@ export class RegisterComponent implements OnInit {
   }
 
   passCitytoAddr(cityId: number) {
-    debugger; // tu o sie wypierdala <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     this.registerDto.addressDto.cityId = cityId;
-    this.cityGetSuccess = true;
+    this.cityGetSuccess = true; // to make addresBox Visible
   }
 
-  //assign role
-  //if user cant find flat - admin
-  //otherwise - flatmate
+  // assign role
+  // if user cant find flat - admin
+  // otherwise - flatmate
 
-  //inform that selection has been done
-  passAddrSelectState() {
+  // inform that selection has been done
+  passAddrSelectState(id: number) {
     this.addrSelectSuccess = true;
+    debugger;
+    this.registerDto.addressDto.id = id;
   }
 
   selectRole(addrSelectSuccess: boolean) {
     if (addrSelectSuccess) {
-      debugger;
       this.registerVariable = RolesEnum.Flatmate;
-      this.registerDto.addressDto.isFromGetReq = true; //inform that get req addres is from get
     }
     else {
-     debugger;
       this.registerVariable = RolesEnum.FlatMateAdmin;
-      this.registerDto.addressDto.isFromGetReq = false;
-
-
     }
   }
-
-
-
-
 
 }

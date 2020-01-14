@@ -97,6 +97,7 @@ namespace RoomMate.Domain.Services.Implements
         {
             return new AddressDto()
             {
+                Id = address.Id,
                 CityId = address.CityId,
                 CityName = address.City.CityName,
                 Street = address.Street,

@@ -9,5 +9,5 @@ export class RegisterDto {
   public email: string;
   public roletype: RolesEnum;
 
-  public addressDto: AddressDto;
+  public addressDto: AddressDto = new AddressDto();
 }
