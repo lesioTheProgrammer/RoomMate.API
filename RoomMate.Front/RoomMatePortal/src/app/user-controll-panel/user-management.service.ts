@@ -45,4 +45,10 @@ export class UserManagementService extends RequestHelperService {
     return this.createGetRequestByParams<CityDto[]>('GetCities', {letters})
     .pipe(map(data => <CityDto[]>data));
   }
+
+  public getAddressByCityIdStreet(id: number, streetLetters: string): Observable<AddressDto[]>{
+    return this.createGetRequestByParams<AddressDto[]>('GetAddress', {id, streetLetters})
+    .pipe(map(data => <AddressDto[]>data));
+  }
+
 }

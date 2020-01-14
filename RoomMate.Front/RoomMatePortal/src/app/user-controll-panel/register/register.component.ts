@@ -7,6 +7,7 @@ import { RolesEnum } from "../dto/RolesEnum";
 import { Observable } from "rxjs";
 import { startWith, map, debounceTime } from "rxjs/operators";
 import { CityDto } from "src/app/address/dto/city-dto";
+import { AddressDto } from "src/app/address/dto/address-dto";
 
 @Component({
   selector: "app-register",
@@ -17,17 +18,25 @@ export class RegisterComponent implements OnInit {
   //properties
   disabledButton = false;
   errorShow: boolean = false;
-  dataLoaded: boolean = false;
+ // dataLoaded: boolean = false;
   isRegistered: boolean = true;
   registerDto: RegisterDto = new RegisterDto();
   form: FormGroup;
   registerVariable: any;
-
-  pusheditems: CityDto[] = []; //empty arr
-
+  pusheditems: CityDto[] = []; // empty arr
   citiesFromApi: Observable<CityDto[]>;
-
   cityName: string;
+  autoComplForm: FormControl = new FormControl();
+  // here working wirh enum:
+  keys = Object.keys; // key has name as label and symbol as value
+  roles = RolesEnum;
+
+  cityGetSuccess: boolean = false;
+
+  addressFromApi: Observable<AddressDto[]>;
+  pushedAddrItems: AddressDto[] = []; // empty arr
+  addresCtrl: FormControl;
+
 
   @Output() registerEvent = new EventEmitter<boolean>();
 
@@ -37,43 +46,45 @@ export class RegisterComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {}
 
-  //here working wirh enum:
-  keys = Object.keys; //key has name as label and symbol as value
-  roles = RolesEnum;
-
-  autoComplForm: FormControl = new FormControl();
-
   ngOnInit() {
     this.form = new FormGroup({
-      name: new FormControl("", {
+      name: new FormControl('', {
         validators: [Validators.required, Validators.minLength(2)]
       }),
-      surname: new FormControl("", {
+      surname: new FormControl('', {
         validators: [Validators.required, Validators.minLength(2)]
       }),
-      email: new FormControl("", {
+      email: new FormControl('', {
         validators: [
           Validators.required,
           Validators.email,
-          Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
+          Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')
         ]
       }),
-      login: new FormControl("", {
+      login: new FormControl('', {
         validators: [
           Validators.required,
-          Validators.pattern("[A-Za-z0-9_]*"),
+          Validators.pattern('[A-Za-z0-9_]*'),
           Validators.minLength(2)
         ]
       }),
-      password: new FormControl("", {
+      password: new FormControl('', {
         validators: [Validators.required, Validators.minLength(6)]
       }),
       roletype: new FormControl(RolesEnum.Flatmate)
     });
 
+
+
     this.citiesFromApi = this.autoComplForm.valueChanges.pipe(
-      startWith(""),
+      startWith(''),
       map(letters => (letters.length >= 2 ? this.getCities(letters) : []))
+    );
+
+    this.addresCtrl = new FormControl();
+    this.addressFromApi = this.addresCtrl.valueChanges.pipe(
+      startWith(''),
+      map(streetLetters => (streetLetters.length >= 2 && this.cityGetSuccess ? this.getAddress(streetLetters) : []))
     );
   }
 
@@ -100,13 +111,13 @@ export class RegisterComponent implements OnInit {
         if (response) {
           this.isRegistered = true;
           this.registerEvent.emit(this.isRegistered);
-          this.openSnackBar("Register success", "Ok");
+          this.openSnackBar('Register success', 'Ok');
           this.closeModal();
         } else {
           this.isRegistered = false;
           this.registerEvent.emit(this.isRegistered);
 
-          this.openSnackBar("Register fail", "Ok");
+          this.openSnackBar('Register failure', 'Ok');
         }
         this.disabledButton = false;
       },
@@ -130,9 +141,7 @@ export class RegisterComponent implements OnInit {
   getCities(letters: string): CityDto[] {
     /// Pierwsze co to wykona się to o:
     this.pusheditems = new Array<CityDto>();
-
     this.registerService.getCityByTwoLetters(letters).subscribe(response => {
-
       if (response != null) {
         response.forEach(element => {
           let newcity = new CityDto();
@@ -145,7 +154,35 @@ export class RegisterComponent implements OnInit {
     return this.pusheditems;
   }
 
-  getAddress(cityId: number) {
-    this.registerDto.cityId = cityId;
+  // metoda wywolywana jak bede wpisywac city
+  getAddress(streetLetters: string): AddressDto[] {
+    this.pushedAddrItems = new Array<AddressDto>();
+
+    this.registerService.getAddressByCityIdStreet(this.registerDto.cityId, streetLetters)
+    .subscribe(response => {
+      if (response != null) {
+        response.forEach(element => {
+          let newAddress = new AddressDto();
+          newAddress.cityId = element.cityId;
+          newAddress.cityName = element.cityName;
+          newAddress.flatNumber = element.flatNumber;
+          newAddress.houseNumber = element.houseNumber;
+          newAddress.street = element.street;
+          this.pushedAddrItems.push(newAddress);
+        });
+      }
+    });
+    return this.pushedAddrItems;
   }
+
+  passCitytoAddr(cityId: number) {
+    this.registerDto.cityId = cityId;
+    this.cityGetSuccess = true;
+  }
+
+
+
+  //post request do bazy z tym adresem co wybral
+
+
 }

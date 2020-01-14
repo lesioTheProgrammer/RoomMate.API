@@ -44,6 +44,9 @@ select * from City
 
 insert into City values (1, 1, GETDATE(), null, GETDATE(), 'Vancover');
 
+insert into City values (1, 1, GETDATE(), null, GETDATE(), 'Valencia');
+
+
 -- first select the city and later by selected city select avialable adresses
 --here select vancover only city
 select City.CityName from City where City.CityName = 'Vancover';
