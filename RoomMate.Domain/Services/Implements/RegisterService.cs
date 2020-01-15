@@ -4,7 +4,6 @@ using RoomMate.Domain.Services.Interfaces;
 using RoomMate.Repository;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RoomMate.Domain.Services.Implements
 {
@@ -12,29 +11,28 @@ namespace RoomMate.Domain.Services.Implements
     public class RegisterService : IRegisterService
     {
         private readonly IRepository<User> _userRepository;
-        private readonly IRepository<Address> _addressRepository;
-        private readonly IRepository<City> _cityRepository;
+        private readonly IAddressService  _addressService;
 
 
         public RegisterService(IRepository<User> userRepository,
-            IRepository<City> cityRepository,
-            IRepository<Address> addressRepository)
+             IAddressService addressService)
         {
             this._userRepository = userRepository;
-            this._addressRepository = addressRepository;
-            this._cityRepository = cityRepository;
+            //what with dependency? added to service addresDepencendy
+            this._addressService = addressService;
         }
 
 
         public bool RegisterUser(RegisterDto registerDto)
         {
+            bool isRegistered = false;
+            int idOfJustCreatedUser = 0;
+
             //check unique values of login and email
             if (IsUserTaken(registerDto.Login, registerDto.Email))
             {
-                return false;
+                return isRegistered;
             }
-            //tu mielonka dto przekazuje z register dto i potem wale tym do repo?
-            //w repo jeszcze robie czysty obiekt do inserta do tabeli
             //crypting password
             var crypto = new SimpleCrypto.PBKDF2();
             registerDto.Password = crypto.Compute(registerDto.Password); //crypted pass
@@ -51,13 +49,30 @@ namespace RoomMate.Domain.Services.Implements
             {
                 var user = this.ConvertToTarget(registerDto);
                 this._userRepository.InsertOrUpdate(user);
-                return true;
+                isRegistered =  true;
+                idOfJustCreatedUser = user.Id;
 
             }
             catch (Exception ex)
             {
-                return false;
+                isRegistered =  false;
             }
+           
+            //tu o metoda do inputow w tabeli adres i polaczyc to z userem
+            // onyly if user seleceted valid addres
+            //if user is registered correctly then insert the address otherwise thers no point
+            if (ValidationDto.IsValidId(registerDto.AddressDto.Id) && isRegistered == true)
+            {
+                isRegistered = _addressService.AddAddressUserSelected(registerDto.AddressDto, idOfJustCreatedUser);
+            }
+            //if user selected only city
+            else if (!ValidationDto.IsValidId(registerDto.AddressDto.Id)
+                && ValidationDto.IsValidId(registerDto.AddressDto.CityId))
+            {
+
+            }
+
+            return isRegistered;
         }
 
         public bool IsUserTaken(string login, string email)
@@ -73,7 +88,7 @@ namespace RoomMate.Domain.Services.Implements
 
 
 
-        public User ConvertToTarget(RegisterDto registerDto)
+        private User ConvertToTarget(RegisterDto registerDto)
         {
             return new User
             {
@@ -93,63 +108,18 @@ namespace RoomMate.Domain.Services.Implements
             };
         }
 
-        public AddressDto ConvertToAddrDto(Address address)
-        {
-            return new AddressDto()
-            {
-                Id = address.Id,
-                CityId = address.CityId,
-                CityName = address.City.CityName,
-                Street = address.Street,
-                HouseNumber = address.HouseNumber,
-                FlatNumber = address.FlatNumber
-            };
-        }
-
-        public CityDto ConvertToCityDto(City city)
-        {
-            return new CityDto()
-            {
-                CityId = city.Id,
-                CityName = city.CityName
-            };
-        }
+        
+        
 
         public List<CityDto> GetCitiesByName(string letters)
         {
-            //what with tolower?
-            var cityDtoList = new List<CityDto>();
-            var lowerCityLett = letters.ToLower();
-            var citiesList = _cityRepository.GetList(x => x.CityName.ToLower().Contains(lowerCityLett)
-            && x.CityName.ToLower().StartsWith(lowerCityLett));
-
-            if (citiesList.Any())
-            {
-                foreach (var city in citiesList)
-                {
-                    cityDtoList.Add(this.ConvertToCityDto(city));
-                }
-            }
-            return cityDtoList;
+            //antipatern???
+            return _addressService.GetCitiesByName(letters);
         }
 
         public IList<AddressDto> GetAddressByCityId(int id, string streetLetters)
         {
-            var addresDtoList = new List<AddressDto>();
-            var lowerStrLetters = streetLetters.ToLower();
-            //take all addreses by cityID and startingLetters
-            //include cityName as I wish
-            var listOfAddreses = _addressRepository.GetListWithInclude(x => x.CityId == id && 
-            x.Street.ToLower().Contains(lowerStrLetters) && x.Street.ToLower().StartsWith(lowerStrLetters), c=>c.City);
-
-            if (listOfAddreses.Any())
-            {
-                foreach (var address in listOfAddreses)
-                {
-                    addresDtoList.Add(ConvertToAddrDto(address));
-                }
-            }
-            return addresDtoList;
+            return _addressService.GetAddressByCityId(id, streetLetters);
         }
     }
 }

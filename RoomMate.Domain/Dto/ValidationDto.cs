@@ -38,7 +38,7 @@ namespace RoomMate.Domain.Dto
             return true;
         }
 
-        public static bool IsValidCity(int? id)
+        public static bool IsValidId(int? id)
         {
             if (id == 0 || id == null)
             {

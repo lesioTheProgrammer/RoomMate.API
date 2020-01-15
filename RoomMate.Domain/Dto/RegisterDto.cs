@@ -28,7 +28,7 @@ namespace RoomMate.Domain.Dto
 
             return (ValidationDto.IsEmpty(this.Login) && ValidationDto.IsEmpty(this.Name) 
                 && ValidationDto.IsEmpty(Surname)  && ValidationDto.IsValidPassword(this.Password)
-                && ValidationDto.IsValidEmail(this.Email) && ValidationDto.IsValidCity(this.AddressDto.CityId));
+                && ValidationDto.IsValidEmail(this.Email) && ValidationDto.IsValidId(this.AddressDto.CityId));
         }
     }
 }

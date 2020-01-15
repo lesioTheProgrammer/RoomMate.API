@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RoomMate.Domain.Dto
+﻿namespace RoomMate.Domain.Dto
 {
     public class FlatDto : BaseDto
     {
         public string FlatName { get; set; }
 
         public int? FlatAddressId { get; set; }
+
+        public int? AddressId { get; set; }
 
         public int? FlatOwnerId { get; set; }
 

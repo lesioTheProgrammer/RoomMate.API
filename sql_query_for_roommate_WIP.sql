@@ -57,10 +57,43 @@ join City as c on c.Id = a.CityId;
 
 
 
-select * from City
+select * from City--id
 
-select * from Addresses
+select * from Addresses --cityID
+
+select * from Flats  --addID
 
 
-update Addresses set Street = 'prank' where Street = 'Prank'
+
+select * from UserFlat --flatid i userId
+
+select * from Users --nic
+
+
+-- if address exist theres also flat to this addres 1:1
+--there can be user without flat? yes for a while but later I cant allow that - thats why there will be obligatory redirect to addr page 
+
+--1. only city in form: insert into users values from form and into addres - cityId
+--2. city and addres in form: insert into users values from form and 
+
+
+
+insert into Flats values (1, 25, 1, GETDATE(), 3, 'Gerar this is my flat', null, GETDATE(), 1);
+
+--test selects - last from just inserted
+select * from Users
+
+
+
+
+
+
+--nested select tio get city flat user flat etc
+
+select c.CityName, a.Street, f.FlatName, u.Email from City as c
+left join Addresses as a on a.CityId = c.Id
+left join Flats as f on f.AddressId = a.Id
+left join UserFlat as uf on uf.FlatId = f.id
+left join Users as u on u.Id = uf.UserId
+where u.Id = (select top 1Id from Users order by Id desc);
 

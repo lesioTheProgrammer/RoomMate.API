@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -142,6 +141,7 @@ namespace RoomMate.Api
             container.Register<ILoginService, LoginService>(Lifestyle.Scoped);
             container.Register<IRegisterService, RegisterService>(Lifestyle.Scoped);
             container.Register<IUserService, UserService>(Lifestyle.Scoped);
+            container.Register<IAddressService, AddressService>(Lifestyle.Scoped); //addr serv
 
 
             // Allow Simple Injector to resolve services from ASP.NET Core.

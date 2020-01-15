@@ -3,13 +3,11 @@ using System.Collections.Generic;
 
 namespace RoomMate.Domain.Services.Interfaces
 {
-    public interface IRegisterService
+    public interface IAddressService
     {
-        bool RegisterUser(RegisterDto dto);
-        bool IsUserTaken(string login, string email);
-
         List<CityDto> GetCitiesByName(string letters);
 
         IList<AddressDto> GetAddressByCityId(int id, string streetLetters);
+        bool AddAddressUserSelected(AddressDto address, int idOfJustCreatedUser);
     }
 }

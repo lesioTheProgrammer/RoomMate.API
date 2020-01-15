@@ -15,5 +15,7 @@ namespace RoomMate.Domain.Services.Interfaces
 
         int GetCountOfFlats();
 
+        bool AddFlatToUser(int idOfJustCreatedUser, int addressId);
+
     }
 }
