@@ -37,5 +37,14 @@ namespace RoomMate.Domain.Dto
             }
             return true;
         }
+
+        public static bool IsValidCity(int? id)
+        {
+            if (id == 0 || id == null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

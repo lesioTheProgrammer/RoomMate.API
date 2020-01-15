@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { RegisterDto } from "./dto/register-dto";
 import { MatDialogRef, MatSnackBar } from "@angular/material";
 import { UserManagementService } from "../user-management.service";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from "@angular/forms";
 import { RolesEnum } from "../dto/RolesEnum";
 import { Observable } from "rxjs";
 import { startWith, map, debounceTime } from "rxjs/operators";
@@ -84,7 +84,15 @@ export class RegisterComponent implements OnInit {
       startWith(''),
       map(streetLetters => (streetLetters.length >= 2 && this.cityGetSuccess ? this.getAddress(streetLetters) : []))
     );
+
+    this.autoComplForm.setValidators(forbiddenNamesValidator(this.pusheditems));
+
+    // on init ends here
   }
+
+
+
+
 
   closeModal(): void {
     this.dialogRef.close();
@@ -182,7 +190,6 @@ export class RegisterComponent implements OnInit {
   // inform that selection has been done
   passAddrSelectState(id: number) {
     this.addrSelectSuccess = true;
-    debugger;
     this.registerDto.addressDto.id = id;
   }
 
@@ -195,4 +202,21 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+
+
+
+
+
+}
+
+
+// validate autocomplete form
+export function forbiddenNamesValidator(cities: CityDto[]): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    // below findIndex will check if control.value is equal to one of our options or not
+    const index = cities.findIndex(name => {
+      return (new RegExp('\^' + name.cityName + '\$')).test(control.value);
+    });
+    return index < 0 ? { 'forbiddenNames': { value: control.value } } : null;
+  };
 }

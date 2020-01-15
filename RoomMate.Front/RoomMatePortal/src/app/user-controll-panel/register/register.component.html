@@ -129,6 +129,11 @@
         {{ city.cityName }}
       </mat-option>
     </mat-autocomplete>
+    <mat-error *ngIf="autoComplForm.hasError('forbiddenNames') && !isRegistered">
+      You should enter value from suggested one only. <strong>'{{autoComplForm.errors.forbiddenNames.value}}'</strong> is not allowed.
+    </mat-error>
+
+
   </mat-form-field>
 
   <!-- autocomplete address -->
