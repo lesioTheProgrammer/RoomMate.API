@@ -25,14 +25,27 @@ namespace RoomMate.Api.Controllers
             this.tokenService = tokenService;
             this.userService = userService;
         }
+        [Route("GetCities")]
+        [HttpGet]
+        public IActionResult GetCitiesByName(string letters)
+        {
+            return this.Ok(this.registerService.GetCitiesByName(letters));
+        }
 
-        
+
+        [Route("GetAddress")]
+        [HttpGet]
+        public IActionResult GetAddressByCityId(int id, string streetLetters)
+        {
+            return this.Ok(this.registerService.GetAddressByCityId(id, streetLetters));
+        }
+
 
 
         [Route("Register")]
         [HttpPost]
         public IActionResult Register([FromBody]RegisterDto registerDto)
-        {
+       {
             if (registerDto.IsValid() && registerService.RegisterUser(registerDto))
             {
                 return this.Ok(true);

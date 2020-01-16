@@ -5,7 +5,6 @@ using RoomMate.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace RoomMate.Domain.Services.Implements
 {
@@ -62,6 +61,34 @@ namespace RoomMate.Domain.Services.Implements
             }
 
             return null;
+        }
+
+
+        public bool AddFlatToUser(int idOfJustCreatedUser, int addressId)
+        {
+            //userFlat repo i flatrepo
+            //select flatID po adresID
+            var flat = this.flatRepository.GetFirst(x => x.AddressId == addressId);
+            if (flat == null)
+            {
+                // this situation is not possible? 
+                return false;
+            }
+
+            try
+            {
+                var userFlat = new UserFlat()
+                {
+                    UserId = idOfJustCreatedUser,
+                    FlatId = flat.Id
+                };
+                this.userFlatRepository.InsertOrUpdate(userFlat);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using RoomMate.Domain.Dto;
 using RoomMate.Domain.Services.Interfaces;
 using RoomMate.Repository;
 using System;
+using System.Collections.Generic;
 
 namespace RoomMate.Domain.Services.Implements
 {
@@ -10,28 +11,31 @@ namespace RoomMate.Domain.Services.Implements
     public class RegisterService : IRegisterService
     {
         private readonly IRepository<User> _userRepository;
+        private readonly IAddressService  _addressService;
 
 
-        public RegisterService(IRepository<User> userRepository)
+        public RegisterService(IRepository<User> userRepository,
+             IAddressService addressService)
         {
             this._userRepository = userRepository;
+            this._addressService = addressService;
         }
 
 
         public bool RegisterUser(RegisterDto registerDto)
         {
+            bool isRegistered = false;
+            int idOfJustCreatedUser = 0;
+
             //check unique values of login and email
             if (IsUserTaken(registerDto.Login, registerDto.Email))
             {
-                return false;
+                return isRegistered;
             }
-            //tu mielonka dto przekazuje z register dto i potem wale tym do repo?
-            //w repo jeszcze robie czysty obiekt do inserta do tabeli
             //crypting password
             var crypto = new SimpleCrypto.PBKDF2();
             registerDto.Password = crypto.Compute(registerDto.Password); //crypted pass
             registerDto.PasswordSalt = crypto.Salt; //salt
-            
             //add missing parts of user to registerDto and pass it to the convertToTarget
             registerDto.Active = true;
             registerDto.Code = ""; //usefull on reset password only
@@ -39,22 +43,33 @@ namespace RoomMate.Domain.Services.Implements
             registerDto.CreatedDate = DateTime.Now;
             registerDto.ModificatedDate = DateTime.Now;
             registerDto.ModificatedBy = null;
-
             //add user to db
             try
             {
                 var user = this.ConvertToTarget(registerDto);
                 this._userRepository.InsertOrUpdate(user);
-                return true;
+                isRegistered =  true;
+                idOfJustCreatedUser = user.Id;
 
             }
             catch (Exception ex)
             {
-                return false;
+                isRegistered =  false;
             }
+            // onyly if user seleceted valid addres
+            //if user is registered correctly then insert the address otherwise thers no point
+            if ((registerDto.IsValidId(registerDto.AddressDto.Id)) && isRegistered == true)
+            {
+                isRegistered = _addressService.AddAddressUserSelected(registerDto.AddressDto, idOfJustCreatedUser);
+            }
+            //if user selected only city
+            else if (!registerDto.IsValidId(registerDto.AddressDto.Id)
+                && registerDto.IsValidId(registerDto.AddressDto.CityId))
+            {
+                // todo 
+            }
+            return isRegistered;
         }
-
-
 
         public bool IsUserTaken(string login, string email)
         {
@@ -69,7 +84,7 @@ namespace RoomMate.Domain.Services.Implements
 
 
 
-        public User ConvertToTarget(RegisterDto registerDto)
+        private User ConvertToTarget(RegisterDto registerDto)
         {
             return new User
             {
@@ -87,6 +102,19 @@ namespace RoomMate.Domain.Services.Implements
                 Surname = registerDto.Surname,
                 RoleType = registerDto.RoleType
             };
+        }
+
+        
+        
+
+        public List<CityDto> GetCitiesByName(string letters)
+        {
+            return _addressService.GetCitiesByName(letters);
+        }
+
+        public IList<AddressDto> GetAddressByCityId(int id, string streetLetters)
+        {
+            return _addressService.GetAddressByCityId(id, streetLetters);
         }
     }
 }

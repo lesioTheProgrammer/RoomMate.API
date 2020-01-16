@@ -20,12 +20,15 @@ namespace RoomMate.Domain.Dto
 
         public  RoleTypeEnum RoleType { get; set; }
 
+        public AddressDto AddressDto { get; set; }
+
+
         public bool IsValid()
         {
 
             return (ValidationDto.IsEmpty(this.Login) && ValidationDto.IsEmpty(this.Name) 
                 && ValidationDto.IsEmpty(Surname)  && ValidationDto.IsValidPassword(this.Password)
-                && ValidationDto.IsValidEmail(this.Email));
+                && ValidationDto.IsValidEmail(this.Email) && IsValidId(this.AddressDto.CityId));
         }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomMate.Domain;
 
 namespace RoomMate.Database.Migrations
 {
     [DbContext(typeof(RoomMateContext))]
-    partial class RoomMateContextModelSnapshot : ModelSnapshot
+    [Migration("20200109103555_CityTableWIP")]
+    partial class CityTableWIP
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -7,7 +7,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { MatNativeDateModule, MatDialogModule, MatDialogRef } from '@angular/material';
+import { MatNativeDateModule, MatDialogModule, MatDialogRef, MatAutocompleteModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModules } from './material-module/material.module';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
@@ -29,6 +29,7 @@ import { AccessDeniedComponent } from './access-denied/access-denied.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { RemoveAccountComponent } from './user-profile/remove-account/remove-account.component';
+import { AddressComponent } from './address/address.component';
 
 const routes: Routes =  [
   { path: '', component: MyRoomComponent},
@@ -60,6 +61,7 @@ export function tokenGetter() {
     UserListComponent,
     UserProfileComponent,
     RemoveAccountComponent,
+    AddressComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,7 +79,8 @@ export function tokenGetter() {
     CommonModule,
     MatDialogModule,
     AppMaterialModules,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatAutocompleteModule
   ],
   entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent],
   providers: [[DashboardService],

@@ -11,5 +11,7 @@
         public string FlatNumber { get; set; }
 
         public virtual  Flat Flat { get; set; }
+
+        public virtual City City { get; set; }
     }
 }
