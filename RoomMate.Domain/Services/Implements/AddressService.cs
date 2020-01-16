@@ -83,11 +83,7 @@ namespace RoomMate.Domain.Services.Implements
 
         public bool AddAddressUserSelected(AddressDto address, int idOfJustCreatedUser)
         {
-            //przyjdzie mi tu addressID 
-            //dodac flat do usera
-            //a zeby dodac flat trzeba dodac adres, ale dares juz wybrany po aID
             return  _flatSerivce.AddFlatToUser(idOfJustCreatedUser, address.Id);
-            // t/f depending on addingstare
         }
 
     }

@@ -15,5 +15,14 @@ namespace RoomMate.Domain.Dto
         public int? ModificatedBy { get; set; } 
 
         public DateTime ModificatedDate { get; set; }
+
+        public  bool IsValidId(int? id)
+        {
+            if (id == 0 || id == null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

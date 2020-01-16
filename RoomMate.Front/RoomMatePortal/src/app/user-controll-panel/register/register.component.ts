@@ -18,26 +18,20 @@ export class RegisterComponent implements OnInit {
   //properties
   disabledButton = false;
   errorShow: boolean = false;
- // dataLoaded: boolean = false;
   isRegistered: boolean = true;
   registerDto: RegisterDto = new RegisterDto();
   form: FormGroup;
   registerVariable: any;
   pusheditems: CityDto[] = []; // empty arr
-  citiesFromApi: Observable<CityDto[]>;
+  citiesList: Observable<CityDto[]>;
   cityName: string;
-  autoComplForm: FormControl = new FormControl();
-  // here working wirh enum:
+  cityCtrl: FormControl = new FormControl();
   roles = RolesEnum;
-
   cityGetSuccess: boolean = false;
-
-  addressFromApi: Observable<AddressDto[]>;
+  addressesList: Observable<AddressDto[]>;
   pushedAddrItems: AddressDto[] = []; // empty arr
   addresCtrl: FormControl;
   addrSelectSuccess: boolean = false;
-
-
 
   @Output() registerEvent = new EventEmitter<boolean>();
 
@@ -73,26 +67,18 @@ export class RegisterComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(6)]
       }),
     });
-
-    this.citiesFromApi = this.autoComplForm.valueChanges.pipe(
+    this.citiesList = this.cityCtrl.valueChanges.pipe(
       startWith(''),
       map(letters => (letters.length >= 2 ? this.getCities(letters) : []))
     );
-
     this.addresCtrl = new FormControl();
-    this.addressFromApi = this.addresCtrl.valueChanges.pipe(
+    this.addressesList = this.addresCtrl.valueChanges.pipe(
       startWith(''),
       map(streetLetters => (streetLetters.length >= 2 && this.cityGetSuccess ? this.getAddress(streetLetters) : []))
     );
-
-    this.autoComplForm.setValidators(forbiddenNamesValidator(this.pusheditems));
-
+    this.cityCtrl.setValidators(forbiddenNamesValidator(this.pusheditems));
     // on init ends here
   }
-
-
-
-
 
   closeModal(): void {
     this.dialogRef.close();
@@ -123,7 +109,6 @@ export class RegisterComponent implements OnInit {
         } else {
           this.isRegistered = false;
           this.registerEvent.emit(this.isRegistered);
-
           this.openSnackBar('Register failure', 'Ok');
         }
         this.disabledButton = false;
@@ -139,9 +124,8 @@ export class RegisterComponent implements OnInit {
       duration: 2000
     });
   }
-
   getCities(letters: string): CityDto[] {
-    /// Pierwsze co to wykona się to o:
+    /// First that will execute new empty list:
     this.pusheditems = new Array<CityDto>();
     this.registerService.getCityByTwoLetters(letters).subscribe(response => {
       if (response != null) {
@@ -155,7 +139,6 @@ export class RegisterComponent implements OnInit {
     });
     return this.pusheditems;
   }
-
   // method called when user selects the city
   getAddress(streetLetters: string): AddressDto[] {
     this.pushedAddrItems = new Array<AddressDto>();
@@ -177,16 +160,13 @@ export class RegisterComponent implements OnInit {
     });
     return this.pushedAddrItems;
   }
-
   passCitytoAddr(cityId: number) {
     this.registerDto.addressDto.cityId = cityId;
     this.cityGetSuccess = true; // to make addresBox Visible
   }
-
   // assign role
   // if user cant find flat - admin
   // otherwise - flatmate
-
   // inform that selection has been done
   passAddrSelectState(id: number) {
     this.addrSelectSuccess = true;
@@ -201,14 +181,7 @@ export class RegisterComponent implements OnInit {
       this.registerVariable = RolesEnum.FlatMateAdmin;
     }
   }
-
-
-
-
-
-
 }
-
 
 // validate autocomplete form
 export function forbiddenNamesValidator(cities: CityDto[]): ValidatorFn {

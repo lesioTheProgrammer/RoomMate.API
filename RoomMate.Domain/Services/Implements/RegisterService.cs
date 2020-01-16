@@ -18,7 +18,6 @@ namespace RoomMate.Domain.Services.Implements
              IAddressService addressService)
         {
             this._userRepository = userRepository;
-            //what with dependency? added to service addresDepencendy
             this._addressService = addressService;
         }
 
@@ -57,21 +56,18 @@ namespace RoomMate.Domain.Services.Implements
             {
                 isRegistered =  false;
             }
-           
-            //tu o metoda do inputow w tabeli adres i polaczyc to z userem
             // onyly if user seleceted valid addres
             //if user is registered correctly then insert the address otherwise thers no point
-            if (ValidationDto.IsValidId(registerDto.AddressDto.Id) && isRegistered == true)
+            if ((registerDto.IsValidId(registerDto.AddressDto.Id)) && isRegistered == true)
             {
                 isRegistered = _addressService.AddAddressUserSelected(registerDto.AddressDto, idOfJustCreatedUser);
             }
             //if user selected only city
-            else if (!ValidationDto.IsValidId(registerDto.AddressDto.Id)
-                && ValidationDto.IsValidId(registerDto.AddressDto.CityId))
+            else if (!registerDto.IsValidId(registerDto.AddressDto.Id)
+                && registerDto.IsValidId(registerDto.AddressDto.CityId))
             {
-
+                // todo 
             }
-
             return isRegistered;
         }
 
@@ -113,7 +109,6 @@ namespace RoomMate.Domain.Services.Implements
 
         public List<CityDto> GetCitiesByName(string letters)
         {
-            //antipatern???
             return _addressService.GetCitiesByName(letters);
         }
 
