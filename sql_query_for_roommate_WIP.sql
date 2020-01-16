@@ -1,4 +1,5 @@
 
+use RoomMate
 
 
 
@@ -21,6 +22,7 @@ insert into Flats values (1, 24, 1, GETDATE(), 2, 'Flat free for all', null, GET
 insert into UserFlat values (1, 1, GETDATE(), (select Flats.Id from Flats where FlatName = 'Flat free for all'), null, GETDATE(), 1);
 
 
+delete City from City where City.Id >=3;
 
 
 --sql select flat by address?
@@ -78,7 +80,7 @@ select * from Users --nic
 
 
 
-insert into Flats values (1, 25, 1, GETDATE(), 3, 'Gerar this is my flat', null, GETDATE(), 1);
+insert into Flats values (1, 25, 1, GETDATE(), 1002, 'Flat', null, GETDATE(), 1);
 
 --test selects - last from just inserted
 select * from Users
@@ -96,4 +98,10 @@ left join Flats as f on f.AddressId = a.Id
 left join UserFlat as uf on uf.FlatId = f.id
 left join Users as u on u.Id = uf.UserId
 where u.Id = (select top 1Id from Users order by Id desc);
+
+
+
+select * from Users
+
+
 

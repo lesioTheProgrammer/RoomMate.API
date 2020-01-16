@@ -15,7 +15,7 @@ import { CityDto } from "../address/dto/city-dto";
 })
 export class UserManagementService extends RequestHelperService {
   protected getApiRoute(): string {
-    //ta nazwa mowi do jakiego kontrolera wlaimy strzlaa elo
+    // ta nazwa mowi do jakiego kontrolera wlaimy strzlaa elo
     return "UserManagement";
   }
   constructor(private httpClient: HttpClient) {
