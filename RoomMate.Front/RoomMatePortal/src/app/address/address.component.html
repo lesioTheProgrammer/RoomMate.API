@@ -2,16 +2,36 @@
   <div class="card shadow  col-lg-4" style="margin:10px;">
     <div class="card-body">
       <span style="text-align: center">
-        <h2>Enter the flat details</h2>
+        <h2>Search for flat using the address</h2>
       </span>
       <form style="min-width: 150px;max-width: 500px;width: 100%;">
 
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Flat name" value="Melina na prądzyna">
+        <mat-form-field class="example-full-width">
+          <br />
+          <input
+            #inputField
+            type="text"
+            placeholder="Enter the city name"
+            aria-label="City"
+            matInput
+            [formControl]="cityCtrl"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let city of citiesList | async"
+              [value]="city.cityName"
+              (onSelectionChange)="passCitytoAddr(city.cityId)"
+            >
+              {{ city.cityName }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="cityCtrl.hasError('forbiddenNames')">
+            You should enter value from suggested one only. <strong>'{{cityCtrl.errors.forbiddenNames.value}}'</strong> is not allowed.
+          </mat-error>
         </mat-form-field>
-        <mat-form-field class="full-width">
-          <input matInput placeholder="City" value="Wrocław">
-        </mat-form-field>
+
+
         <mat-form-field class="full-width">
           <input matInput placeholder="Street" value="Prądzyńskiego">
         </mat-form-field>

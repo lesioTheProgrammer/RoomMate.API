@@ -85,7 +85,7 @@ export function tokenGetter() {
     ReactiveFormsModule,
     MatAutocompleteModule
   ],
-  entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent],
+  entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent, AddressComponent],
   providers: [[DashboardService],
    [{provide: MatDialogRef, useValue: {}}
  ],

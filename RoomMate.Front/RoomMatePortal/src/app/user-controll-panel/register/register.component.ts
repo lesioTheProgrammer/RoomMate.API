@@ -76,8 +76,6 @@ export class RegisterComponent implements OnInit {
       startWith(''),
       map(streetLetters => (streetLetters.length >= 2 && this.cityGetSuccess ? this.getAddress(streetLetters) : []))
     );
-    this.cityCtrl.setValidators(forbiddenNamesValidator(this.pusheditems));
-    // on init ends here
   }
 
   closeModal(): void {
@@ -127,6 +125,7 @@ export class RegisterComponent implements OnInit {
   getCities(letters: string): CityDto[] {
     /// First that will execute new empty list:
     this.pusheditems = new Array<CityDto>();
+    debugger;
     this.registerService.getCityByTwoLetters(letters).subscribe(response => {
       if (response != null) {
         response.forEach(element => {
@@ -181,15 +180,4 @@ export class RegisterComponent implements OnInit {
       this.registerVariable = RolesEnum.FlatMateAdmin;
     }
   }
-}
-
-// validate autocomplete form
-export function forbiddenNamesValidator(cities: CityDto[]): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    // below findIndex will check if control.value is equal to one of our options or not
-    const index = cities.findIndex(name => {
-      return (new RegExp('\^' + name.cityName + '\$')).test(control.value);
-    });
-    return index < 0 ? { 'forbiddenNames': { value: control.value } } : null;
-  };
 }
