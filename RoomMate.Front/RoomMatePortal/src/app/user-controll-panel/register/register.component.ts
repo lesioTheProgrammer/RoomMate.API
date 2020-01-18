@@ -67,15 +67,6 @@ export class RegisterComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(6)]
       }),
     });
-    this.citiesList = this.cityCtrl.valueChanges.pipe(
-      startWith(''),
-      map(letters => (letters.length >= 2 ? this.getCities(letters) : []))
-    );
-    this.addresCtrl = new FormControl();
-    this.addressesList = this.addresCtrl.valueChanges.pipe(
-      startWith(''),
-      map(streetLetters => (streetLetters.length >= 2 && this.cityGetSuccess ? this.getAddress(streetLetters) : []))
-    );
   }
 
   closeModal(): void {
@@ -122,47 +113,9 @@ export class RegisterComponent implements OnInit {
       duration: 2000
     });
   }
-  getCities(letters: string): CityDto[] {
-    /// First that will execute new empty list:
-    this.pusheditems = new Array<CityDto>();
-    debugger;
-    this.registerService.getCityByTwoLetters(letters).subscribe(response => {
-      if (response != null) {
-        response.forEach(element => {
-          let newcity = new CityDto();
-          newcity.cityId = element.cityId;
-          newcity.cityName = element.cityName;
-          this.pusheditems.push(newcity);
-        });
-      }
-    });
-    return this.pusheditems;
-  }
-  // method called when user selects the city
-  getAddress(streetLetters: string): AddressDto[] {
-    this.pushedAddrItems = new Array<AddressDto>();
-    this.registerService.getAddressByCityIdStreet(this.registerDto.addressDto.cityId, streetLetters)
-    .subscribe(response => {
-      if (response != null) {
-        response.forEach(element => {
-          let newAddress = new AddressDto();
-          newAddress.cityId = element.cityId;
-          newAddress.cityName = element.cityName;
-          newAddress.flatNumber = element.flatNumber;
-          newAddress.houseNumber = element.houseNumber;
-          newAddress.street = element.street;
-          newAddress.allAddress = element.allAddress;
-          newAddress.id = element.id;
-          this.pushedAddrItems.push(newAddress);
-        });
-      }
-    });
-    return this.pushedAddrItems;
-  }
-  passCitytoAddr(cityId: number) {
-    this.registerDto.addressDto.cityId = cityId;
-    this.cityGetSuccess = true; // to make addresBox Visible
-  }
+
+
+
   // assign role
   // if user cant find flat - admin
   // otherwise - flatmate

@@ -11,7 +11,7 @@ import { AddressDto } from "./dto/address-dto";
 export class FlatAddressService {
   protected getApiRoute(): string {
     // controllername
-    return "UserManagement";
+    return "Flat";
   }
 
   private wwwPath: string = environment.apiPath + this.getApiRoute();
@@ -21,8 +21,8 @@ export class FlatAddressService {
   // this service will be without request helper
 
   public getCityByTwoLetters(letters: string): Observable<CityDto[]> {
-    let route = "GetCities";
-    let paramsAsObj: Object = { letters };
+    const route = "GetCities";
+    const paramsAsObj: Object = { letters };
     return this.httpClient.get<CityDto[]>(this.wwwPath + "/" + route, {
       params: <any>paramsAsObj
     });
@@ -32,8 +32,8 @@ export class FlatAddressService {
     id: any,
     streetLetters: string
   ): Observable<AddressDto[]> {
-    let route = "GetAddress";
-    let body = new HttpParams({
+    const route = "GetAddresses";
+    const body = new HttpParams({
       fromObject : {
         'id' : id,
         'streetLetters' : streetLetters
@@ -42,6 +42,21 @@ export class FlatAddressService {
     return this.httpClient.get<AddressDto[]>(this.wwwPath + "/" + route, {
       params: body
     });
+  }
+
+
+  public getAddressByFlatHouseNumb(houseNumber: any, flatNumber: any): Observable<AddressDto> {
+    const route = "GetFlat";
+    const body = new HttpParams({
+      fromObject: {
+        'houseNumber' : houseNumber,
+        'flatNumber' : flatNumber
+      }
+    })
+    return this.httpClient.get<AddressDto>(this.wwwPath + "/" + route, {
+      params: body
+    });
+
   }
 
 

@@ -14,7 +14,8 @@
 
         public int Area { get; set; }
 
-        public AddressDto FlatAddress { get; set; }
+
+        public UserListDto Users { get; set; }
 
     }
 }

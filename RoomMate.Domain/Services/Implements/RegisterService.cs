@@ -3,7 +3,6 @@ using RoomMate.Domain.Dto;
 using RoomMate.Domain.Services.Interfaces;
 using RoomMate.Repository;
 using System;
-using System.Collections.Generic;
 
 namespace RoomMate.Domain.Services.Implements
 {
@@ -57,7 +56,7 @@ namespace RoomMate.Domain.Services.Implements
                 isRegistered =  false;
             }
             // onyly if user seleceted valid addres
-            //if user is registered correctly then insert the address otherwise thers no point
+            // change it completly because now i dont add addres at the same time I register the user;
             if ((registerDto.IsValidId(registerDto.AddressDto.Id)) && isRegistered == true)
             {
                 isRegistered = _addressService.AddAddressUserSelected(registerDto.AddressDto, idOfJustCreatedUser);
@@ -104,17 +103,6 @@ namespace RoomMate.Domain.Services.Implements
             };
         }
 
-        
-        
-
-        public List<CityDto> GetCitiesByName(string letters)
-        {
-            return _addressService.GetCitiesByName(letters);
-        }
-
-        public IList<AddressDto> GetAddressByCityId(int id, string streetLetters)
-        {
-            return _addressService.GetAddressByCityId(id, streetLetters);
-        }
+     
     }
 }

@@ -13,9 +13,10 @@ namespace RoomMate.Domain.Services.Implements
         private readonly IRepository<Address> _addressRepository;
         private readonly IRepository<City> _cityRepository;
         private readonly IFlatService _flatSerivce;
-        
 
-        public AddressService(IRepository<Address> address, IRepository<City> city, IFlatService flatservice )
+
+        public AddressService(IRepository<Address> address, IRepository<City> city, IFlatService flatservice
+           )
         {
             this._addressRepository = address;
             this._cityRepository = city;
@@ -48,13 +49,36 @@ namespace RoomMate.Domain.Services.Implements
             };
         }
 
+        public AddressDto GetAddressByFlatHouseNumb(string houseNumber, string flatNumber)
+        {
+
+            var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == houseNumber && x.FlatNumber == flatNumber,
+                u => u.City, f => f.Flat.UserFlats);
+            var xd = address.Flat.UserFlats;
+            return new AddressDto();
+
+            //GetFirst(x => x.HouseNumber == houseNumber && x.FlatNumber == flatNumber);
+        }
+
+        public AddressDto ConvertToAddressDto(Address addr)
+        {
+
+            return new AddressDto()
+            {
+                HouseNumber = addr.HouseNumber,
+                FlatNumber = addr.FlatNumber,
+                Street = addr.Street,
+                CityName = addr.City.CityName,
+                CreatedBy = addr.Flat.CreatedBy,
+                RoomCount = addr.Flat.RoomCount,
+                FlatName = addr.Flat.FlatName,
+            };
+        }
 
         public IList<AddressDto> GetAddressByCityId(int id, string streetLetters)
         {
             var addresDtoList = new List<AddressDto>();
             var lowerStrLetters = streetLetters.ToLower();
-            //take all addreses by cityID and startingLetters
-            //include cityName as I wish
             var listOfAddreses = _addressRepository.GetListWithInclude(x => x.CityId == id &&
             x.Street.ToLower().Contains(lowerStrLetters) && x.Street.ToLower().StartsWith(lowerStrLetters), c => c.City);
 
@@ -83,7 +107,7 @@ namespace RoomMate.Domain.Services.Implements
 
         public bool AddAddressUserSelected(AddressDto address, int idOfJustCreatedUser)
         {
-            return  _flatSerivce.AddFlatToUser(idOfJustCreatedUser, address.Id);
+            return _flatSerivce.AddFlatToUser(idOfJustCreatedUser, address.Id);
         }
 
     }

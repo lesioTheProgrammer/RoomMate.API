@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace RoomMate.Repository
 {
@@ -94,6 +94,19 @@ namespace RoomMate.Repository
             return query.Where(predicate).ToList();
         }
 
+        public IList<T> GetListManyMany(Func<T, bool> predicate = null)
+        {
+            IQueryable<T> query = dbset;
+            /*
+             * 
+             * var query = 
+    context.Posts.Where(post =>
+        post.Tags.All(tag => 
+            tagIds.Contains(tag.TagId)));
+             * 
+             */
+            return query.Where(predicate).ToList();
+        }
 
         public IList<T> GetListWithInclude(Func<T, bool> predicate, params Expression<Func<T, object>>[] includes)
         {
@@ -107,5 +120,56 @@ namespace RoomMate.Repository
 
             return includes.Aggregate(query, (current, include) => current.Include(include)).Where(predicate).ToList();
         }
+
+
+
+        public T GetFirstWithInclude(Func<T, bool> predicate, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = dbset;
+            //check if it works
+            return includes.Aggregate(query, (current, include) => current.Include(include)).Where(predicate).FirstOrDefault();
+
+        }
+
+        // nested first or deafult
+        public TResult GetFirstOrDefault<TResult>(Expression<Func<T, TResult>> selector,
+                                          Expression<Func<T, bool>> predicate = null,
+                                          Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+                                          Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+                                          bool disableTracking = true)
+        {
+            IQueryable<T> query = dbset;
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).Select(selector).FirstOrDefault();
+            }
+            else
+            {
+                return query.Select(selector).FirstOrDefault();
+            }
+        }
+
+
+
+
+
+
+
+
     }
 }

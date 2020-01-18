@@ -1,5 +1,5 @@
 
- export class AddressDto{
+ export class AddressDto {
   public cityId: number;
   public cityName: string;
   public street: string;

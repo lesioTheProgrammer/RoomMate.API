@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CityDto } from './dto/city-dto';
 import { AddressDto } from './dto/address-dto';
-import { FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormControl, AbstractControl, ValidatorFn, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { FlatAddressService } from './flat-address.service';
@@ -15,12 +15,19 @@ export class AddressComponent implements OnInit {
   pusheditems: CityDto[] = [];
   pushedAddrItems: AddressDto[] = [];
   addressDto: AddressDto = new AddressDto();
-  cityGetSuccess: boolean;
+  cityGetSuccess: boolean = false;
   citiesList: Observable<CityDto[]>;
   cityCtrl: FormControl = new FormControl();
   addresCtrl: FormControl = new FormControl();
   addressesList: Observable<AddressDto[]>;
   addrSelectSuccess: boolean;
+  disabledButton = false;
+
+  form: FormGroup;
+
+  flatDetails: AddressDto = new AddressDto();
+
+
 
 
   constructor(
@@ -30,22 +37,28 @@ export class AddressComponent implements OnInit {
   ngOnInit() {
     this.citiesList = this.cityCtrl.valueChanges.pipe(
       startWith(''),
-      map(letters => (letters.length >= 2 ? this.getCities(letters) : []))
+      map(letters => (letters.length >= 2  ? this.getCities(letters) : []))
     );
     this.addressesList = this.addresCtrl.valueChanges.pipe(
       startWith(''),
       map(streetLetters => (streetLetters.length >= 2 && this.cityGetSuccess ? this.getAddress(streetLetters) : []))
     );
-    debugger;
     this.cityCtrl.setValidators(forbiddenNamesValidator(this.pusheditems));
+
+    this.form = new FormGroup({
+      houseNumber: new FormControl(),
+      flatNumber: new FormControl()
+    });
     // on init ends here
   }
 
   getCities(letters: string): CityDto[] {
-    /// First that will execute new empty list:
-    debugger;
+    if (this.cityGetSuccess){
+      // this will block another getRequest after selecting the cities.
+      this.cityCtrl.setValidators(forbiddenNamesValidator(this.pusheditems));
+      return this.pusheditems;
+    }
     this.pusheditems = new Array<CityDto>();
-    debugger;
     this.flataddresService.getCityByTwoLetters(letters).subscribe(response => {
       if (response != null) {
         response.forEach(element => {
@@ -60,7 +73,6 @@ export class AddressComponent implements OnInit {
   }
 
   passCitytoAddr(cityId: number) {
-    debugger;
     this.addressDto.cityId = cityId;
     this.cityGetSuccess = true; // to make addresBox Visible
   }
@@ -91,6 +103,24 @@ export class AddressComponent implements OnInit {
     this.addressDto.id = id;
   }
 
+  searchCertainFlat() {
+    this.disabledButton = true;
+    //address service search for flat by inputs
+
+    debugger;
+    // flatDetails.houseNumber = this.form.value.houseNumber;
+    // flatDetails.flatNumber = this.form.value.flatNumber;
+    this.flataddresService.getAddressByFlatHouseNumb(this.form.value.houseNumber,
+      this.form.value.flatNumber).subscribe(response => {
+        if (response != null){
+          debugger;
+          this.flatDetails = response;
+        }
+      })
+
+
+  }
+
 }
 
 // validate autocomplete form
@@ -100,7 +130,7 @@ export function forbiddenNamesValidator(cities: CityDto[]): ValidatorFn {
     const index = cities.findIndex(name => {
       return (new RegExp('\^' + name.cityName + '\$')).test(control.value);
     });
-    if (cities.length == 0){
+    if (cities.length === 0) {
       return null;
     }
     return index < 0 ? { 'forbiddenNames': { value: control.value } } : null;

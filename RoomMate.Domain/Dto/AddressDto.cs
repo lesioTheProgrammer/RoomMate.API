@@ -12,9 +12,10 @@
 
         public string FlatNumber { get; set; }
 
-        public string AllAddress { get {
-                return this.Street + " " + this.HouseNumber + "/" + this.FlatNumber;
-            }
-        }
+        public string FlatName { get; set; }
+
+        public int RoomCount { get; set; }
+
+        public UserListDto Users { get; set; }
     }
 }
