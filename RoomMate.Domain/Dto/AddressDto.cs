@@ -1,4 +1,6 @@
-﻿namespace RoomMate.Domain.Dto
+﻿using System.Collections.Generic;
+
+namespace RoomMate.Domain.Dto
 {
     public class AddressDto : BaseDto
     {
@@ -16,6 +18,6 @@
 
         public int RoomCount { get; set; }
 
-        public UserListDto Users { get; set; }
+        public ICollection<UserListDto> Users { get; set; }
     }
 }

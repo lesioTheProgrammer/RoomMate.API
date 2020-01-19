@@ -7,7 +7,7 @@ select * from Addresses
 
 select * from Flats
 
-select * from UserFlat
+select * from UserFlats
 
 select * from City
 
@@ -19,7 +19,7 @@ insert into Addresses values (1, 1, 1, '2020-01-01', '12', '47', null,  GETDATE(
 insert into Flats values (1, 24, 1, GETDATE(), 2, 'Flat free for all', null, GETDATE(), 2);
 
 
-insert into UserFlat values (1, 1, GETDATE(), (select Flats.Id from Flats where FlatName = 'Flat free for all'), null, GETDATE(), 1);
+insert into UserFlats values (1, 1, GETDATE(), (select Flats.Id from Flats where FlatName = 'Flat free for all'), null, GETDATE(), 1);
 
 
 delete City from City where City.Id >=3;
@@ -33,7 +33,7 @@ delete City from City where City.Id >=3;
 
 
 --delete data from address table
-delete UserFlat where UserFlat.Id =1;
+delete UserFlats where UserFlats.Id =1;
 
 delete Flats where Flats.Id = 1;
 
@@ -67,7 +67,7 @@ select * from Flats  --addID
 
 
 
-select * from UserFlat --flatid i userId
+select * from UserFlats --flatid i userId
 
 select * from Users --nic
 
@@ -95,7 +95,7 @@ select * from Users
 select c.CityName, a.Street, f.FlatName, u.Email from City as c
 left join Addresses as a on a.CityId = c.Id
 left join Flats as f on f.AddressId = a.Id
-left join UserFlat as uf on uf.FlatId = f.id
+left join UserFlats as uf on uf.FlatId = f.id
 left join Users as u on u.Id = uf.UserId
 where u.Id = (select top 1Id from Users order by Id desc);
 
@@ -108,15 +108,23 @@ select * from Users
 
 select a.Id, a.FlatNumber, a.HouseNumber from Addresses as a;
 select f.AddressId, f.FlatName, f.Id from Flats as f;
-select uf.FlatId, uf.UserId from UserFlat as uf
+select uf.FlatId, uf.UserId from UserFlats as uf
 
 
 
-delete UserFlat from UserFlat as uf where uf.FlatId = 5
+delete UserFlats from UserFlats as uf where uf.FlatId = 5
 
 update Addresses set FlatNumber = '3' where Addresses.Id = 3;
 
-select uf.FlatId, uf.UserId from UserFlat as uf
+select uf.FlatId, uf.UserId from UserFlats as uf
 
 
-insert into UserFlat (FlatId, UserId, Active, CreatedDate, ModificatedDate)  values (5, 1, 1, GETDATE(), GETDATE())
+insert into UserFlats (FlatId, UserId, Active, CreatedDate, ModificatedDate)  values (5, 26, 1, GETDATE(), GETDATE())
+
+select * from UserFlats
+
+
+delete UserFlats from UserFlats where Id >1
+
+
+select * from Users

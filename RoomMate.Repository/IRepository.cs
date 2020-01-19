@@ -23,8 +23,6 @@ namespace RoomMate.Repository
         void AddRange(IEnumerable<T> entities);
         int SaveChanges();
         bool Detach(T entity);
-
-
         TResult GetFirstOrDefault<TResult>(Expression<Func<T, TResult>> selector,
                                           Expression<Func<T, bool>> predicate = null,
                                           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,

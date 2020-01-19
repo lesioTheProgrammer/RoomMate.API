@@ -14,8 +14,6 @@
 
         public int Area { get; set; }
 
-
         public UserListDto Users { get; set; }
-
     }
 }

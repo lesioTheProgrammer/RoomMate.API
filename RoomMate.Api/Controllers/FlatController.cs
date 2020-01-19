@@ -73,8 +73,6 @@ namespace RoomMate.Api.Controllers
         }
 
 
-
-
         [Route("GetCities")]
         [HttpGet]
         public IActionResult GetCitiesByName(string letters)
@@ -94,9 +92,7 @@ namespace RoomMate.Api.Controllers
         [HttpGet]
         public IActionResult GetAddressByFlatHouseNumb(string houseNumber, string flatNumber)
         {
-            // mock for now
             return this.Ok(this._addressService.GetAddressByFlatHouseNumb(houseNumber, flatNumber));
-
         }
     }
 }

@@ -71,7 +71,6 @@ namespace RoomMate.Repository
             SaveChanges();
             return data;
         }
-
         public int SaveChanges()
         {
             return this._context.SaveChanges();
@@ -94,30 +93,10 @@ namespace RoomMate.Repository
             return query.Where(predicate).ToList();
         }
 
-        public IList<T> GetListManyMany(Func<T, bool> predicate = null)
-        {
-            IQueryable<T> query = dbset;
-            /*
-             * 
-             * var query = 
-    context.Posts.Where(post =>
-        post.Tags.All(tag => 
-            tagIds.Contains(tag.TagId)));
-             * 
-             */
-            return query.Where(predicate).ToList();
-        }
 
         public IList<T> GetListWithInclude(Func<T, bool> predicate, params Expression<Func<T, object>>[] includes)
         {
-            //foreach (var property in includes)
-            //{
-            //    dbset.Include(property);
-            //}
-            //return dbset.Where(predicate).ToList();
-
             IQueryable<T> query = dbset;
-
             return includes.Aggregate(query, (current, include) => current.Include(include)).Where(predicate).ToList();
         }
 
@@ -126,7 +105,6 @@ namespace RoomMate.Repository
         public T GetFirstWithInclude(Func<T, bool> predicate, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = dbset;
-            //check if it works
             return includes.Aggregate(query, (current, include) => current.Include(include)).Where(predicate).FirstOrDefault();
 
         }
@@ -163,13 +141,5 @@ namespace RoomMate.Repository
                 return query.Select(selector).FirstOrDefault();
             }
         }
-
-
-
-
-
-
-
-
     }
 }
