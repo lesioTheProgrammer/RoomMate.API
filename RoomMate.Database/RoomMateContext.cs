@@ -18,5 +18,15 @@ namespace RoomMate.Domain
         public DbSet<WorkType> WorkTypes { get; set; }
         public DbSet<RoleType> RoleTypes { get; set; }
         public DbSet<City> City { get; set; }
+
+        public DbSet<UserFlat> UserFlats { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserFlat>().HasKey(uf => new { uf.UserId, uf.FlatId });
+        }
+
+
+
     }
 }

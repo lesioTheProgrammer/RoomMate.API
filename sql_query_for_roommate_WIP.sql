@@ -105,3 +105,18 @@ select * from Users
 
 
 
+
+select a.Id, a.FlatNumber, a.HouseNumber from Addresses as a;
+select f.AddressId, f.FlatName, f.Id from Flats as f;
+select uf.FlatId, uf.UserId from UserFlat as uf
+
+
+
+delete UserFlat from UserFlat as uf where uf.FlatId = 5
+
+update Addresses set FlatNumber = '3' where Addresses.Id = 3;
+
+select uf.FlatId, uf.UserId from UserFlat as uf
+
+
+insert into UserFlat (FlatId, UserId, Active, CreatedDate, ModificatedDate)  values (5, 1, 1, GETDATE(), GETDATE())
