@@ -33,11 +33,11 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.loginDto).subscribe(
       response => {
         if (response.token !== "") {
-          this.isLogged = true;
           localStorage.setItem("login", JSON.stringify(this.loginDto.login));
           localStorage.setItem("jwt", response.token);
           this.loginEvent.emit(this.isLogged);
           this.closeModal();
+          this.isLogged = true;
           this.route.navigate(["/dashboard"]);
         }
       },

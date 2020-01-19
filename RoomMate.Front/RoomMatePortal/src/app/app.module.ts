@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatNativeDateModule, MatDialogModule, MatDialogRef, MatAutocompleteModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModules } from './material-module/material.module';
@@ -69,8 +69,7 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        whitelistedDomains: [],
-        blacklistedRoutes: []
+        whitelistedDomains: ["localhost:59570"],
       }
     }),
     BrowserAnimationsModule,
@@ -83,12 +82,12 @@ export function tokenGetter() {
     MatAutocompleteModule
   ],
   entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent],
-  providers: [[DashboardService],
-   [{provide: MatDialogRef, useValue: {}}
- ],
- [PassBetweenComponService],
- [CookieService],
- [AuthGuard],
+  providers:
+  [[DashboardService],
+  [{provide: MatDialogRef, useValue: {}}],
+  [PassBetweenComponService],
+  [CookieService],
+  [AuthGuard],
 ],
   bootstrap: [AppComponent]
 })
