@@ -32,11 +32,11 @@ export class FlatAddressService {
     id: any,
     streetLetters: string
   ): Observable<AddressDto[]> {
-    const route = "GetAddresses";
+    const route = "GetAddress";
     const body = new HttpParams({
       fromObject : {
-        'id' : id,
-        'streetLetters' : streetLetters
+        id : id,
+        streetLetters : streetLetters
       }
     })
     return this.httpClient.get<AddressDto[]>(this.wwwPath + "/" + route, {
@@ -44,23 +44,19 @@ export class FlatAddressService {
     });
   }
 
-
-  public getAddressByFlatHouseNumb(houseNumber: any, flatNumber: any): Observable<AddressDto> {
+  public getAddressByFlatHouseNumb(
+    houseNumber: any,
+    flatNumber: any
+  ): Observable<AddressDto> {
     const route = "GetFlat";
     const body = new HttpParams({
       fromObject: {
-        'houseNumber' : houseNumber,
-        'flatNumber' : flatNumber
+        houseNumber: houseNumber,
+        flatNumber: flatNumber
       }
-    })
+    });
     return this.httpClient.get<AddressDto>(this.wwwPath + "/" + route, {
       params: body
     });
-
   }
-
-
-
-
-
 }

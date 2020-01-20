@@ -22,16 +22,7 @@ export class RegisterComponent implements OnInit {
   registerDto: RegisterDto = new RegisterDto();
   form: FormGroup;
   registerVariable: any;
-  pusheditems: CityDto[] = []; // empty arr
-  citiesList: Observable<CityDto[]>;
-  cityName: string;
-  cityCtrl: FormControl = new FormControl();
   roles = RolesEnum;
-  cityGetSuccess: boolean = false;
-  addressesList: Observable<AddressDto[]>;
-  pushedAddrItems: AddressDto[] = []; // empty arr
-  addresCtrl: FormControl;
-  addrSelectSuccess: boolean = false;
 
   @Output() registerEvent = new EventEmitter<boolean>();
 
@@ -79,7 +70,6 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    this.selectRole(this.addrSelectSuccess);
     this.disabledButton = true;
     this.registerDto.name = this.form.value.name;
     this.registerDto.surname = this.form.value.surname;
@@ -120,10 +110,7 @@ export class RegisterComponent implements OnInit {
   // if user cant find flat - admin
   // otherwise - flatmate
   // inform that selection has been done
-  passAddrSelectState(id: number) {
-    this.addrSelectSuccess = true;
-    this.registerDto.addressDto.id = id;
-  }
+
 
   selectRole(addrSelectSuccess: boolean) {
     if (addrSelectSuccess) {

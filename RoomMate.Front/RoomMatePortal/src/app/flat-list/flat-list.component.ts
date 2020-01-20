@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges  } from '@angular/core';
+import { AddressDto } from '../address/dto/address-dto';
 
 @Component({
   selector: 'app-flat-list',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FlatListComponent implements OnInit {
 
+  @Input() flatDetails: AddressDto;
   constructor() { }
 
   ngOnInit() {
   }
-
+    ngOnChanges(flatDetails: SimpleChanges): void{
+      debugger;
+      let checkIfExist = this.flatDetails;
+    }
 }

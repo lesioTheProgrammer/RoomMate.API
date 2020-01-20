@@ -78,6 +78,10 @@ export class AddressComponent implements OnInit {
   }
 
   getAddress(streetLetters: string): AddressDto[] {
+    if (this.addrSelectSuccess){
+      // this will block another getRequest after selecting the cities.
+      return this.pushedAddrItems;
+    }
     this.pushedAddrItems = new Array<AddressDto>();
     this.flataddresService.getAddressByCityIdStreet(this.addressDto.cityId, streetLetters)
     .subscribe(response => {
@@ -105,22 +109,14 @@ export class AddressComponent implements OnInit {
 
   searchCertainFlat() {
     this.disabledButton = true;
-    //address service search for flat by inputs
-
-    debugger;
-    // flatDetails.houseNumber = this.form.value.houseNumber;
-    // flatDetails.flatNumber = this.form.value.flatNumber;
     this.flataddresService.getAddressByFlatHouseNumb(this.form.value.houseNumber,
       this.form.value.flatNumber).subscribe(response => {
         if (response != null){
-          debugger;
           this.flatDetails = response;
+          this.disabledButton = false;
         }
       })
-
-
   }
-
 }
 
 // validate autocomplete form

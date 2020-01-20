@@ -100,31 +100,6 @@
 
 
 
-  <!-- autocomplete address -->
-  <mat-form-field class="example-full-width2" *ngIf="cityGetSuccess">
-    <br />
-    <input
-      #inputField
-      type="text"
-      placeholder="Select the address"
-      aria-label="Address"
-      matInput
-      [formControl]="addresCtrl"
-      [matAutocomplete]="address"
-      disabled="cityGetSuccess"
-    />
-    <mat-autocomplete #address="matAutocomplete">
-      <mat-option
-        *ngFor="let address of addressesList | async"
-        [value]="address.allAddress"
-        (onSelectionChange)="passAddrSelectState(address.id)"
-      >
-      ul.{{address.allAddress}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-  <!-- autocomplete end -->
-
   <div mat-dialog-actions style="float:right">
     <button mat-button (click)="closeModal()">Anuluj</button>
     <button
