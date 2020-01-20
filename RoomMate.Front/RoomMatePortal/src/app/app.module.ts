@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatNativeDateModule, MatDialogModule, MatDialogRef, MatAutocompleteModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModules } from './material-module/material.module';
@@ -30,15 +30,13 @@ import { UserListComponent } from './user-list/user-list.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { RemoveAccountComponent } from './user-profile/remove-account/remove-account.component';
 import { AddressComponent } from './address/address.component';
-import { FlatListComponent } from './flat-list/flat-list.component';
 
 const routes: Routes =  [
   { path: '', component: MyRoomComponent},
   { path: 'myRoom', component: MyRoomComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   { path: 'accessDebnied', component: AccessDeniedComponent},
-  { path: 'userProfile/:id', component: UserProfileComponent},
-  { path: 'myFlats', component: AddressComponent,  canActivate: [AuthGuard]},
+  { path: 'userProfile/:id', component: UserProfileComponent}
 
 ];
 
@@ -64,7 +62,6 @@ export function tokenGetter() {
     UserProfileComponent,
     RemoveAccountComponent,
     AddressComponent,
-    FlatListComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,8 +69,7 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        whitelistedDomains: [],
-        blacklistedRoutes: []
+        whitelistedDomains: ["localhost:59570"],
       }
     }),
     BrowserAnimationsModule,
@@ -85,13 +81,13 @@ export function tokenGetter() {
     ReactiveFormsModule,
     MatAutocompleteModule
   ],
-  entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent, AddressComponent],
-  providers: [[DashboardService],
-   [{provide: MatDialogRef, useValue: {}}
- ],
- [PassBetweenComponService],
- [CookieService],
- [AuthGuard],
+  entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent],
+  providers:
+  [[DashboardService],
+  [{provide: MatDialogRef, useValue: {}}],
+  [PassBetweenComponService],
+  [CookieService],
+  [AuthGuard],
 ],
   bootstrap: [AppComponent]
 })

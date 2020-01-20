@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RoomMate.Database.Models.Enums;
 using RoomMate.Domain.Dto;
 using RoomMate.Domain.Services.Interfaces;
@@ -7,6 +8,7 @@ namespace RoomMate.Api.Controllers
 {
 
     [Route("api/Dashboard")]
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly IHouseworkService houseworkService;

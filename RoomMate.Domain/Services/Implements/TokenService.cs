@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using RoomMate.Domain.Dto;
 using RoomMate.Domain.Services.Interfaces;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,7 +10,7 @@ namespace RoomMate.Domain.Services.Implements
 {
     public class TokenService : ITokenService
     {
-        public string GenerateToken()
+        public TokenDto GenerateToken()
         {
             var secretKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes("StachuLesiuProgramista@345"));
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -18,7 +19,7 @@ namespace RoomMate.Domain.Services.Implements
                 signingCredentials: signinCredentials
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return new TokenDto() { Token = new JwtSecurityTokenHandler().WriteToken(tokenOptions) };
         }
     }
 }
