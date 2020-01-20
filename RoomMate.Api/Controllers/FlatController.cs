@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RoomMate.Domain.Services.Interfaces;
 
 namespace RoomMate.Api.Controllers
 {
 
     [Route("api/Flat")]
-  //  [Authorize]   remove it for now
+    [Authorize]  
     public class FlatController : Controller
     {
         private readonly IFlatService _flatService;
