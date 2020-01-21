@@ -110,7 +110,12 @@ namespace RoomMate.Repository
             return includes.Aggregate(query, (current, include) => current.Include(include)).Where(predicate).FirstOrDefault();
 
         }
+        public IList<TResult> GetDistinct<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector)
+        {
+            IQueryable<T> query = dbset;
 
+            return query.Where(predicate).Select(selector).Distinct().ToList();
+        }
         //public IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> items, Func<T, TKey> property)
         //{
         //    return items.GroupBy(property).Select(x => x.First());

@@ -26,8 +26,9 @@ namespace RoomMate.Repository
         void AddRange(IEnumerable<T> entities);
         int SaveChanges();
         bool Detach(T entity);
-
-        //IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> items, Func<T, TKey> property);
+        IList<TResult> GetDistinct<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector);
+            
+            //IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> items, Func<T, TKey> property);
         TResult GetFirstOrDefault<TResult>(Expression<Func<T, TResult>> selector,
                                           Expression<Func<T, bool>> predicate = null,
                                           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,

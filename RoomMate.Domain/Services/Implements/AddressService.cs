@@ -94,12 +94,23 @@ namespace RoomMate.Domain.Services.Implements
             var addresDtoList = new List<AddressDto>();
             var lowerStrLetters = streetLetters.ToLower();
 
-
-
+            /// Contains x liter albo zaczynające się od x liter? To nie jest to samo? xd
+            /// Po co include?
+            /// var listOfAddreses = _addressRepository.GetList(blablbala) ?
             var listOfAddreses = _addressRepository.GetListWithInclude(x => x.CityId == id &&
             x.Street.ToLower().Contains(lowerStrLetters) && x.Street.ToLower().StartsWith(lowerStrLetters), c => c.City).AsEnumerable();
 
-            // i cant do generic repo with tkey and t
+            /// MS
+            /// Najpierw predykat - czyli to co w where, później to co w selekt 
+            /// Robisz to identycznie jak na dole tylko że w repo
+            /// 
+            var distinctStreets = _addressRepository.GetDistinct(pred => pred.CityId == id && pred.Street.ToLower().Contains(lowerStrLetters), x => x.Street );
+
+
+            // i cant do generic repo with tkey and t 
+            // Sszuka jednego rozwiązania na stacku i tak ma być. "Generic repo to rak'
+            // Brain.Run() please ;c
+            // Możesz używać LINQ - w tym przypadku jest to działanie na listach :) Dodatkowo LINQ ma metodę Distinct 
             var listOfAddresesDistincByStrr = listOfAddreses.GroupBy(str => str.Street.ToLower()).Select(g => g.FirstOrDefault()).ToList();
 
 
