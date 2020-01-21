@@ -128,3 +128,9 @@ delete UserFlats from UserFlats where Id >1
 
 
 select * from Users
+
+
+select * from Addresses
+
+
+select * from Flats

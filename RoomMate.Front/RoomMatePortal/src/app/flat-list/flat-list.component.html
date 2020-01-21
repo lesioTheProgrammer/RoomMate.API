@@ -8,48 +8,32 @@
      content='width=device-width, initial-scale=1.0, maximum-scale=2.0'
 />
 <!-- not working  -->
-
-
-  <form class="form-inline">
-    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-    <button class="btn btn-outline-warning btn-rounded btn-sm my-0" type="submit">Search</button>
-  </form>
-
   <table class="table">
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
+        <th scope="col">City</th>
+        <th scope="col">Street</th>
+        <th scope="col">House number</th>
+        <th scope="col">Flat number</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr *ngIf="hasAddresCame">
         <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>Larry</td>
-        <td>the Bird</td>
-        <td>@twitter</td>
+        <td>{{flatDetails.cityName}}</td>
+        <td>{{flatDetails.street}} street</td>
+        <td>{{flatDetails.houseNumber}}</td>
+        <td>{{flatDetails.flatNumber}}</td>
       </tr>
     </tbody>
   </table>
 
-  <button mat-mat-button
-  (click)=checkOnclick()
-  type="submit">
-  Klik
-  </button>
-
+  <div *ngIf="hasAddresCame">
+    Users in flat:
+    <div *ngFor="let user of flatDetails.users; let isLast = last">
+      <span *ngIf="!isLast" [innerHTML]="user.name + ' &nbsp;'"></span>
+      <span *ngIf="isLast" [innerHTML]="user.name"></span>
+    </div>
+  </div>
 </div>
