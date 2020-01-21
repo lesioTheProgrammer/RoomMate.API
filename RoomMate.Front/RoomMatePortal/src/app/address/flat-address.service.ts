@@ -31,8 +31,10 @@ export class FlatAddressService {
   public getAddressByCityIdStreet(
     id: any,
     streetLetters: string
+
   ): Observable<AddressDto[]> {
-    const route = "GetAddress";
+    const route = "GetStreet";
+    debugger;
     const body = new HttpParams({
       fromObject : {
         id : id,
@@ -46,13 +48,18 @@ export class FlatAddressService {
 
   public getAddressByFlatHouseNumb(
     houseNumber: any,
-    flatNumber: any
+    flatNumber: any,
+    streetLetters: any,
+    cityId: any
   ): Observable<AddressDto> {
     const route = "GetFlat";
+    debugger;
     const body = new HttpParams({
       fromObject: {
         houseNumber: houseNumber,
-        flatNumber: flatNumber
+        flatNumber: flatNumber,
+        streetLetters: streetLetters,
+        cityId: cityId
       }
     });
     return this.httpClient.get<AddressDto>(this.wwwPath + "/" + route, {

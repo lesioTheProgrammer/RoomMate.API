@@ -14,7 +14,7 @@ select * from City
 select * from Users
 
 
-insert into Addresses values (1, 1, 1, '2020-01-01', '12', '47', null,  GETDATE(), 'Prank')
+insert into Addresses values (1, 1, 1, '2020-01-01', '133', '47', null,  GETDATE(), 'Pradzynskiego')
 
 insert into Flats values (1, 24, 1, GETDATE(), 2, 'Flat free for all', null, GETDATE(), 2);
 
@@ -123,10 +123,6 @@ insert into UserFlats (FlatId, UserId, Active, CreatedDate, ModificatedDate)  va
 
 select * from UserFlats
 
-
-delete UserFlats from UserFlats where Id >1
-
-
 select * from Users
 
 
@@ -134,3 +130,6 @@ select * from Addresses
 
 
 select * from Flats
+
+
+

@@ -6,8 +6,11 @@ using System.Linq.Expressions;
 
 namespace RoomMate.Repository
 {
-    public interface IRepository<T>
+    public interface IRepository<T> // ,TKey>
+    where T : class
+        //, IEntity<TKey> where TKey : IEquatable<TKey>
     {
+        //Get<T>(TKey key);
         IQueryable<T> GetAll { get; }
         IEnumerable<T> GetEnumerable(Func<T, bool> predicate);
         T GetFirst(Func<T, bool> predicate);
@@ -23,6 +26,8 @@ namespace RoomMate.Repository
         void AddRange(IEnumerable<T> entities);
         int SaveChanges();
         bool Detach(T entity);
+
+        //IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> items, Func<T, TKey> property);
         TResult GetFirstOrDefault<TResult>(Expression<Func<T, TResult>> selector,
                                           Expression<Func<T, bool>> predicate = null,
                                           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,

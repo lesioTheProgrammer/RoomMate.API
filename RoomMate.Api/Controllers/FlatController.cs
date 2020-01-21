@@ -82,18 +82,18 @@ namespace RoomMate.Api.Controllers
         }
 
 
-        [Route("GetAddress")]
+        [Route("GetStreet")]
         [HttpGet]
-        public IActionResult GetAddressByCityId(int id, string streetLetters)
+        public IActionResult GetStreetsByLettersCityID(int id, string streetLetters)
         {
-            return this.Ok(this._addressService.GetAddressByCityId(id, streetLetters));
+            return this.Ok(this._addressService.GetStreetsDistincted(id, streetLetters));
         }
 
         [Route("GetFlat")]
         [HttpGet]
-        public IActionResult GetAddressByFlatHouseNumb(string houseNumber, string flatNumber)
+        public IActionResult GetAddressByFlatHouseNumb(string houseNumber, string flatNumber, string streetLetters, int cityId)
         {
-            return this.Ok(this._addressService.GetAddressByFlatHouseNumb(houseNumber, flatNumber));
+            return this.Ok(this._addressService.GetAddressByFlatHouseNumb(houseNumber, flatNumber, streetLetters, cityId));
         }
     }
 }

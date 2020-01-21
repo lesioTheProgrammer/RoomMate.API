@@ -12,9 +12,14 @@ export class FlatListComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
   ngOnChanges(flatDetails: SimpleChanges): void {
+    debugger;
     // checking if addres has came xD
-    if ("houseNumber" in this.flatDetails) {
+    // wrong becaue now i am creating new obj
+    // have to check if theres value in non inputeded
+    // property of addres dto
+    if ("flatName" in this.flatDetails) {
       this.hasAddresCame = true;
     }
   }

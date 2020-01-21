@@ -20,7 +20,7 @@
             <mat-option
               *ngFor="let city of citiesList | async"
               [value]="city.cityName"
-              (onSelectionChange)="passCitytoAddr(city.cityId)"
+              (onSelectionChange)="passCitytoAddr(city.cityId, city.cityName)"
             >
               {{ city.cityName }}
             </mat-option>
@@ -49,7 +49,7 @@
             <mat-option
               *ngFor="let address of addressesList | async"
               [value]="address.street"
-              (onSelectionChange)="passAddrSelectState(address.id)"
+              (onSelectionChange)="passAddrSelectState(address.id, address.street)"
             >
               ul.{{ address.street }}
             </mat-option>

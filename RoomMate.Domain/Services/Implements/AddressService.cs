@@ -52,16 +52,16 @@ namespace RoomMate.Domain.Services.Implements
             };
         }
 
-        public AddressDto GetAddressByFlatHouseNumb(string houseNumber, string flatNumber)
+        public AddressDto GetAddressByFlatHouseNumb(string houseNumber, string flatNumber, string streetLetters, int cityId)
         {
             var addressDto = new AddressDto();
-            var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == houseNumber && x.FlatNumber == flatNumber,
-                u => u.City, f => f.Flat);
+            var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == houseNumber && x.FlatNumber == flatNumber
+            && x.Street.ToLower() == streetLetters.ToLower() && x.CityId == cityId, u => u.City, f => f.Flat);
             // get users in flat 
             var userDtoList = this.userService.GetUserByFlatId(address.Flat.Id);
             try
             {
-                addressDto =  ConvertToAddressUSersDto(address, userDtoList);
+                addressDto = ConvertToAddressUSersDto(address, userDtoList);
 
             }
             catch (Exception ex)
@@ -87,16 +87,25 @@ namespace RoomMate.Domain.Services.Implements
             };
         }
 
-        public IList<AddressDto> GetAddressByCityId(int id, string streetLetters)
+        public IList<AddressDto> GetStreetsDistincted(int id, string streetLetters)
         {
+            // get only addreses with certain street names
+
             var addresDtoList = new List<AddressDto>();
             var lowerStrLetters = streetLetters.ToLower();
-            var listOfAddreses = _addressRepository.GetListWithInclude(x => x.CityId == id &&
-            x.Street.ToLower().Contains(lowerStrLetters) && x.Street.ToLower().StartsWith(lowerStrLetters), c => c.City);
 
-            if (listOfAddreses.Any())
+
+
+            var listOfAddreses = _addressRepository.GetListWithInclude(x => x.CityId == id &&
+            x.Street.ToLower().Contains(lowerStrLetters) && x.Street.ToLower().StartsWith(lowerStrLetters), c => c.City).AsEnumerable();
+
+            // i cant do generic repo with tkey and t
+            var listOfAddresesDistincByStrr = listOfAddreses.GroupBy(str => str.Street.ToLower()).Select(g => g.FirstOrDefault()).ToList();
+
+
+            if (listOfAddresesDistincByStrr.Any())
             {
-                foreach (var address in listOfAddreses)
+                foreach (var address in listOfAddresesDistincByStrr)
                 {
                     addresDtoList.Add(ConvertToAddrDto(address));
                 }

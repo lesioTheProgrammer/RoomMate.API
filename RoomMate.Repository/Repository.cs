@@ -7,7 +7,9 @@ using System.Linq.Expressions;
 
 namespace RoomMate.Repository
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public  class Repository<T> : IRepository<T> //, TKey>
+    where T : class
+        //, IEntity<TKey> where TKey : IEquatable<TKey>
     {
         private DbSet<T> dbset;
         private bool _isDisposed = false;
@@ -26,7 +28,7 @@ namespace RoomMate.Repository
             dbset.AddRange(entities);
             this.SaveChanges();
         }
-        public int Delete(int id)
+        public  int Delete(int id)
         {
             var item = dbset.Find(id);
             if (item != null)
@@ -108,6 +110,20 @@ namespace RoomMate.Repository
             return includes.Aggregate(query, (current, include) => current.Include(include)).Where(predicate).FirstOrDefault();
 
         }
+
+        //public IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> items, Func<T, TKey> property)
+        //{
+        //    return items.GroupBy(property).Select(x => x.First());
+        //}
+
+
+        //public  IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> items, Func<T, TKey> property,
+
+        //    Func<T, bool> predicate, params Expression<Func<T, object>>[] includes) // stolen from Fetfirst with include
+        //{
+
+        //    return items.GroupBy(property).Select(x => x.FirstOrDefault());
+        //}
 
         // nested first or deafult
         public TResult GetFirstOrDefault<TResult>(Expression<Func<T, TResult>> selector,
