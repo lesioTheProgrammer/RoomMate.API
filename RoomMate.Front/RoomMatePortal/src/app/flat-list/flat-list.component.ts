@@ -17,14 +17,21 @@ export class FlatListComponent implements OnInit {
 
   ngOnChanges(flatDetails: SimpleChanges): void {
     debugger;
+    this.hasAddresCame = false;
+    this.newAddressDetails = false;
 //     id 0 if new addres with street inpult angular
 //     undefined if new addres from data entered in angular
 //     defined and !=0 if from db
-      if (this.flatDetails.id === 0 || !this.flatDetails.id){
+      if (this.flatDetails.id === 0 || this.flatDetails.cityId){
         this.newAddressDetails = true;
-      }
-      else {
+      } else if (this.flatDetails.id) {
         this.hasAddresCame = true;
       }
+  }
+
+
+  flatAdd(){
+    debugger;
+    let xd = this.flatDetails;
   }
 }

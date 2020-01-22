@@ -19,6 +19,15 @@
       </tr>
     </thead>
     <tbody>
+      <tr *ngIf="newAddressDetails">
+        <th scope="row">1</th>
+        <td>{{flatDetails.cityName}}</td>
+        <td>{{flatDetails.street}} street</td>
+        <td>{{flatDetails.houseNumber}}</td>
+        <td>{{flatDetails.flatNumber}}</td>
+      </tr>
+    </tbody>
+    <tbody>
       <tr *ngIf="hasAddresCame">
         <th scope="row">1</th>
         <td>{{flatDetails.cityName}}</td>
@@ -28,6 +37,14 @@
       </tr>
     </tbody>
   </table>
+
+  <div *ngIf="newAddressDetails">
+    <button
+    (click)= "flatAdd()"
+    type="submit">
+     Add the flat!
+    </button>
+  </div>
 
   <div *ngIf="hasAddresCame">
     Users in flat:

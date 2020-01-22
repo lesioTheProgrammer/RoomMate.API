@@ -104,7 +104,6 @@ export class AddressComponent implements OnInit {
     this.disabledButton = true;
     // if user started to type street and theres no such
     // street dont even search for it
-    debugger;
     if (this.streetSelectSuccess) {
       this.flataddresService.getAddressByFlatHouseNumb(this.form.value.houseNumber,
         this.form.value.flatNumber, this.citySelectionDto.street,
@@ -116,7 +115,6 @@ export class AddressComponent implements OnInit {
         })
     }
     else {
-      debugger;
       this.flatDetails = new AddressDto();
       this.flatDetails.cityId = this.citySelectionDto.cityId;
       this.flatDetails.cityName = this.citySelectionDto.cityName;
