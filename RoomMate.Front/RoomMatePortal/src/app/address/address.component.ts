@@ -102,11 +102,8 @@ export class AddressComponent implements OnInit {
 
   searchCertainFlat() {
     this.disabledButton = true;
-    // if user started to type street and theres no such
-    // street dont even search for it
-    if (this.streetSelectSuccess) {
       this.flataddresService.getAddressByFlatHouseNumb(this.form.value.houseNumber,
-        this.form.value.flatNumber, this.citySelectionDto.street,
+        this.form.value.flatNumber, this.streetCtrl.value,
         this.citySelectionDto.cityId ).subscribe(response => {
           this.disabledButton = false;
           if (response != null) {
@@ -114,20 +111,7 @@ export class AddressComponent implements OnInit {
           }
         })
     }
-    else {
-      this.flatDetails = new AddressDto();
-      this.flatDetails.cityId = this.citySelectionDto.cityId;
-      this.flatDetails.cityName = this.citySelectionDto.cityName;
-      this.flatDetails.street = this.streetCtrl.value; //good
-      this.flatDetails.houseNumber = this.form.value.houseNumber;
-      this.flatDetails.flatNumber = this.form.value.flatNumber;
-      // theres no such flat pass input values to child, add new flat there
-      // if recognized as new flat
-      this.disabledButton = false;
-    }
-  }
 }
-
 // validate autocomplete form
 export function forbiddenNamesValidator(cities: CityDto[]): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {

@@ -57,7 +57,7 @@
         </mat-form-field>
         <!-- autocomplete end -->
         <!-- numeric inputs -->
-        <form [formGroup]="form" (keyup.enter)="searchCertainFlat()">
+        <form [formGroup]="form">
         <div class="mb-3 form-group" *ngIf="cityGetSuccess">
           <label for="houseNumber">House number</label>
           <input

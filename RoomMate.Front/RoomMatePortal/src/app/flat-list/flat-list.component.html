@@ -19,34 +19,24 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngIf="newAddressDetails">
+      <tr >
         <th scope="row">1</th>
         <td>{{flatDetails.cityName}}</td>
-        <td>{{flatDetails.street}} street</td>
-        <td>{{flatDetails.houseNumber}}</td>
-        <td>{{flatDetails.flatNumber}}</td>
-      </tr>
-    </tbody>
-    <tbody>
-      <tr *ngIf="hasAddresCame">
-        <th scope="row">1</th>
-        <td>{{flatDetails.cityName}}</td>
-        <td>{{flatDetails.street}} street</td>
+        <td>{{flatDetails.street}}</td>
         <td>{{flatDetails.houseNumber}}</td>
         <td>{{flatDetails.flatNumber}}</td>
       </tr>
     </tbody>
   </table>
-
-  <div *ngIf="newAddressDetails">
+  <div *ngIf="flatDetails.cityId">
     <button
     (click)= "flatAdd()"
     type="submit">
      Add the flat!
     </button>
   </div>
-
-  <div *ngIf="hasAddresCame">
+  <div></div>
+  <div *ngIf="flatDetails.users">
     Users in flat:
     <div *ngFor="let user of flatDetails.users; let isLast = last">
       <span *ngIf="!isLast" [innerHTML]="user.name + ' &nbsp;'"></span>

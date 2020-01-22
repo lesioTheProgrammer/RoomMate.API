@@ -65,7 +65,14 @@ namespace RoomMate.Domain.Services.Implements
             }
             else
             {
-                return new AddressDto();
+
+                return new AddressDto() {
+                    HouseNumber = houseNumber,
+                    FlatNumber = flatNumber,
+                    Street = streetLetters,
+                    CityName = _cityRepository.GetFirst(x => x.Id == cityId).CityName,
+                    CityId = cityId
+            };
             }
             try
             {
