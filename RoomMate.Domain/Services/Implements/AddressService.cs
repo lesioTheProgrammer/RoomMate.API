@@ -55,10 +55,18 @@ namespace RoomMate.Domain.Services.Implements
         public AddressDto GetAddressByFlatHouseNumb(string houseNumber, string flatNumber, string streetLetters, int cityId)
         {
             var addressDto = new AddressDto();
+            var userDtoList = new List<UserListDto>();
             var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == houseNumber && x.FlatNumber == flatNumber
             && x.Street.ToLower() == streetLetters.ToLower() && x.CityId == cityId, u => u.City, f => f.Flat);
             // get users in flat 
-            var userDtoList = this.userService.GetUserByFlatId(address.Flat.Id);
+            if (address != null) // jak leci fake numery
+            {
+              userDtoList = this.userService.GetUserByFlatId(address.Flat.Id);
+            }
+            else
+            {
+                return new AddressDto();
+            }
             try
             {
                 addressDto = ConvertToAddressUSersDto(address, userDtoList);
@@ -76,6 +84,7 @@ namespace RoomMate.Domain.Services.Implements
             //no need to check userDtoList to null because reference types (ICollection here, are always nullable)
             return new AddressDto()
             {
+                Id = addr.Id,
                 HouseNumber = addr.HouseNumber,
                 FlatNumber = addr.FlatNumber,
                 Street = addr.Street,
@@ -87,41 +96,33 @@ namespace RoomMate.Domain.Services.Implements
             };
         }
 
-        public IList<AddressDto> GetStreetsDistincted(int id, string streetLetters)
+        public IList<string> GetStreetsDistincted(int id, string streetLetters)
         {
             // get only addreses with certain street names
-
-            var addresDtoList = new List<AddressDto>();
-            var lowerStrLetters = streetLetters.ToLower();
-
             /// Contains x liter albo zaczynające się od x liter? To nie jest to samo? xd
-            /// Po co include?
+            /// LB theres and, not or 
+            /// Po co include? 
+            /// LB i need city too
             /// var listOfAddreses = _addressRepository.GetList(blablbala) ?
-            var listOfAddreses = _addressRepository.GetListWithInclude(x => x.CityId == id &&
-            x.Street.ToLower().Contains(lowerStrLetters) && x.Street.ToLower().StartsWith(lowerStrLetters), c => c.City).AsEnumerable();
-
+            //var listOfAddreses = _addressRepository.GetListWithInclude(x => x.CityId == id &&
+            //x.Street.ToLower().Contains(lowerStrLetters) && x.Street.ToLower().StartsWith(lowerStrLetters), c => c.City).AsEnumerable();
             /// MS
             /// Najpierw predykat - czyli to co w where, później to co w selekt 
             /// Robisz to identycznie jak na dole tylko że w repo
             /// 
-            var distinctStreets = _addressRepository.GetDistinct(pred => pred.CityId == id && pred.Street.ToLower().Contains(lowerStrLetters), x => x.Street );
-
+            var distinctStreets = _addressRepository.GetDistinct(pred => pred.CityId == id && pred.Street.ToLower().Contains(streetLetters.ToLower()), x => x.Street );
 
             // i cant do generic repo with tkey and t 
             // Sszuka jednego rozwiązania na stacku i tak ma być. "Generic repo to rak'
             // Brain.Run() please ;c
             // Możesz używać LINQ - w tym przypadku jest to działanie na listach :) Dodatkowo LINQ ma metodę Distinct 
-            var listOfAddresesDistincByStrr = listOfAddreses.GroupBy(str => str.Street.ToLower()).Select(g => g.FirstOrDefault()).ToList();
+            //var listOfAddresesDistincByStrr = listOfAddreses.GroupBy(str => str.Street.ToLower()).Select(g => g.FirstOrDefault()).ToList();
 
-
-            if (listOfAddresesDistincByStrr.Any())
+            if (distinctStreets.Any())
             {
-                foreach (var address in listOfAddresesDistincByStrr)
-                {
-                    addresDtoList.Add(ConvertToAddrDto(address));
-                }
+                return distinctStreets;
             }
-            return addresDtoList;
+            return new List<string>();
         }
 
         private AddressDto ConvertToAddrDto(Address address)

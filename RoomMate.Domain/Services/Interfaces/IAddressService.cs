@@ -7,7 +7,7 @@ namespace RoomMate.Domain.Services.Interfaces
     {
         List<CityDto> GetCitiesByName(string letters);
 
-        IList<AddressDto> GetStreetsDistincted(int id, string streetLetters);
+        IList<string> GetStreetsDistincted(int id, string streetLetters);
         bool AddAddressUserSelected(AddressDto address, int idOfJustCreatedUser);
 
         AddressDto GetAddressByFlatHouseNumb(string houseNumber, string flatNumber, string streetLetters, int cityId);

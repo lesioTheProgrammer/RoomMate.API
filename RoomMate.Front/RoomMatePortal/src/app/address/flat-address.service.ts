@@ -28,20 +28,18 @@ export class FlatAddressService {
     });
   }
 
-  public getAddressByCityIdStreet(
+  public getStreet(
     id: any,
     streetLetters: string
-
-  ): Observable<AddressDto[]> {
+  ): Observable<string[]> {
     const route = "GetStreet";
-    debugger;
     const body = new HttpParams({
       fromObject : {
         id : id,
         streetLetters : streetLetters
       }
     })
-    return this.httpClient.get<AddressDto[]>(this.wwwPath + "/" + route, {
+    return this.httpClient.get<string[]>(this.wwwPath + "/" + route, {
       params: body
     });
   }
@@ -53,7 +51,6 @@ export class FlatAddressService {
     cityId: any
   ): Observable<AddressDto> {
     const route = "GetFlat";
-    debugger;
     const body = new HttpParams({
       fromObject: {
         houseNumber: houseNumber,

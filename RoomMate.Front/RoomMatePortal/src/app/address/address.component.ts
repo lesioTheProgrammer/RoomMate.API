@@ -13,21 +13,20 @@ import { FlatAddressService } from './flat-address.service';
 })
 export class AddressComponent implements OnInit {
   pusheditems: CityDto[] = [];
-  pushedAddrItems: AddressDto[] = [];
+  pushedStreetItems: string[] = [];
   citySelectionDto: AddressDto = new AddressDto();
   cityGetSuccess: boolean = false;
-  citiesList: Observable<CityDto[]>;
+
   cityCtrl: FormControl = new FormControl();
-  addresCtrl: FormControl = new FormControl();
-  addressesList: Observable<AddressDto[]>;
-  addrSelectSuccess: boolean;
+  streetCtrl: FormControl = new FormControl();
+  citiesList: Observable<CityDto[]>;
+  streetList: Observable<string[]>;
+  streetSelectSuccess: boolean;
   disabledButton = false;
 
+
   form: FormGroup;
-
   flatDetails: AddressDto = new AddressDto();
-
-
 
 
   constructor(
@@ -39,9 +38,10 @@ export class AddressComponent implements OnInit {
       startWith(''),
       map(letters => (letters.length >= 2  ? this.getCities(letters) : []))
     );
-    this.addressesList = this.addresCtrl.valueChanges.pipe(
+    this.streetList = this.streetCtrl.valueChanges.pipe(
       startWith(''),
-      map(streetLetters => (streetLetters.length >= 2 && this.cityGetSuccess ? this.getAddress(streetLetters) : []))
+      map(street => (street.length >= 2 &&
+      this.cityGetSuccess ? this.getStreet(street) : []))
     );
     this.cityCtrl.setValidators(forbiddenNamesValidator(this.pusheditems));
 
@@ -78,36 +78,25 @@ export class AddressComponent implements OnInit {
     this.cityGetSuccess = true; // to make addresBox Visible
   }
 
-  getAddress(streetLetters: string): AddressDto[] {
-    if (this.addrSelectSuccess){
+  getStreet(street: string): string[] {
+    if (this.streetSelectSuccess) {
       // this will block another getRequest after selecting the cities.
-      return this.pushedAddrItems;
+      return this.pushedStreetItems;
     }
-    this.pushedAddrItems = new Array<AddressDto>();
-    this.flataddresService.getAddressByCityIdStreet(this.citySelectionDto.cityId, streetLetters)
+    this.pushedStreetItems = new Array<string>();
+    this.flataddresService.getStreet(this.citySelectionDto.cityId, street)
     .subscribe(response => {
-      debugger;
       if (response != null && response.length !== 0) {
         response.forEach(element => {
-          debugger;
-          let newAddress = new AddressDto();
-          newAddress.cityId = element.cityId;
-          newAddress.cityName = element.cityName;
-          newAddress.flatNumber = element.flatNumber;
-          newAddress.houseNumber = element.houseNumber;
-          newAddress.street = element.street;
-          newAddress.allAddress = element.allAddress;
-          newAddress.id = element.id;
-          this.pushedAddrItems.push(newAddress);
+          this.pushedStreetItems.push(element);
         });
       }
     });
-    return this.pushedAddrItems;
+    return this.pushedStreetItems;
   }
 
-  passAddrSelectState(id: number, street: string) {
-    this.addrSelectSuccess = true;
-    this.citySelectionDto.id = id;
+  passStreetSelection(street: string) {
+    this.streetSelectSuccess = true;
     this.citySelectionDto.street = street;
   }
 
@@ -116,13 +105,13 @@ export class AddressComponent implements OnInit {
     // if user started to type street and theres no such
     // street dont even search for it
     debugger;
-    if (this.addrSelectSuccess) {
+    if (this.streetSelectSuccess) {
       this.flataddresService.getAddressByFlatHouseNumb(this.form.value.houseNumber,
         this.form.value.flatNumber, this.citySelectionDto.street,
         this.citySelectionDto.cityId ).subscribe(response => {
+          this.disabledButton = false;
           if (response != null) {
             this.flatDetails = response;
-            this.disabledButton = false;
           }
         })
     }
@@ -131,11 +120,12 @@ export class AddressComponent implements OnInit {
       this.flatDetails = new AddressDto();
       this.flatDetails.cityId = this.citySelectionDto.cityId;
       this.flatDetails.cityName = this.citySelectionDto.cityName;
-      this.flatDetails.street = this.addresCtrl.value; //good
+      this.flatDetails.street = this.streetCtrl.value; //good
       this.flatDetails.houseNumber = this.form.value.houseNumber;
       this.flatDetails.flatNumber = this.form.value.flatNumber;
       // theres no such flat pass input values to child, add new flat there
       // if recognized as new flat
+      this.disabledButton = false;
     }
   }
 }

@@ -32,26 +32,26 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- autocomplete address -->
+        <!-- autocomplete street -->
         <mat-form-field class="example-full-width2" *ngIf="cityGetSuccess">
           <br />
           <input
             #inputField
             type="text"
-            placeholder="Select the address"
-            aria-label="Address"
+            placeholder="Select the street"
+            aria-label="Street"
             matInput
-            [formControl]="addresCtrl"
-            [matAutocomplete]="address"
+            [formControl]="streetCtrl"
+            [matAutocomplete]="street"
             disabled="cityGetSuccess"
           />
-          <mat-autocomplete #address="matAutocomplete">
+          <mat-autocomplete #street="matAutocomplete">
             <mat-option
-              *ngFor="let address of addressesList | async"
-              [value]="address.street"
-              (onSelectionChange)="passAddrSelectState(address.id, address.street)"
+              *ngFor="let street of streetList | async"
+              [value]="street"
+              (onSelectionChange)="passStreetSelection(street)"
             >
-              ul.{{ address.street }}
+              ul.{{ street }}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>

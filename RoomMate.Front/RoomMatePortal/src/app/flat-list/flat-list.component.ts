@@ -8,6 +8,8 @@ import { AddressDto } from "../address/dto/address-dto";
 })
 export class FlatListComponent implements OnInit {
   hasAddresCame: boolean = false;
+  newAddressDetails: boolean = false;
+
   @Input() flatDetails: AddressDto;
   constructor() {}
 
@@ -15,12 +17,14 @@ export class FlatListComponent implements OnInit {
 
   ngOnChanges(flatDetails: SimpleChanges): void {
     debugger;
-    // checking if addres has came xD
-    // wrong becaue now i am creating new obj
-    // have to check if theres value in non inputeded
-    // property of addres dto
-    if ("flatName" in this.flatDetails) {
-      this.hasAddresCame = true;
-    }
+//     id 0 if new addres with street inpult angular
+//     undefined if new addres from data entered in angular
+//     defined and !=0 if from db
+      if (this.flatDetails.id === 0 || !this.flatDetails.id){
+        this.newAddressDetails = true;
+      }
+      else {
+        this.hasAddresCame = true;
+      }
   }
 }

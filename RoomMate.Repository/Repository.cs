@@ -116,19 +116,6 @@ namespace RoomMate.Repository
 
             return query.Where(predicate).Select(selector).Distinct().ToList();
         }
-        //public IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> items, Func<T, TKey> property)
-        //{
-        //    return items.GroupBy(property).Select(x => x.First());
-        //}
-
-
-        //public  IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> items, Func<T, TKey> property,
-
-        //    Func<T, bool> predicate, params Expression<Func<T, object>>[] includes) // stolen from Fetfirst with include
-        //{
-
-        //    return items.GroupBy(property).Select(x => x.FirstOrDefault());
-        //}
 
         // nested first or deafult
         public TResult GetFirstOrDefault<TResult>(Expression<Func<T, TResult>> selector,
