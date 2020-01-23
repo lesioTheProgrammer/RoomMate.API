@@ -132,16 +132,15 @@ namespace RoomMate.Api
             container.Register<DbContext, RoomMateContext>(Lifestyle.Scoped);
             container.Register(typeof(IRepository<>), typeof(Repository<>), Lifestyle.Scoped);
 
-
             //// Tutaj dodawać nowe serwisy
-            /// TODO: Dodać automat na to, żeby przeszło klasy dziedziczące po Serwisie
             container.Register<ITokenService, TokenService>(Lifestyle.Scoped);
             container.Register<IFlatService, FlatService>(Lifestyle.Scoped);
             container.Register<IHouseworkService, HouseworkService>(Lifestyle.Scoped);
             container.Register<ILoginService, LoginService>(Lifestyle.Scoped);
             container.Register<IRegisterService, RegisterService>(Lifestyle.Scoped);
             container.Register<IUserService, UserService>(Lifestyle.Scoped);
-            container.Register<IAddressService, AddressService>(Lifestyle.Scoped); //addr serv
+            container.Register<IAddressService, AddressService>(Lifestyle.Scoped); 
+            container.Register<INoteService, NoteService>(Lifestyle.Scoped);
 
 
             // Allow Simple Injector to resolve services from ASP.NET Core.

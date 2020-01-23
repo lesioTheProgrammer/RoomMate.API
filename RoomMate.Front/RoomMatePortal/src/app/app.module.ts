@@ -30,6 +30,7 @@ import { UserListComponent } from './user-list/user-list.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { RemoveAccountComponent } from './user-profile/remove-account/remove-account.component';
 import { AddressComponent } from './address/address.component';
+import { NotesComponent } from './notes/notes.component';
 
 const routes: Routes =  [
   { path: '', component: MyRoomComponent},
@@ -62,6 +63,7 @@ export function tokenGetter() {
     UserProfileComponent,
     RemoveAccountComponent,
     AddressComponent,
+    NotesComponent,
   ],
   imports: [
     BrowserModule,

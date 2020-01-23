@@ -1,0 +1,30 @@
+<div>
+  <div class="row">
+    <div class="col-lg-5">
+      <div class="card-body " style=" align-items: center;">
+        <mat-form-field style="width: 100%;">
+          <textarea matInput placeholder="Leave a note" rows="15"  [(ngModel)]="newNoteDto.content"></textarea>
+        </mat-form-field>
+        <button mat-button (click)="saveNote()">Add note</button>
+        <div *ngIf="noteAdded == false" class="alert alert-danger" role="alert">
+          <strong>Error!</strong> Fail - add note
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-7 row">
+      <div *ngFor="let note of notesDto" class="card shadow" style="margin:10px;width:25%;">
+        <div class="card-body">
+          <span style="text-align: center">
+            <h4 style="font-weight: bolder;">{{note.userName}}</h4>
+          </span>
+          <span>
+            {{note.content}}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

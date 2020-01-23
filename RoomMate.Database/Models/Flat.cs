@@ -17,6 +17,8 @@ namespace RoomMate.Database.Models
         public virtual Address Address { get; set; }
 
         public virtual ICollection<UserFlat> UserFlats { get; set; }
+
+        public virtual ICollection<Notes> Notes { get; set; }
     }
 }
 

@@ -22,5 +22,7 @@ namespace RoomMate.Database.Models
         public virtual ICollection<UserFlat> UserFlats { get; set; }
 
         public virtual RoleTypeEnum RoleType { get; set; }
+
+        public virtual ICollection<Notes> Notes { get; set; }
     }
 }
