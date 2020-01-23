@@ -12,17 +12,17 @@ import { FlatAddressService } from './flat-address.service';
   styleUrls: ['./address.component.css']
 })
 export class AddressComponent implements OnInit {
-  pusheditems: CityDto[] = [];
-  pushedStreetItems: string[] = [];
+  listOfCitiesToSelect: CityDto[] = [];
+  listOfStreetsToSelect: string[] = [];
   citySelectionDto: AddressDto = new AddressDto();
-  cityGetSuccess: boolean = false;
+  citySelected = false;
+  streetSelected: boolean;
 
-  cityCtrl: FormControl = new FormControl();
-  streetCtrl: FormControl = new FormControl();
-  citiesList: Observable<CityDto[]>;
+  cityControl: FormControl = new FormControl();
+  streetControl: FormControl = new FormControl();
+  citiesList: Observable<CityDto[]>  = new  Observable<CityDto[]>();
   streetList: Observable<string[]>;
-  streetSelectSuccess: boolean;
-  disabledButton = false;
+  disabledButton = true;
 
 
   form: FormGroup;
@@ -30,96 +30,110 @@ export class AddressComponent implements OnInit {
 
 
   constructor(
-    public flataddresService: FlatAddressService
+    public flatAddressService: FlatAddressService
   ) {}
 
   ngOnInit() {
-    this.citiesList = this.cityCtrl.valueChanges.pipe(
+    this.citiesList = this.cityControl.valueChanges.pipe(
       startWith(''),
       map(letters => (letters.length >= 2  ? this.getCities(letters) : []))
     );
-    this.streetList = this.streetCtrl.valueChanges.pipe(
+    this.streetList = this.streetControl.valueChanges.pipe(
       startWith(''),
       map(street => (street.length >= 2 &&
-      this.cityGetSuccess ? this.getStreet(street) : []))
+      this.citySelected ? this.getStreet(street) : []))
     );
-    this.cityCtrl.setValidators(forbiddenNamesValidator(this.pusheditems));
-
+    this.cityControl.setValidators(forbiddenNamesValidator(this.listOfCitiesToSelect, false));
     this.form = new FormGroup({
       houseNumber: new FormControl(),
       flatNumber: new FormControl()
     });
-    // on init ends here
   }
 
   getCities(letters: string): CityDto[] {
-    if (this.cityGetSuccess){
-      // this will block another getRequest after selecting the cities.
-      this.cityCtrl.setValidators(forbiddenNamesValidator(this.pusheditems));
-      return this.pusheditems;
+    if ((this.citySelectionDto.cityName !== letters) && (this.citySelectionDto.cityId !== 0 && this.citySelectionDto.cityId)) {
+      this.citySelected = false;
+      this.citySelectionDto.cityId = 0;
+      this.citySelectionDto.cityName = '';
+      this.listOfCitiesToSelect = [];
     }
-    this.pusheditems = new Array<CityDto>();
-    this.flataddresService.getCityByTwoLetters(letters).subscribe(response => {
+    if (this.citySelected) {
+      // this will block another getRequest after selecting the cities.
+      return this.listOfCitiesToSelect;
+    }
+    this.listOfCitiesToSelect = new Array<CityDto>();
+    this.flatAddressService.getCityByTwoLetters(letters).subscribe(response => {
       if (response != null) {
+
         response.forEach(element => {
-          let newcity = new CityDto();
+          const newcity = new CityDto();
           newcity.cityId = element.cityId;
           newcity.cityName = element.cityName;
-          this.pusheditems.push(newcity);
+          this.listOfCitiesToSelect.push(newcity);
         });
+        // false because if response will come there will be always new list
+        this.cityControl.setValidators(forbiddenNamesValidator(this.listOfCitiesToSelect, false));
       }
     });
-    return this.pusheditems;
+    return this.listOfCitiesToSelect;
   }
 
-  passCitytoAddr(cityId: number, cityName: string) {
+  citySelection(cityId: number, cityName: string) {
     this.citySelectionDto.cityId = cityId;
     this.citySelectionDto.cityName = cityName;
-    this.cityGetSuccess = true; // to make addresBox Visible
+    this.cityControl.setValue(cityName);
+    this.citySelected = true;
+    this.disabledButton = false;
   }
 
   getStreet(street: string): string[] {
-    if (this.streetSelectSuccess) {
+    if (this.streetSelected) {
       // this will block another getRequest after selecting the cities.
-      return this.pushedStreetItems;
+      return this.listOfStreetsToSelect;
     }
-    this.pushedStreetItems = new Array<string>();
-    this.flataddresService.getStreet(this.citySelectionDto.cityId, street)
+    this.listOfStreetsToSelect = new Array<string>();
+    this.flatAddressService.getStreet(this.citySelectionDto.cityId, street)
     .subscribe(response => {
       if (response != null && response.length !== 0) {
         response.forEach(element => {
-          this.pushedStreetItems.push(element);
+          this.listOfStreetsToSelect.push(element);
         });
       }
     });
-    return this.pushedStreetItems;
+    return this.listOfStreetsToSelect;
   }
 
-  passStreetSelection(street: string) {
-    this.streetSelectSuccess = true;
+  streetSelection(street: string) {
+    this.streetSelected = true;
     this.citySelectionDto.street = street;
   }
 
   searchCertainFlat() {
     this.disabledButton = true;
-      this.flataddresService.getAddressByFlatHouseNumb(this.form.value.houseNumber,
-        this.form.value.flatNumber, this.streetCtrl.value,
+      this.flatAddressService.getAddressByFlatHouseNumb(this.form.value.houseNumber,
+        this.form.value.flatNumber, this.streetControl.value,
         this.citySelectionDto.cityId ).subscribe(response => {
           this.disabledButton = false;
           if (response != null) {
             this.flatDetails = response;
           }
-        })
+        });
     }
 }
 // validate autocomplete form
-export function forbiddenNamesValidator(cities: CityDto[]): ValidatorFn {
+export function forbiddenNamesValidator(citySelect: any, oldList: boolean): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
     // below findIndex will check if control.value is equal to one of our options or not
-    const index = cities.findIndex(name => {
+    if (citySelect === undefined) {
+      return null;
+    }
+    if ((citySelect.length === 0) && oldList === false) {
+      return { 'forbiddenNames': { value: control.value } };
+    }
+    const index = citySelect.findIndex(name => {
       return (new RegExp('\^' + name.cityName + '\$')).test(control.value);
     });
-    if (cities.length === 0) {
+    if (citySelect.length === 0) {
       return null;
     }
     return index < 0 ? { 'forbiddenNames': { value: control.value } } : null;

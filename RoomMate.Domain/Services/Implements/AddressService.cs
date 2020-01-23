@@ -59,20 +59,20 @@ namespace RoomMate.Domain.Services.Implements
             var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == houseNumber && x.FlatNumber == flatNumber
             && x.Street.ToLower() == streetLetters.ToLower() && x.CityId == cityId, u => u.City, f => f.Flat);
             // get users in flat 
-            if (address != null) // jak leci fake numery
+            if (address != null)
             {
-              userDtoList = this.userService.GetUserByFlatId(address.Flat.Id);
+                userDtoList = this.userService.GetUserByFlatId(address.Flat.Id);
             }
             else
             {
-
-                return new AddressDto() {
+                return new AddressDto()
+                {
                     HouseNumber = houseNumber,
                     FlatNumber = flatNumber,
                     Street = streetLetters,
                     CityName = _cityRepository.GetFirst(x => x.Id == cityId).CityName,
                     CityId = cityId
-            };
+                };
             }
             try
             {
@@ -88,7 +88,6 @@ namespace RoomMate.Domain.Services.Implements
 
         public AddressDto ConvertToAddressUSersDto(Address addr, List<UserListDto> userDtoList)
         {
-            //no need to check userDtoList to null because reference types (ICollection here, are always nullable)
             return new AddressDto()
             {
                 Id = addr.Id,
@@ -106,25 +105,7 @@ namespace RoomMate.Domain.Services.Implements
         public IList<string> GetStreetsDistincted(int id, string streetLetters)
         {
             // get only addreses with certain street names
-            /// Contains x liter albo zaczynające się od x liter? To nie jest to samo? xd
-            /// LB theres and, not or 
-            /// Po co include? 
-            /// LB i need city too
-            /// var listOfAddreses = _addressRepository.GetList(blablbala) ?
-            //var listOfAddreses = _addressRepository.GetListWithInclude(x => x.CityId == id &&
-            //x.Street.ToLower().Contains(lowerStrLetters) && x.Street.ToLower().StartsWith(lowerStrLetters), c => c.City).AsEnumerable();
-            /// MS
-            /// Najpierw predykat - czyli to co w where, później to co w selekt 
-            /// Robisz to identycznie jak na dole tylko że w repo
-            /// 
-            var distinctStreets = _addressRepository.GetDistinct(pred => pred.CityId == id && pred.Street.ToLower().Contains(streetLetters.ToLower()), x => x.Street );
-
-            // i cant do generic repo with tkey and t 
-            // Sszuka jednego rozwiązania na stacku i tak ma być. "Generic repo to rak'
-            // Brain.Run() please ;c
-            // Możesz używać LINQ - w tym przypadku jest to działanie na listach :) Dodatkowo LINQ ma metodę Distinct 
-            //var listOfAddresesDistincByStrr = listOfAddreses.GroupBy(str => str.Street.ToLower()).Select(g => g.FirstOrDefault()).ToList();
-
+            var distinctStreets = _addressRepository.GetDistinct(pred => pred.CityId == id && pred.Street.ToLower().Contains(streetLetters.ToLower()), x => x.Street);
             if (distinctStreets.Any())
             {
                 return distinctStreets;
@@ -149,6 +130,5 @@ namespace RoomMate.Domain.Services.Implements
         {
             return flatSerivce.AddFlatToUser(idOfJustCreatedUser, address.Id);
         }
-
     }
 }

@@ -7,86 +7,91 @@
       <form style="min-width: 150px;max-width: 500px;width: 100%;">
         <mat-form-field class="example-full-width">
           <br />
+          <!-- autocomplete city -->
           <input
             #inputField
             type="text"
             placeholder="Select the city name"
             aria-label="City"
             matInput
-            [formControl]="cityCtrl"
+            [formControl]="cityControl"
             [matAutocomplete]="auto"
           />
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option
               *ngFor="let city of citiesList | async"
               [value]="city.cityName"
-              (onSelectionChange)="passCitytoAddr(city.cityId, city.cityName)"
+              (onSelectionChange)="citySelection(city.cityId, city.cityName)"
             >
               {{ city.cityName }}
             </mat-option>
           </mat-autocomplete>
-          <mat-error *ngIf="cityCtrl.hasError('forbiddenNames')">
+          <mat-error *ngIf="cityControl.hasError('forbiddenNames')">
             You should enter value from suggested one only.
-            <strong>'{{ cityCtrl.errors.forbiddenNames.value }}'</strong> is not
-            allowed.
+            <strong>'{{ cityControl.errors.forbiddenNames.value }}'</strong> is
+            not allowed.
           </mat-error>
         </mat-form-field>
 
-        <!-- autocomplete street -->
-        <mat-form-field class="example-full-width2" *ngIf="cityGetSuccess">
-          <br />
-          <input
-            #inputField
-            type="text"
-            placeholder="Select the street"
-            aria-label="Street"
-            matInput
-            [formControl]="streetCtrl"
-            [matAutocomplete]="street"
-            disabled="cityGetSuccess"
-          />
-          <mat-autocomplete #street="matAutocomplete">
-            <mat-option
-              *ngFor="let street of streetList | async"
-              [value]="street"
-              (onSelectionChange)="passStreetSelection(street)"
-            >
-              ul.{{ street }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-        <!-- autocomplete end -->
-        <!-- numeric inputs -->
-        <form [formGroup]="form">
-        <div class="mb-3 form-group" *ngIf="cityGetSuccess">
-          <label for="houseNumber">House number</label>
-          <input
-            type="text"
-            id="houseNumber"
-            class="form-control"
-            formControlName="houseNumber"
-            class="form-control"
-          />
+        <div *ngIf="citySelected">
+          <!-- autocomplete street -->
+          <mat-form-field class="example-full-width2">
+            <br />
+            <input
+              #inputField
+              type="text"
+              placeholder="Select the street"
+              aria-label="Street"
+              matInput
+              [formControl]="streetControl"
+              [matAutocomplete]="street"
+              disabled="cityGetSuccess"
+            />
+            <mat-autocomplete #street="matAutocomplete">
+              <mat-option
+                *ngFor="let street of streetList | async"
+                [value]="street"
+                (onSelectionChange)="streetSelection(street)"
+              >
+                {{ street }} St.
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <!-- numeric inputs -->
+          <form [formGroup]="form">
+            <div class="mb-3 form-group">
+              <label for="houseNumber">House number</label>
+              <input
+                type="text"
+                id="houseNumber"
+                class="form-control"
+                formControlName="houseNumber"
+                class="form-control"
+              />
+            </div>
+            <div class="mb-3 form-group">
+              <label for="flatNumber">Flat number</label>
+              <input
+                type="text"
+                id="flatNumber"
+                class="form-control"
+                formControlName="flatNumber"
+                class="form-control"
+              />
+            </div>
+          </form>
         </div>
-        <div class="mb-3 form-group" *ngIf="cityGetSuccess">
-          <label for="flatNumber">Flat number</label>
-          <input
-            type="text"
-            id="flatNumber"
-            class="form-control"
-            formControlName="flatNumber"
-            class="form-control"
-          />
-        </div>
-      </form>
-        <!-- end of test -->
-        <div></div>
-      <button mat-button
-      cdkFocusInitial
-      (click)="searchCertainFlat()"
-      type="submit"
-      [disabled]="disabledButton">Search</button>
 
+        <div></div>
+        <button
+          mat-button
+          cdkFocusInitial
+          (click)="searchCertainFlat()"
+          type="submit"
+          [disabled]="disabledButton"
+        >
+          Search
+        </button>
       </form>
     </div>
   </div>

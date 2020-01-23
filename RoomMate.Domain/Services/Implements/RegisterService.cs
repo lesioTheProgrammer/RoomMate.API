@@ -20,7 +20,6 @@ namespace RoomMate.Domain.Services.Implements
             this._addressService = addressService;
         }
 
-
         public bool RegisterUser(RegisterDto registerDto)
         {
             bool isRegistered = false;
@@ -55,7 +54,6 @@ namespace RoomMate.Domain.Services.Implements
             {
                 isRegistered =  false;
             }
-            // onyly if user seleceted valid addres
             // change it completly because now i dont add addres at the same time I register the user;
             if ((registerDto.IsValidId(registerDto.AddressDto.Id)) && isRegistered == true)
             {
@@ -81,8 +79,6 @@ namespace RoomMate.Domain.Services.Implements
             return taken;
         }
 
-
-
         private User ConvertToTarget(RegisterDto registerDto)
         {
             return new User
@@ -102,7 +98,5 @@ namespace RoomMate.Domain.Services.Implements
                 RoleType = registerDto.RoleType
             };
         }
-
-     
     }
 }
