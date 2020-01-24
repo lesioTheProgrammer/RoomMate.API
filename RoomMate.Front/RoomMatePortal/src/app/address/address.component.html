@@ -56,6 +56,10 @@
                 {{ street }} St.
               </mat-option>
             </mat-autocomplete>
+            <mat-error *ngIf="streetControl.hasError('f.streetControl.errors')" class="invalid-feedback">
+              You should enter value from suggested one only.
+              <strong>'Gerara'</strong>
+            </mat-error>
           </mat-form-field>
           <!-- numeric inputs -->
           <form [formGroup]="form">
@@ -67,8 +71,15 @@
                 class="form-control"
                 formControlName="houseNumber"
                 class="form-control"
+                [ngClass]="{ 'is-invalid': f.houseNumber.errors }"
               />
+              <div *ngIf="f.houseNumber.errors" class="invalid-feedback">
+                <div *ngIf="f.houseNumber.errors.required">
+                  Flat number is required.
+                </div>
+              </div>
             </div>
+
             <div class="mb-3 form-group">
               <label for="flatNumber">Flat number</label>
               <input
@@ -77,7 +88,13 @@
                 class="form-control"
                 formControlName="flatNumber"
                 class="form-control"
+                [ngClass]="{ 'is-invalid': f.flatNumber.errors }"
               />
+              <div *ngIf="f.flatNumber.errors" class="invalid-feedback">
+                <div *ngIf="f.flatNumber.errors.required">
+                  Flat number is required.
+                </div>
+              </div>
             </div>
           </form>
         </div>
@@ -86,7 +103,7 @@
         <button
           mat-button
           cdkFocusInitial
-          (click)="searchCertainFlat()"
+          (click)="searchForFlat()"
           type="submit"
           [disabled]="disabledButton"
         >

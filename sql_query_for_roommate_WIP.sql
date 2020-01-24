@@ -44,9 +44,9 @@ select * from Addresses
 select * from City
 
 
-insert into City values (1, 1, GETDATE(), null, GETDATE(), 'Vancover');
+insert into City values (1, 1, GETDATE(), null, GETDATE(), 'Gerara');
 
-insert into City values (1, 1, GETDATE(), null, GETDATE(), 'Valencia');
+insert into City values (1, 1, GETDATE(), null, GETDATE(), 'Germania');
 
 
 -- first select the city and later by selected city select avialable adresses
@@ -103,12 +103,15 @@ where u.Id = (select top 1Id from Users order by Id desc);
 
 select * from Users
 
-
+select * from City
 
 
 select a.Id, a.FlatNumber, a.HouseNumber from Addresses as a;
 select f.AddressId, f.FlatName, f.Id from Flats as f;
 select uf.FlatId, uf.UserId from UserFlats as uf
+
+
+
 
 
 
@@ -125,11 +128,15 @@ select * from UserFlats
 
 select * from Users
 
+select * from Flats
+
+
 
 select * from Addresses
+select * from City
 
 
-select * from Flats
+update Addresses set CityId = 6 where Addresses.Id = 1003
 
 
 

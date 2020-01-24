@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RoomMate.Domain.Dto;
 using RoomMate.Domain.Services.Interfaces;
 
 namespace RoomMate.Api.Controllers
@@ -91,9 +92,13 @@ namespace RoomMate.Api.Controllers
 
         [Route("GetFlat")]
         [HttpGet]
-        public IActionResult GetAddressByFlatHouseNumb(string houseNumber, string flatNumber, string streetLetters, int cityId)
+        public IActionResult GetAddressByFlatHouseNumb(AddressDto addressDto)
         {
-            return this.Ok(this._addressService.GetAddressByFlatHouseNumb(houseNumber, flatNumber, streetLetters, cityId));
+            if (addressDto.IsValid())
+            {
+              return this.Ok(this._addressService.GetAddressByFlatHouseNumb(addressDto));
+            }
+            return this.Ok(null);
         }
     }
 }

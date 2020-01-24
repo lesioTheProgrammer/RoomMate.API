@@ -10,6 +10,6 @@ namespace RoomMate.Domain.Services.Interfaces
         IList<string> GetStreetsDistincted(int id, string streetLetters);
         bool AddAddressUserSelected(AddressDto address, int idOfJustCreatedUser);
 
-        AddressDto GetAddressByFlatHouseNumb(string houseNumber, string flatNumber, string streetLetters, int cityId);
+        AddressDto GetAddressByFlatHouseNumb(AddressDto addressDto);
     }
 }

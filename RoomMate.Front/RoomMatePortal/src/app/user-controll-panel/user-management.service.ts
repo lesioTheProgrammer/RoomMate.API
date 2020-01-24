@@ -15,15 +15,13 @@ import { CityDto } from "../address/dto/city-dto";
 })
 export class UserManagementService extends RequestHelperService {
   protected getApiRoute(): string {
-    // ta nazwa mowi do jakiego kontrolera wlaimy strzlaa elo
     return "UserManagement";
   }
   constructor(private httpClient: HttpClient) {
     super(httpClient);
   }
-  //pajpow nie pisac, observejbel po to zeby api wiedzial co zwroce
+  // do not write pipes
   public login(loginDto: LoginDto): Observable<TokenDto> {
-    //login metoda juz z api hehe, przy poscie sam ogarniw
     return this.createPostRequest("Login", loginDto).pipe(
       map(data => <TokenDto>data)
     );

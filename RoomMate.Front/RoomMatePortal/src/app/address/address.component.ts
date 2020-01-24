@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CityDto } from './dto/city-dto';
 import { AddressDto } from './dto/address-dto';
-import { FormControl, AbstractControl, ValidatorFn, FormGroup } from '@angular/forms';
+import { FormControl, AbstractControl, ValidatorFn, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { FlatAddressService } from './flat-address.service';
@@ -19,15 +19,14 @@ export class AddressComponent implements OnInit {
   streetSelected: boolean;
 
   cityControl: FormControl = new FormControl();
-  streetControl: FormControl = new FormControl();
+  streetControl: FormControl = new FormControl('', {
+    validators: [Validators.required]
+  });
   citiesList: Observable<CityDto[]>  = new  Observable<CityDto[]>();
   streetList: Observable<string[]>;
   disabledButton = true;
-
-
   form: FormGroup;
   flatDetails: AddressDto = new AddressDto();
-
 
   constructor(
     public flatAddressService: FlatAddressService
@@ -45,9 +44,17 @@ export class AddressComponent implements OnInit {
     );
     this.cityControl.setValidators(forbiddenNamesValidator(this.listOfCitiesToSelect, false));
     this.form = new FormGroup({
-      houseNumber: new FormControl(),
-      flatNumber: new FormControl()
+      houseNumber: new FormControl('', {
+        validators: [Validators.required]
+      }),
+      flatNumber: new FormControl('', {
+        validators: [Validators.required]
+      }),
     });
+  }
+
+  get f() {
+    return this.form.controls;
   }
 
   getCities(letters: string): CityDto[] {
@@ -79,11 +86,11 @@ export class AddressComponent implements OnInit {
   }
 
   citySelection(cityId: number, cityName: string) {
+    this.citySelected = true;
     this.citySelectionDto.cityId = cityId;
     this.citySelectionDto.cityName = cityName;
-    this.cityControl.setValue(cityName);
-    this.citySelected = true;
     this.disabledButton = false;
+    this.cityControl.setValue(cityName);
   }
 
   getStreet(street: string): string[] {
@@ -108,11 +115,15 @@ export class AddressComponent implements OnInit {
     this.citySelectionDto.street = street;
   }
 
-  searchCertainFlat() {
+  searchForFlat() {
     this.disabledButton = true;
-      this.flatAddressService.getAddressByFlatHouseNumb(this.form.value.houseNumber,
-        this.form.value.flatNumber, this.streetControl.value,
-        this.citySelectionDto.cityId ).subscribe(response => {
+    const flatDetailsGetReq = new AddressDto();
+    flatDetailsGetReq.houseNumber = this.form.value.houseNumber;
+    flatDetailsGetReq.flatNumber = this.form.value.flatNumber;
+    flatDetailsGetReq.street = this.streetControl.value;
+    flatDetailsGetReq.cityId = this.citySelectionDto.cityId;
+     this.streetControl.markAsTouched(); // to display street error
+      this.flatAddressService.getAddressByFlatHouseNumb(flatDetailsGetReq).subscribe(response => {
           this.disabledButton = false;
           if (response != null) {
             this.flatDetails = response;

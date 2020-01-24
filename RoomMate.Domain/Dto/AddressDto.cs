@@ -19,5 +19,12 @@ namespace RoomMate.Domain.Dto
         public int RoomCount { get; set; }
 
         public ICollection<UserListDto> Users { get; set; }
+
+        public bool IsValid()
+        {
+            return (IsEmpty(this.Street) && IsEmpty(this.HouseNumber)
+                && IsEmpty(this.FlatNumber)
+                 && IsValidId(this.CityId));
+        }
     }
 }

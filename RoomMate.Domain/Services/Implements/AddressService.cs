@@ -52,12 +52,13 @@ namespace RoomMate.Domain.Services.Implements
             };
         }
 
-        public AddressDto GetAddressByFlatHouseNumb(string houseNumber, string flatNumber, string streetLetters, int cityId)
+        public AddressDto GetAddressByFlatHouseNumb(AddressDto addressDto)
         {
-            var addressDto = new AddressDto();
+            // string houseNumber, string flatNumber, string streetLetters, int cityId
+            var addressDtoReturned = new AddressDto();
             var userDtoList = new List<UserListDto>();
-            var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == houseNumber && x.FlatNumber == flatNumber
-            && x.Street.ToLower() == streetLetters.ToLower() && x.CityId == cityId, u => u.City, f => f.Flat);
+            var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == addressDto.HouseNumber && x.FlatNumber == addressDto.FlatNumber
+            && x.Street.ToLower() == addressDto.Street.ToLower() && x.CityId == addressDto.CityId, u => u.City, f => f.Flat);
             // get users in flat 
             if (address != null)
             {
@@ -67,23 +68,23 @@ namespace RoomMate.Domain.Services.Implements
             {
                 return new AddressDto()
                 {
-                    HouseNumber = houseNumber,
-                    FlatNumber = flatNumber,
-                    Street = streetLetters,
-                    CityName = _cityRepository.GetFirst(x => x.Id == cityId).CityName,
-                    CityId = cityId
+                    HouseNumber = addressDto.HouseNumber,
+                    FlatNumber = addressDto.FlatNumber,
+                    Street = addressDto.Street,
+                    CityName = _cityRepository.GetFirst(x => x.Id == addressDto.CityId).CityName,
+                    CityId = addressDto.CityId
                 };
             }
             try
             {
-                addressDto = ConvertToAddressUSersDto(address, userDtoList);
+                addressDtoReturned = ConvertToAddressUSersDto(address, userDtoList);
 
             }
             catch (Exception ex)
             {
                 string mess = ex.Message;
             }
-            return addressDto;
+            return addressDtoReturned;
         }
 
         public AddressDto ConvertToAddressUSersDto(Address addr, List<UserListDto> userDtoList)

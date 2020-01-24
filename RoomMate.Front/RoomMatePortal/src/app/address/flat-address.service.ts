@@ -45,22 +45,11 @@ export class FlatAddressService {
   }
 
   public getAddressByFlatHouseNumb(
-    houseNumber: any,
-    flatNumber: any,
-    streetLetters: any,
-    cityId: any
+    addressDto: AddressDto
   ): Observable<AddressDto> {
     const route = "GetFlat";
-    const body = new HttpParams({
-      fromObject: {
-        houseNumber: houseNumber,
-        flatNumber: flatNumber,
-        streetLetters: streetLetters,
-        cityId: cityId
-      }
-    });
     return this.httpClient.get<AddressDto>(this.wwwPath + "/" + route, {
-      params: body
+      params: <any>addressDto
     });
   }
 }

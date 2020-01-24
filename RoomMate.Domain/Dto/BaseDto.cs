@@ -24,5 +24,13 @@ namespace RoomMate.Domain.Dto
             }
             return true;
         }
+        public static bool IsEmpty(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }
