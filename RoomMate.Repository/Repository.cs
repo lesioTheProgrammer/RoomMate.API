@@ -7,9 +7,8 @@ using System.Linq.Expressions;
 
 namespace RoomMate.Repository
 {
-    public  class Repository<T> : IRepository<T> //, TKey>
+    public  class Repository<T> : IRepository<T> 
     where T : class
-        //, IEntity<TKey> where TKey : IEquatable<TKey>
     {
         private DbSet<T> dbset;
         private bool _isDisposed = false;

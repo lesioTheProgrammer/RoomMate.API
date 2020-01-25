@@ -54,7 +54,6 @@ namespace RoomMate.Domain.Services.Implements
 
         public AddressDto GetAddressByFlatHouseNumb(AddressDto addressDto)
         {
-            // string houseNumber, string flatNumber, string streetLetters, int cityId
             var addressDtoReturned = new AddressDto();
             var userDtoList = new List<UserListDto>();
             var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == addressDto.HouseNumber && x.FlatNumber == addressDto.FlatNumber

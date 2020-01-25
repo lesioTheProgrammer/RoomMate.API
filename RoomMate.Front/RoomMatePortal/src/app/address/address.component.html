@@ -4,7 +4,7 @@
       <span style="text-align: center">
         <h2>Search for flat using the address</h2>
       </span>
-      <form style="min-width: 150px;max-width: 500px;width: 100%;">
+      <form style="min-width: 150px;max-width: 500px;width: 100%;" >
         <mat-form-field class="example-full-width">
           <br />
           <!-- autocomplete city -->
@@ -56,7 +56,7 @@
                 {{ street }} St.
               </mat-option>
             </mat-autocomplete>
-            <mat-error *ngIf="streetControl.hasError('f.streetControl.errors')" class="invalid-feedback">
+            <mat-error *ngIf="f.streetControlValid.errors" class="invalid-feedback">
               You should enter value from suggested one only.
               <strong>'Gerara'</strong>
             </mat-error>
@@ -96,19 +96,20 @@
                 </div>
               </div>
             </div>
+
           </form>
         </div>
-
         <div></div>
         <button
-          mat-button
-          cdkFocusInitial
-          (click)="searchForFlat()"
-          type="submit"
-          [disabled]="disabledButton"
-        >
-          Search
-        </button>
+        mat-button
+        cdkFocusInitial
+        (click)="(!form.valid) || searchForFlat()"
+        type="submit"
+        [disabled]="(cityControl.hasError('forbiddenNames')) || disabledButton"
+      >
+        Search
+      </button>
+
       </form>
     </div>
   </div>

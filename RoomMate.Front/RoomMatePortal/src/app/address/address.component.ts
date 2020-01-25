@@ -50,7 +50,10 @@ export class AddressComponent implements OnInit {
       flatNumber: new FormControl('', {
         validators: [Validators.required]
       }),
+
     });
+    // add exisiting controll to form to simplyfy validation later on (!form.valid)
+    this.form.addControl('streetControlValid', this.streetControl);
   }
 
   get f() {
