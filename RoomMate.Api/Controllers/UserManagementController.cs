@@ -25,20 +25,7 @@ namespace RoomMate.Api.Controllers
             this.tokenService = tokenService;
             this.userService = userService;
         }
-        [Route("GetCities")]
-        [HttpGet]
-        public IActionResult GetCitiesByName(string letters)
-        {
-            return this.Ok(this.registerService.GetCitiesByName(letters));
-        }
-
-
-        [Route("GetAddress")]
-        [HttpGet]
-        public IActionResult GetAddressByCityId(int id, string streetLetters)
-        {
-            return this.Ok(this.registerService.GetAddressByCityId(id, streetLetters));
-        }
+       
 
 
 

@@ -1,4 +1,6 @@
-﻿namespace RoomMate.Domain.Dto
+﻿using System.Collections.Generic;
+
+namespace RoomMate.Domain.Dto
 {
     public class AddressDto : BaseDto
     {
@@ -12,9 +14,17 @@
 
         public string FlatNumber { get; set; }
 
-        public string AllAddress { get {
-                return this.Street + " " + this.HouseNumber + "/" + this.FlatNumber;
-            }
+        public string FlatName { get; set; }
+
+        public int RoomCount { get; set; }
+
+        public ICollection<UserListDto> Users { get; set; }
+
+        public bool IsValid()
+        {
+            return (IsEmpty(this.Street) && IsEmpty(this.HouseNumber)
+                && IsEmpty(this.FlatNumber)
+                 && IsValidId(this.CityId));
         }
     }
 }

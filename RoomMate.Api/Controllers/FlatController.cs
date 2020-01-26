@@ -1,26 +1,28 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RoomMate.Domain.Dto;
 using RoomMate.Domain.Services.Interfaces;
 
 namespace RoomMate.Api.Controllers
 {
-    
+
     [Route("api/Flat")]
-    [Authorize]
+    [Authorize]  
     public class FlatController : Controller
     {
-        private readonly IFlatService flatService;
-
-        public FlatController(IFlatService flatService)
+        private readonly IFlatService _flatService;
+        private readonly IAddressService _addressService;
+        public FlatController(IFlatService flatService, IAddressService addressService)
         {
-            this.flatService = flatService;
+            this._flatService = flatService;
+            this._addressService = addressService;
         }
 
         [HttpGet]
         [Route("GetCountOfAllFlats")]   
         public IActionResult GetCountOfAllFlats()
         {
-            var count = flatService.GetCountOfFlats();
+            var count = _flatService.GetCountOfFlats();
             return this.Ok(count);
         }
 
@@ -28,7 +30,7 @@ namespace RoomMate.Api.Controllers
         [Route("GetFlatById")]
         public IActionResult GetFlatById(int id)
         {
-            var flat = flatService.GetFlatById(id);
+            var flat = _flatService.GetFlatById(id);
             return this.Ok(flat);
         }
 
@@ -36,7 +38,7 @@ namespace RoomMate.Api.Controllers
         [Route("GetUserFlat")]
         public IActionResult GetUserFlat([FromBody]int id)
         {
-            var userFlat = flatService.GetUserFlat(id);
+            var userFlat = _flatService.GetUserFlat(id);
             return this.Ok(userFlat);
         }
 
@@ -70,6 +72,33 @@ namespace RoomMate.Api.Controllers
         {
             //TODO: Przypisanie osoby do mieszkania
             return this.Ok();
+        }
+
+
+        [Route("GetCities")]
+        [HttpGet]
+        public IActionResult GetCitiesByName(string letters)
+        {
+            return this.Ok(this._addressService.GetCitiesByName(letters));
+        }
+
+
+        [Route("GetStreet")]
+        [HttpGet]
+        public IActionResult GetStreetsByLettersCityID(int id, string streetLetters)
+        {
+            return this.Ok(this._addressService.GetStreetsDistincted(id, streetLetters));
+        }
+
+        [Route("GetFlat")]
+        [HttpGet]
+        public IActionResult GetAddressByFlatHouseNumb(AddressDto addressDto)
+        {
+            if (addressDto.IsValid())
+            {
+              return this.Ok(this._addressService.GetAddressByFlatHouseNumb(addressDto));
+            }
+            return this.Ok(null);
         }
     }
 }

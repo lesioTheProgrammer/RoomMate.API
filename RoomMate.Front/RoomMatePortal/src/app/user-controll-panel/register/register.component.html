@@ -98,56 +98,7 @@
     </div>
   </form>
 
-<!-- autocompllete city -->
-  <mat-form-field class="example-full-width">
-    <br />
-    <input
-      #inputField
-      type="text"
-      placeholder="Enter the city name"
-      aria-label="City"
-      matInput
-      [formControl]="cityCtrl"
-      [matAutocomplete]="auto"
-    />
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option
-        *ngFor="let city of citiesList | async"
-        [value]="city.cityName"
-        (onSelectionChange)="passCitytoAddr(city.cityId)"
-      >
-        {{ city.cityName }}
-      </mat-option>
-    </mat-autocomplete>
-    <mat-error *ngIf="cityCtrl.hasError('forbiddenNames') && !isRegistered">
-      You should enter value from suggested one only. <strong>'{{cityCtrl.errors.forbiddenNames.value}}'</strong> is not allowed.
-    </mat-error>
-  </mat-form-field>
 
-  <!-- autocomplete address -->
-  <mat-form-field class="example-full-width2" *ngIf="cityGetSuccess">
-    <br />
-    <input
-      #inputField
-      type="text"
-      placeholder="Select the address"
-      aria-label="Address"
-      matInput
-      [formControl]="addresCtrl"
-      [matAutocomplete]="address"
-      disabled="cityGetSuccess"
-    />
-    <mat-autocomplete #address="matAutocomplete">
-      <mat-option
-        *ngFor="let address of addressesList | async"
-        [value]="address.allAddress"
-        (onSelectionChange)="passAddrSelectState(address.id)"
-      >
-      ul.{{address.allAddress}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-  <!-- autocomplete end -->
 
   <div mat-dialog-actions style="float:right">
     <button mat-button (click)="closeModal()">Anuluj</button>

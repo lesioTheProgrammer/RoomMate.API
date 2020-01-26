@@ -30,13 +30,15 @@ import { UserListComponent } from './user-list/user-list.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { RemoveAccountComponent } from './user-profile/remove-account/remove-account.component';
 import { AddressComponent } from './address/address.component';
+import { FlatListComponent } from './flat-list/flat-list.component';
 
 const routes: Routes =  [
   { path: '', component: MyRoomComponent},
   { path: 'myRoom', component: MyRoomComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   { path: 'accessDebnied', component: AccessDeniedComponent},
-  { path: 'userProfile/:id', component: UserProfileComponent}
+  { path: 'userProfile/:id', component: UserProfileComponent},
+  { path: 'myFlats', component: AddressComponent,  canActivate: [AuthGuard]},
 
 ];
 
@@ -62,6 +64,7 @@ export function tokenGetter() {
     UserProfileComponent,
     RemoveAccountComponent,
     AddressComponent,
+    FlatListComponent,
   ],
   imports: [
     BrowserModule,

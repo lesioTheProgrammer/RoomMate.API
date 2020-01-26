@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace RoomMate.Repository
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public  class Repository<T> : IRepository<T> 
+    where T : class
     {
         private DbSet<T> dbset;
         private bool _isDisposed = false;
@@ -26,7 +27,7 @@ namespace RoomMate.Repository
             dbset.AddRange(entities);
             this.SaveChanges();
         }
-        public int Delete(int id)
+        public  int Delete(int id)
         {
             var item = dbset.Find(id);
             if (item != null)
@@ -71,7 +72,6 @@ namespace RoomMate.Repository
             SaveChanges();
             return data;
         }
-
         public int SaveChanges()
         {
             return this._context.SaveChanges();
@@ -97,15 +97,56 @@ namespace RoomMate.Repository
 
         public IList<T> GetListWithInclude(Func<T, bool> predicate, params Expression<Func<T, object>>[] includes)
         {
-            //foreach (var property in includes)
-            //{
-            //    dbset.Include(property);
-            //}
-            //return dbset.Where(predicate).ToList();
+            IQueryable<T> query = dbset;
+            return includes.Aggregate(query, (current, include) => current.Include(include)).Where(predicate).ToList();
+        }
 
+
+
+        public T GetFirstWithInclude(Func<T, bool> predicate, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = dbset;
+            return includes.Aggregate(query, (current, include) => current.Include(include)).Where(predicate).FirstOrDefault();
+
+        }
+        public IList<TResult> GetDistinct<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector)
+        {
             IQueryable<T> query = dbset;
 
-            return includes.Aggregate(query, (current, include) => current.Include(include)).Where(predicate).ToList();
+            return query.Where(predicate).Select(selector).Distinct().ToList();
+        }
+
+        // nested first or deafult
+        public TResult GetFirstOrDefault<TResult>(Expression<Func<T, TResult>> selector,
+                                          Expression<Func<T, bool>> predicate = null,
+                                          Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+                                          Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+                                          bool disableTracking = true)
+        {
+            IQueryable<T> query = dbset;
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).Select(selector).FirstOrDefault();
+            }
+            else
+            {
+                return query.Select(selector).FirstOrDefault();
+            }
         }
     }
 }

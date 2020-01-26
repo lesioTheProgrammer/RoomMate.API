@@ -2,6 +2,7 @@
 using RoomMate.Domain.Dto;
 using RoomMate.Domain.Services.Interfaces;
 using RoomMate.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,14 +13,17 @@ namespace RoomMate.Domain.Services.Implements
         // Method to register address
         private readonly IRepository<Address> _addressRepository;
         private readonly IRepository<City> _cityRepository;
-        private readonly IFlatService _flatSerivce;
-        
+        private readonly IFlatService flatSerivce;
+        private readonly IUserService userService;
 
-        public AddressService(IRepository<Address> address, IRepository<City> city, IFlatService flatservice )
+
+        public AddressService(IRepository<Address> address, IRepository<City> city, IFlatService flatservice,
+           IUserService userService)
         {
             this._addressRepository = address;
             this._cityRepository = city;
-            this._flatSerivce = flatservice;
+            this.flatSerivce = flatservice;
+            this.userService = userService;
         }
 
 
@@ -48,24 +52,65 @@ namespace RoomMate.Domain.Services.Implements
             };
         }
 
-
-        public IList<AddressDto> GetAddressByCityId(int id, string streetLetters)
+        public AddressDto GetAddressByFlatHouseNumb(AddressDto addressDto)
         {
-            var addresDtoList = new List<AddressDto>();
-            var lowerStrLetters = streetLetters.ToLower();
-            //take all addreses by cityID and startingLetters
-            //include cityName as I wish
-            var listOfAddreses = _addressRepository.GetListWithInclude(x => x.CityId == id &&
-            x.Street.ToLower().Contains(lowerStrLetters) && x.Street.ToLower().StartsWith(lowerStrLetters), c => c.City);
-
-            if (listOfAddreses.Any())
+            var addressDtoReturned = new AddressDto();
+            var userDtoList = new List<UserListDto>();
+            var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == addressDto.HouseNumber && x.FlatNumber == addressDto.FlatNumber
+            && x.Street.ToLower() == addressDto.Street.ToLower() && x.CityId == addressDto.CityId, u => u.City, f => f.Flat);
+            // get users in flat 
+            if (address != null)
             {
-                foreach (var address in listOfAddreses)
-                {
-                    addresDtoList.Add(ConvertToAddrDto(address));
-                }
+                userDtoList = this.userService.GetUserByFlatId(address.Flat.Id);
             }
-            return addresDtoList;
+            else
+            {
+                return new AddressDto()
+                {
+                    HouseNumber = addressDto.HouseNumber,
+                    FlatNumber = addressDto.FlatNumber,
+                    Street = addressDto.Street,
+                    CityName = _cityRepository.GetFirst(x => x.Id == addressDto.CityId).CityName,
+                    CityId = addressDto.CityId
+                };
+            }
+            try
+            {
+                addressDtoReturned = ConvertToAddressUSersDto(address, userDtoList);
+
+            }
+            catch (Exception ex)
+            {
+                string mess = ex.Message;
+            }
+            return addressDtoReturned;
+        }
+
+        public AddressDto ConvertToAddressUSersDto(Address addr, List<UserListDto> userDtoList)
+        {
+            return new AddressDto()
+            {
+                Id = addr.Id,
+                HouseNumber = addr.HouseNumber,
+                FlatNumber = addr.FlatNumber,
+                Street = addr.Street,
+                CityName = addr.City.CityName,
+                CreatedBy = addr.Flat.CreatedBy,
+                RoomCount = addr.Flat.RoomCount,
+                FlatName = addr.Flat.FlatName,
+                Users = userDtoList
+            };
+        }
+
+        public IList<string> GetStreetsDistincted(int id, string streetLetters)
+        {
+            // get only addreses with certain street names
+            var distinctStreets = _addressRepository.GetDistinct(pred => pred.CityId == id && pred.Street.ToLower().Contains(streetLetters.ToLower()), x => x.Street);
+            if (distinctStreets.Any())
+            {
+                return distinctStreets;
+            }
+            return new List<string>();
         }
 
         private AddressDto ConvertToAddrDto(Address address)
@@ -83,8 +128,7 @@ namespace RoomMate.Domain.Services.Implements
 
         public bool AddAddressUserSelected(AddressDto address, int idOfJustCreatedUser)
         {
-            return  _flatSerivce.AddFlatToUser(idOfJustCreatedUser, address.Id);
+            return flatSerivce.AddFlatToUser(idOfJustCreatedUser, address.Id);
         }
-
     }
 }
