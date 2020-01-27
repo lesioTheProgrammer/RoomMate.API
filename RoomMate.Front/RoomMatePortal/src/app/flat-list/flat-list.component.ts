@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from "@angular/core";
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from "@angular/core";
 import { AddressDto } from "../address/dto/address-dto";
 import { MatSnackBar } from "@angular/material";
 import { FlatAddressService } from "../address/flat-address.service";
@@ -12,6 +12,7 @@ export class FlatListComponent implements OnInit {
 
   loginCurrentUser: string;
   userExistInList: boolean = false;
+  joinedFlat: boolean = false;
 
 
   @Input() flatDetails: AddressDto;
@@ -19,6 +20,9 @@ export class FlatListComponent implements OnInit {
     private _snackBar: MatSnackBar,
     public flatAddressService: FlatAddressService
   ) {}
+
+
+  @Output() updateList = new EventEmitter();
 
   ngOnInit() {
     this.loginCurrentUser = JSON.parse(localStorage.getItem("login"));
@@ -44,6 +48,8 @@ export class FlatListComponent implements OnInit {
         .subscribe(response => {
           if (response) {
             this.openSnackBar('You entered the flat', 'Ok');
+            this.joinedFlat = true;
+            this.updateList.emit();
           } else {
             this.openSnackBar('Something went wrong', 'Ok');
           }

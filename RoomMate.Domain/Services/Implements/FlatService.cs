@@ -10,25 +10,29 @@ namespace RoomMate.Domain.Services.Implements
 {
     public class FlatService : IFlatService
     {
-        private readonly IRepository<Flat> flatRepository;
-        private readonly IRepository<UserFlat> userFlatRepository;
+        private readonly IRepository<Flat> _flatRepository;
+        private readonly IRepository<UserFlat> _userFlatRepository;
+        private readonly IRepository<User> _userRepository;
 
-        public FlatService(IRepository<Flat> flatRepository, IRepository<UserFlat> userFlatRepository)
+
+        public FlatService(IRepository<Flat> flatRepository, IRepository<UserFlat> userFlatRepository,
+            IRepository<User> userRepo)
         {
-            this.flatRepository = flatRepository;
-            this.userFlatRepository = userFlatRepository;
+            this._flatRepository = flatRepository;
+            this._userFlatRepository = userFlatRepository;
+            this._userRepository = userRepo;
         }
 
         public int GetCountOfFlats()
         {
-            var allFlats = flatRepository.GetList();
+            var allFlats = _flatRepository.GetList();
 
             return allFlats.Count();
         }
 
         public FlatDto GetFlatById(int flatId)
         {
-            var flat = this.flatRepository.GetFirst(x => x.Id == flatId);
+            var flat = this._flatRepository.GetFirst(x => x.Id == flatId);
 
             if (flat != null)
             {
@@ -48,11 +52,11 @@ namespace RoomMate.Domain.Services.Implements
 
         public List<Flat> GetUserFlat(int userId)
         {
-            var userFlatIdList = this.userFlatRepository.GetList(x => x.UserId == userId).Select(x => x.FlatId);
+            var userFlatIdList = this._userFlatRepository.GetList(x => x.UserId == userId).Select(x => x.FlatId);
 
             if (userFlatIdList.Any())
             {
-                var userFlat = this.flatRepository.GetList(x => x.Active && userFlatIdList.Contains(x.Id));
+                var userFlat = this._flatRepository.GetList(x => x.Active && userFlatIdList.Contains(x.Id));
 
                 if (userFlat.Any())
                 {
@@ -64,31 +68,32 @@ namespace RoomMate.Domain.Services.Implements
         }
 
 
-        public bool AddFlatToUser(int idOfJustCreatedUser, int addressId)
+        public bool AddFlatToUser(AddressDto addressDto)
         {
-            //userFlat repo i flatrepo
-            //select flatID po adresID
-            var flat = this.flatRepository.GetFirst(x => x.AddressId == addressId);
-            if (flat == null)
-            {
-                // this situation is not possible? 
-                return false;
-            }
 
-            try
+            if (addressDto != null)
             {
-                var userFlat = new UserFlat()
+               
+                try
                 {
-                    UserId = idOfJustCreatedUser,
-                    FlatId = flat.Id
-                };
-                this.userFlatRepository.InsertOrUpdate(userFlat);
-                return true;
+                    var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressDto.Id).Id;
+                    var userID = this._userRepository.GetFirst(x => x.Login == addressDto.LoggedUserName).Id;
+                    var userFlat = new UserFlat()
+                    {
+                        UserId = userID,
+                        FlatId = flatID
+                    };
+                    this._userFlatRepository.InsertOrUpdate(userFlat);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
             }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            return false;
+
+            
         }
     }
 }

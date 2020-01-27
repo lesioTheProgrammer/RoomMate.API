@@ -98,6 +98,7 @@ namespace RoomMate.Domain.Services.Implements
                 CreatedBy = addr.Flat.CreatedBy,
                 RoomCount = addr.Flat.RoomCount,
                 FlatName = addr.Flat.FlatName,
+                CityId = addr.CityId,
                 Users = userDtoList
             };
         }
@@ -126,9 +127,6 @@ namespace RoomMate.Domain.Services.Implements
             };
         }
 
-        public bool AddAddressUserSelected(AddressDto address, int idOfJustCreatedUser)
-        {
-            return flatSerivce.AddFlatToUser(idOfJustCreatedUser, address.Id);
-        }
+       
     }
 }

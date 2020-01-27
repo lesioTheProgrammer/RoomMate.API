@@ -57,7 +57,6 @@ namespace RoomMate.Domain.Services.Implements
             // change it completly because now i dont add addres at the same time I register the user;
             if ((registerDto.IsValidId(registerDto.AddressDto.Id)) && isRegistered == true)
             {
-                isRegistered = _addressService.AddAddressUserSelected(registerDto.AddressDto, idOfJustCreatedUser);
             }
             //if user selected only city
             else if (!registerDto.IsValidId(registerDto.AddressDto.Id)

@@ -139,4 +139,8 @@ select * from City
 update Addresses set CityId = 6 where Addresses.Id = 1003
 
 
+update UserFlats set UserId = 31 where UserId = 40;
 
+
+
+delete UserFlats from UserFlats where UserFlats.Id = 1017;

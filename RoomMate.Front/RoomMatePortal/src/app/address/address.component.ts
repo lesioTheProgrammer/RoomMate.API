@@ -130,7 +130,7 @@ export class AddressComponent implements OnInit {
           this.disabledButton = false;
           if (response != null) {
             this.flatDetails = response;
-          }
+         }
         });
     }
 }

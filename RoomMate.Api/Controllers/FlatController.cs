@@ -68,13 +68,15 @@ namespace RoomMate.Api.Controllers
 
         [HttpPost]
         [Route("AssignMateToFlat")]
-        public IActionResult AssignMateToFlat([FromBody]AddressDto AddressDto)
+        public IActionResult AssignMateToFlat([FromBody]AddressDto addressDto)
         {
             // get currently logged user
-            var xd = AddressDto;
+            if (addressDto.IsValid())
+            {
+                return this.Ok(this._flatService.AddFlatToUser(addressDto));
+            }
+            return this.Ok(false);
 
-            //TODO: Przypisanie osoby do mieszkania
-            return this.Ok();
         }
 
 

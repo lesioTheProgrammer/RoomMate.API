@@ -1,9 +1,6 @@
 ﻿using RoomMate.Database.Models;
 using RoomMate.Domain.Dto;
-using RoomMate.Repository;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace RoomMate.Domain.Services.Interfaces
 {
@@ -15,7 +12,7 @@ namespace RoomMate.Domain.Services.Interfaces
 
         int GetCountOfFlats();
 
-        bool AddFlatToUser(int idOfJustCreatedUser, int addressId);
+        bool AddFlatToUser(AddressDto addressDto);
 
     }
 }
