@@ -11,4 +11,5 @@ import { UserListDto } from "src/app/user-controll-panel/dto/user-list-dto";
   public flatName: string;
   public roomCount: number;
   public users: UserListDto[];
+  public loggedUserName: string;
 }

@@ -52,4 +52,18 @@ export class FlatAddressService {
       params: <any>addressDto
     });
   }
+
+
+  public assignUserToFlat(addressDto: AddressDto): Observable<boolean> {
+    const route = "AssignMateToFlat";
+    return this.httpClient.post<boolean>(this.wwwPath + "/" + route,
+    JSON.stringify(addressDto),
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      });
+    }
+
 }

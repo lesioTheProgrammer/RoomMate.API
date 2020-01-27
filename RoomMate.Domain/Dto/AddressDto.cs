@@ -18,6 +18,8 @@ namespace RoomMate.Domain.Dto
 
         public int RoomCount { get; set; }
 
+        public string LoggedUserName { get; set; }
+
         public ICollection<UserListDto> Users { get; set; }
 
         public bool IsValid()
