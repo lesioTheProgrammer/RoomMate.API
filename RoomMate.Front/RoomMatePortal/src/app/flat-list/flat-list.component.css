@@ -4,3 +4,20 @@
 
  margin-left: 70%;
 }
+
+
+
+.flatAdd {
+  background-color: teal;
+  border-radius: 5px;
+  color: white;
+  border: thick;
+}
+
+
+.joinTheFlat {
+  background-color: yellowgreen;
+  border-radius: 5px;
+  color: white;
+  border: thick;
+}

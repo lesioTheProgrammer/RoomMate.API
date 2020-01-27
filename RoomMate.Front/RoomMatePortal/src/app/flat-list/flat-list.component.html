@@ -28,11 +28,18 @@
       </tr>
     </tbody>
   </table>
-  <div *ngIf="flatDetails.cityId">
-    <button
+  <div *ngIf="flatDetails.cityId"  style="margin-left: 80%;">
+    <button class="flatAdd"
     (click)= "flatAdd()"
     type="submit">
      Add the flat!
+    </button>
+  </div>
+  <div *ngIf="flatDetails.id" style="margin-left: 80%;">
+    <button class = "joinTheFlat"
+    (click)= "joinTheFlat()"
+    type="submit">
+     Join the flat!
     </button>
   </div>
   <div></div>

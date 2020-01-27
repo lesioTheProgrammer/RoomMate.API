@@ -14,8 +14,13 @@ export class FlatListComponent implements OnInit {
   ngOnInit() {
   }
 
-  flatAdd(){
+  flatAdd() {
     debugger;
     let xd = this.flatDetails;
   }
+
+  joinTheFlat(){
+
+  }
+
 }
