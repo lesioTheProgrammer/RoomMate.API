@@ -35,11 +35,18 @@
      Add the flat!
     </button>
   </div>
-  <div *ngIf="flatDetails.id && !joinedFlat" style="margin-left: 90%;">
+  <div *ngIf="flatDetails.id && !joinedFlat && !userExistInList" style="margin-left: 90%;">
     <button class = "joinTheFlat"
     (click)= "joinTheFlat()"
     type="submit">
      Join the flat!
+    </button>
+  </div>
+  <div *ngIf="userExistInList" style="margin-left: 90%;">
+    <button class = "joinTheFlat"
+    (click)= "leaveTheFlat()"
+    type="submit">
+     Leave the flat!
     </button>
   </div>
   <div *ngIf="flatDetails.users" style=" margin-left: 5%">

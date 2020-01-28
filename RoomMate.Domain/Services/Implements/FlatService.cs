@@ -70,14 +70,12 @@ namespace RoomMate.Domain.Services.Implements
 
         public bool AddFlatToUser(AddressDto addressDto)
         {
-
             if (addressDto != null)
             {
-               
                 try
                 {
                     var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressDto.Id).Id;
-                    var userID = this._userRepository.GetFirst(x => x.Login == addressDto.LoggedUserName).Id;
+                    var userID = this._userRepository.GetFirst(x => x.Login.ToLower() == addressDto.LoggedUserName.ToLower()).Id;
                     var userFlat = new UserFlat()
                     {
                         UserId = userID,
@@ -92,8 +90,31 @@ namespace RoomMate.Domain.Services.Implements
                 }
             }
             return false;
+        }
 
-            
+
+        public bool LeaveFlat(AddressDto addressDto)
+        {
+            if (addressDto != null && addressDto.Id != 0)
+            {
+                try
+                {
+                    var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressDto.Id).Id;
+                    var userID = this._userRepository.GetFirst(x => x.Login.ToLower() == addressDto.LoggedUserName.ToLower()).Id;
+
+                    var userFlat = this._userFlatRepository.GetFirst(x => x.UserId == userID && x.FlatId == flatID);
+                    if (userFlat != null)
+                    {
+                        this._userFlatRepository.Delete(userFlat);
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+            return false;
         }
     }
 }

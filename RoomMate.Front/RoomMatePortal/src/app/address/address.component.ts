@@ -28,6 +28,8 @@ export class AddressComponent implements OnInit {
   form: FormGroup;
   flatDetails: AddressDto = new AddressDto();
 
+  userExistInList: boolean = false;
+
   constructor(
     public flatAddressService: FlatAddressService
   ) {}
@@ -129,7 +131,15 @@ export class AddressComponent implements OnInit {
       this.flatAddressService.getAddressByFlatHouseNumb(flatDetailsGetReq).subscribe(response => {
           this.disabledButton = false;
           if (response != null) {
+            this.userExistInList = false;
             this.flatDetails = response;
+            const loginCurrentUser = JSON.parse(localStorage.getItem("login"));
+            this.flatDetails.loggedUserName = loginCurrentUser;
+            this.flatDetails.users.forEach(element => {
+              if (element.login.toLowerCase() === loginCurrentUser.toLowerCase() && !this.userExistInList) {
+                this.userExistInList = true;
+              }
+          });
          }
         });
     }

@@ -14,5 +14,7 @@ namespace RoomMate.Domain.Services.Interfaces
 
         bool AddFlatToUser(AddressDto addressDto);
 
+        bool LeaveFlat(AddressDto addressDto);
+
     }
 }

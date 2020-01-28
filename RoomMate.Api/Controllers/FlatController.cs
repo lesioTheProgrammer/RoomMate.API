@@ -66,11 +66,23 @@ namespace RoomMate.Api.Controllers
             return this.Ok();
         }
 
+
+        [HttpDelete]
+        [Route("LeaveFlat")]
+        public IActionResult LeaveFlat(AddressDto addressDto)
+        {
+            if (addressDto.DoesFlatExist())
+            {
+                return this.Ok(this._flatService.LeaveFlat(addressDto));
+            }
+            return this.Ok(false);
+        }
+
+
         [HttpPost]
         [Route("AssignMateToFlat")]
         public IActionResult AssignMateToFlat([FromBody]AddressDto addressDto)
         {
-            // get currently logged user
             if (addressDto.IsValid())
             {
                 return this.Ok(this._flatService.AddFlatToUser(addressDto));

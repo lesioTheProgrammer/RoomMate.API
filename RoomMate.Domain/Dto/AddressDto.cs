@@ -28,5 +28,10 @@ namespace RoomMate.Domain.Dto
                 && IsEmpty(this.FlatNumber)
                  && IsValidId(this.CityId));
         }
+
+        public bool DoesFlatExist()
+        {
+            return (IsEmpty(this.LoggedUserName) && IsValidId(this.Id));
+        }
     }
 }

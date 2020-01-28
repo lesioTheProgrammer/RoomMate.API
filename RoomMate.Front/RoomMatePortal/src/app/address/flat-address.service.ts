@@ -66,4 +66,13 @@ export class FlatAddressService {
       });
     }
 
+
+    public leaveflat(addressDto: AddressDto): Observable<boolean> {
+      const route = "LeaveFlat";
+      return this.httpClient.delete<boolean>(this.wwwPath + "/" + route,
+      {params: <any>addressDto}
+      );
+    }
+
+
 }
