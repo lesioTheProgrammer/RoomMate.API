@@ -64,6 +64,7 @@ namespace RoomMate.Api.Controllers
         [Route("RemoveFlat")]
         public IActionResult RemoveFlat()
         {
+
             //TODO: Usunięcie - active na false
             return this.Ok();
         }

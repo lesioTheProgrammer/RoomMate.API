@@ -252,7 +252,7 @@ namespace RoomMate.Domain.Services.Implements
             {
                 try
                 {
-                    var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressDto.Id).Id;
+                    var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressDto.AddressId).Id;
                     var userID = this._userRepository.GetFirst(x => x.Login.ToLower() == addressDto.LoggedUserName.ToLower()).Id;
                     this._userFlatRepository.InsertOrUpdate(ConvertToTarget(flatID, userID, addressDto.RoleType));
                     return true;
