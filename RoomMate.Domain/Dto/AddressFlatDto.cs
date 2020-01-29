@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using RoomMate.Database.Models.Enums;
+using System.Collections.Generic;
 
 namespace RoomMate.Domain.Dto
 {
-    public class AddressDto : BaseDto
+    public class AddressFlatDto : BaseDto
     {
         public int CityId { get; set; }
+        public int? AddressId { get; set; }
+
+        public int? FlatOwnerId { get; set; }
 
         public string CityName { get; set; }
 
@@ -20,7 +24,12 @@ namespace RoomMate.Domain.Dto
 
         public string LoggedUserName { get; set; }
 
+        public RoleTypeEnum RoleType { get; set; }
+
         public ICollection<UserListDto> Users { get; set; }
+
+        public int Area { get; set; }
+
 
         public bool IsValid()
         {
@@ -31,7 +40,7 @@ namespace RoomMate.Domain.Dto
 
         public bool DoesFlatExist()
         {
-            return (IsEmpty(this.LoggedUserName) && IsValidId(this.Id));
+            return (IsEmpty(this.LoggedUserName) && IsValidId(this.AddressId));
         }
     }
 }

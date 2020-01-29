@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CityDto } from "./dto/city-dto";
 import { environment } from "../../environments/environment";
-import { AddressDto } from "./dto/address-dto";
+import { AddressFlatDto } from "./dto/address-dto";
 
 @Injectable({
   providedIn: "root"
@@ -45,16 +45,16 @@ export class FlatAddressService {
   }
 
   public getAddressByFlatHouseNumb(
-    addressDto: AddressDto
-  ): Observable<AddressDto> {
+    addressDto: AddressFlatDto
+  ): Observable<AddressFlatDto> {
     const route = "GetFlat";
-    return this.httpClient.get<AddressDto>(this.wwwPath + "/" + route, {
+    return this.httpClient.get<AddressFlatDto>(this.wwwPath + "/" + route, {
       params: <any>addressDto
     });
   }
 
 
-  public assignUserToFlat(addressDto: AddressDto): Observable<boolean> {
+  public assignUserToFlat(addressDto: AddressFlatDto): Observable<boolean> {
     const route = "AssignMateToFlat";
     return this.httpClient.post<boolean>(this.wwwPath + "/" + route,
     JSON.stringify(addressDto),
@@ -66,12 +66,23 @@ export class FlatAddressService {
       });
     }
 
-
-    public leaveflat(addressDto: AddressDto): Observable<boolean> {
+    public leaveflat(addressDto: AddressFlatDto): Observable<boolean> {
       const route = "LeaveFlat";
       return this.httpClient.delete<boolean>(this.wwwPath + "/" + route,
       {params: <any>addressDto}
       );
+    }
+
+    public addTheFlat(addressDto: AddressFlatDto): Observable<AddressFlatDto> {
+      const route = "AddNewFlat";
+      return this.httpClient.post<AddressFlatDto>(this.wwwPath + "/" + route,
+      JSON.stringify(addressDto),
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      });
     }
 
 

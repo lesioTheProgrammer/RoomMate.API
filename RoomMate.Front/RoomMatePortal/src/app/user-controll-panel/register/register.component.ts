@@ -7,7 +7,7 @@ import { RolesEnum } from "../dto/RolesEnum";
 import { Observable } from "rxjs";
 import { startWith, map, debounceTime } from "rxjs/operators";
 import { CityDto } from "src/app/address/dto/city-dto";
-import { AddressDto } from "src/app/address/dto/address-dto";
+import { AddressFlatDto } from "src/app/address/dto/address-dto";
 
 @Component({
   selector: "app-register",
@@ -22,7 +22,6 @@ export class RegisterComponent implements OnInit {
   registerDto: RegisterDto = new RegisterDto();
   form: FormGroup;
   registerVariable: any;
-  roles = RolesEnum;
 
   @Output() registerEvent = new EventEmitter<boolean>();
 
@@ -76,7 +75,6 @@ export class RegisterComponent implements OnInit {
     this.registerDto.email = this.form.value.email;
     this.registerDto.login = this.form.value.login;
     this.registerDto.password = this.form.value.password;
-    this.registerDto.roletype = this.registerVariable;
 
     this.registerService.register(this.registerDto).subscribe(
       response => {
@@ -102,22 +100,5 @@ export class RegisterComponent implements OnInit {
     this._snackBar.open(message, action, {
       duration: 2000
     });
-  }
-
-
-
-  // assign role
-  // if user cant find flat - admin
-  // otherwise - flatmate
-  // inform that selection has been done
-
-
-  selectRole(addrSelectSuccess: boolean) {
-    if (addrSelectSuccess) {
-      this.registerVariable = RolesEnum.Flatmate;
-    }
-    else {
-      this.registerVariable = RolesEnum.FlatMateAdmin;
-    }
   }
 }

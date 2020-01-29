@@ -15,13 +15,17 @@ namespace RoomMate.Domain.Test.Services
     {
         Mock<IRepository<Flat>> flatRepository;
         Mock<IRepository<UserFlat>>  userFlatRepository;
+        Mock<IRepository<User>> userReposiroty;
         FlatService flatService;
         List<Flat> mockedObject;
+
 
         public FlatServiceTest()
         {
             this.flatRepository = new Mock<IRepository<Flat>>();
             this.userFlatRepository = new Mock<IRepository<UserFlat>>();
+            this.userReposiroty = new Mock<IRepository<User>>();
+            
 
             this.mockedObject = new List<Flat>() { new Flat(){
                 Active = true,
@@ -43,7 +47,7 @@ namespace RoomMate.Domain.Test.Services
         public void GetCountOfFlatsTest()
         {
             flatRepository.Setup(x => x.GetList(null)).Returns(this.mockedObject);
-            flatService = new FlatService(flatRepository.Object, userFlatRepository.Object);
+            flatService = new FlatService(flatRepository.Object, userFlatRepository.Object, userReposiroty.Object);
 
             Assert.Equal(1, this.flatService.GetCountOfFlats());
         }
@@ -53,7 +57,7 @@ namespace RoomMate.Domain.Test.Services
             //// Any predicat - return object from list (TO REMEMBER!!!!!)
             flatRepository.Setup(x => x.GetFirst(It.IsAny<Func<Flat, bool>>())).Returns(this.mockedObject[0]);
 
-            flatService = new FlatService(flatRepository.Object, userFlatRepository.Object);
+            flatService = new FlatService(flatRepository.Object, userFlatRepository.Object, userReposiroty.Object);
 
             Assert.IsType<FlatDto>(flatService.GetFlatById(1));
         }

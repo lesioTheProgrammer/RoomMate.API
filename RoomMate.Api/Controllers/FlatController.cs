@@ -10,11 +10,9 @@ namespace RoomMate.Api.Controllers
     [Authorize]  
     public class FlatController : Controller
     {
-        private readonly IFlatService _flatService;
         private readonly IAddressService _addressService;
-        public FlatController(IFlatService flatService, IAddressService addressService)
+        public FlatController(IAddressService addressService)
         {
-            this._flatService = flatService;
             this._addressService = addressService;
         }
 
@@ -22,7 +20,7 @@ namespace RoomMate.Api.Controllers
         [Route("GetCountOfAllFlats")]   
         public IActionResult GetCountOfAllFlats()
         {
-            var count = _flatService.GetCountOfFlats();
+            var count = _addressService.GetCountOfFlats();
             return this.Ok(count);
         }
 
@@ -30,7 +28,7 @@ namespace RoomMate.Api.Controllers
         [Route("GetFlatById")]
         public IActionResult GetFlatById(int id)
         {
-            var flat = _flatService.GetFlatById(id);
+            var flat = _addressService.GetFlatById(id);
             return this.Ok(flat);
         }
 
@@ -38,16 +36,20 @@ namespace RoomMate.Api.Controllers
         [Route("GetUserFlat")]
         public IActionResult GetUserFlat([FromBody]int id)
         {
-            var userFlat = _flatService.GetUserFlat(id);
+            var userFlat = _addressService.GetUserFlat(id);
             return this.Ok(userFlat);
         }
 
         [HttpPost]
         [Route("AddNewFlat")]
-        public IActionResult AddNewFlat()
+        public IActionResult AddNewFlat([FromBody] AddressFlatDto addressFlatDto)
         {
             //TODO: Możliwość dodania nowego mieszkania
-            return this.Ok();
+            if (addressFlatDto.IsValid())
+            {
+                return this.Ok(_addressService.AddNewFlat(addressFlatDto));
+            }
+            return this.Ok(new AddressFlatDto());
         }
 
         [HttpPut]
@@ -69,11 +71,11 @@ namespace RoomMate.Api.Controllers
 
         [HttpDelete]
         [Route("LeaveFlat")]
-        public IActionResult LeaveFlat(AddressDto addressDto)
+        public IActionResult LeaveFlat(AddressFlatDto addressDto)
         {
             if (addressDto.DoesFlatExist())
             {
-                return this.Ok(this._flatService.LeaveFlat(addressDto));
+                return this.Ok(this._addressService.LeaveFlat(addressDto));
             }
             return this.Ok(false);
         }
@@ -81,11 +83,11 @@ namespace RoomMate.Api.Controllers
 
         [HttpPost]
         [Route("AssignMateToFlat")]
-        public IActionResult AssignMateToFlat([FromBody]AddressDto addressDto)
+        public IActionResult AssignMateToFlat([FromBody]AddressFlatDto addressDto)
         {
             if (addressDto.IsValid())
             {
-                return this.Ok(this._flatService.AddFlatToUser(addressDto));
+                return this.Ok(this._addressService.AddFlatToUser(addressDto));
             }
             return this.Ok(false);
 
@@ -109,7 +111,7 @@ namespace RoomMate.Api.Controllers
 
         [Route("GetFlat")]
         [HttpGet]
-        public IActionResult GetAddressByFlatHouseNumb(AddressDto addressDto)
+        public IActionResult GetAddressByFlatHouseNumb(AddressFlatDto addressDto)
         {
             if (addressDto.IsValid())
             {

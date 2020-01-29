@@ -1,5 +1,4 @@
-﻿using RoomMate.Database.Models.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace RoomMate.Database.Models
 {
@@ -20,7 +19,5 @@ namespace RoomMate.Database.Models
         public string PasswordSalt { get; set; }
 
         public virtual ICollection<UserFlat> UserFlats { get; set; }
-
-        public virtual RoleTypeEnum RoleType { get; set; }
     }
 }
