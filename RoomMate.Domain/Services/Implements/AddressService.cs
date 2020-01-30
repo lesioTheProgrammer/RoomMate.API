@@ -64,7 +64,7 @@ namespace RoomMate.Domain.Services.Implements
             var addressDtoReturned = new AddressFlatDto();
             var userDtoList = new List<UserListDto>();
             var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == addressDto.HouseNumber && x.FlatNumber == addressDto.FlatNumber
-            && x.Street.ToLower() == addressDto.Street.ToLower() && x.CityId == addressDto.CityId, u => u.City, f => f.Flat);
+            && x.Street.ToLower() == addressDto.Street.ToLower() && x.CityId == addressDto.CityId && x.Active == true, u => u.City, f => f.Flat);
             // get users in flat 
             if (address != null)
             {
@@ -113,8 +113,7 @@ namespace RoomMate.Domain.Services.Implements
 
         public IList<string> GetStreetsDistincted(int id, string streetLetters)
         {
-            // get only addreses with certain street names
-            var distinctStreets = _addressRepository.GetDistinct(pred => pred.CityId == id && pred.Street.ToLower().Contains(streetLetters.ToLower()), x => x.Street);
+            var distinctStreets = _addressRepository.GetDistinct(pred => pred.CityId == id && pred.Active == true  && pred.Street.ToLower().Contains(streetLetters.ToLower()), x => x.Street);
             if (distinctStreets.Any())
             {
                 return distinctStreets;
@@ -142,7 +141,7 @@ namespace RoomMate.Domain.Services.Implements
         public AddressFlatDto AddNewFlat(AddressFlatDto addressFlatDto)
         {
             //return good flat 
-           var user = _userRepository.GetFirst(x => x.Login.ToLower() == addressFlatDto.LoggedUserName);
+           var user = _userRepository.GetFirst(x => x.Login.ToLower() == addressFlatDto.LoggedUserName && x.Active == true);
            if (user != null)
             {
                 try
@@ -203,7 +202,7 @@ namespace RoomMate.Domain.Services.Implements
 
         public int GetCountOfFlats()
         {
-            var allFlats = _flatRepository.GetList();
+            var allFlats = _flatRepository.GetList(x=>x.Active == true);
 
             return allFlats.Count();
         }
@@ -230,11 +229,11 @@ namespace RoomMate.Domain.Services.Implements
 
         public List<Flat> GetUserFlat(int userId)
         {
-            var userFlatIdList = this._userFlatRepository.GetList(x => x.UserId == userId).Select(x => x.FlatId);
+            var userFlatIdList = this._userFlatRepository.GetList(x => x.UserId == userId && x.Active == true).Select(x => x.FlatId);
 
             if (userFlatIdList.Any())
             {
-                var userFlat = this._flatRepository.GetList(x => x.Active && userFlatIdList.Contains(x.Id));
+                var userFlat = this._flatRepository.GetList(x => x.Active == true && userFlatIdList.Contains(x.Id));
 
                 if (userFlat.Any())
                 {
@@ -252,10 +251,7 @@ namespace RoomMate.Domain.Services.Implements
             {
                 try
                 {
-                    // add to flat if I already removed the flat -- try to get the flat if exists 
-                    // if exists: change status from T to F both addres and flat
-
-                     var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressDto.AddressId).Id;
+                     var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressDto.AddressId ).Id;
                     if (addressDto.Users.Count == 0)
                     {
                         if (flatID != 0 && addressDto.AddressId != 0 && addressDto.Active == false)
@@ -275,8 +271,6 @@ namespace RoomMate.Domain.Services.Implements
 
                                 throw;
                             }
-                            
-
                         }
                     }
 
@@ -306,7 +300,7 @@ namespace RoomMate.Domain.Services.Implements
         public bool RemoveFlat(AddressFlatDto addressFlatDto)
         {
             // change flat and address to unactive:
-            var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressFlatDto.AddressId).Id;
+            var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressFlatDto.AddressId && x.Active == true).Id;
             var addressID = addressFlatDto.AddressId;
             if (flatID != 0 || addressID != 0)
             {
@@ -326,19 +320,14 @@ namespace RoomMate.Domain.Services.Implements
                     return false;
                 }
             }
-
             return false;
-
-
         }
 
 
         public bool LeaveFlat(AddressFlatDto addressDto)
         {
-
             // if user is the last one go to the remove flat method
             var listOfusers = new List<UserListDto>();
-
             if (addressDto != null && addressDto.AddressId != 0)
             {
                 try
@@ -353,7 +342,6 @@ namespace RoomMate.Domain.Services.Implements
                         listOfusers = this.userService.GetUserByFlatId(flatID);
                         if (listOfusers.Count == 1 || listOfusers == null)
                         {
-                            //reomve flat
                             RemoveFlat(addressDto);
                             this._userFlatRepository.Delete(userFlat);
                             return true;
