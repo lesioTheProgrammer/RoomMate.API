@@ -1,4 +1,5 @@
-﻿using RoomMate.Domain.Dto;
+﻿using RoomMate.Database.Models;
+using RoomMate.Domain.Dto;
 using System.Collections.Generic;
 
 namespace RoomMate.Domain.Services.Interfaces
@@ -8,8 +9,21 @@ namespace RoomMate.Domain.Services.Interfaces
         List<CityDto> GetCitiesByName(string letters);
 
         IList<string> GetStreetsDistincted(int id, string streetLetters);
-        bool AddAddressUserSelected(AddressDto address, int idOfJustCreatedUser);
 
-        AddressDto GetAddressByFlatHouseNumb(AddressDto addressDto);
+        AddressFlatDto GetAddressByFlatHouseNumb(AddressFlatDto addressDto);
+
+        int GetCountOfFlats();
+        AddressFlatDto GetFlatById(int flatId);
+
+        List<Flat> GetUserFlat(int userId);
+
+        bool AddFlatToUser(AddressFlatDto addressDto);
+
+        bool LeaveFlat(AddressFlatDto addressDto);
+
+        AddressFlatDto AddNewFlat(AddressFlatDto addressFlatDto);
+
+        bool RemoveFlat(AddressFlatDto addressFlatDto);
+
     }
 }

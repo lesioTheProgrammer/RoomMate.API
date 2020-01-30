@@ -1,6 +1,4 @@
-﻿using RoomMate.Database.Models.Enums;
-
-namespace RoomMate.Domain.Dto
+﻿namespace RoomMate.Domain.Dto
 {
     public class RegisterDto : BaseDto
     {
@@ -18,9 +16,8 @@ namespace RoomMate.Domain.Dto
 
         public string PasswordSalt { get; set; }
 
-        public  RoleTypeEnum RoleType { get; set; }
 
-        public AddressDto AddressDto { get; set; }
+        public AddressFlatDto AddressDto { get; set; }
 
 
         public bool IsValid()

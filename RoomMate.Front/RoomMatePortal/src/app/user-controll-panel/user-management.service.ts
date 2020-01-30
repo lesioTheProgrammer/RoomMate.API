@@ -7,8 +7,6 @@ import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { TokenDto } from "./login/dto/token-dto";
 import { UserListDto } from "./dto/user-list-dto";
-import { AddressDto } from "../address/dto/address-dto";
-import { CityDto } from "../address/dto/city-dto";
 
 @Injectable({
   providedIn: "root"
@@ -38,15 +36,4 @@ export class UserManagementService extends RequestHelperService {
       flatId: flatId
     });
   }
-
-  public getCityByTwoLetters(letters: string): Observable<CityDto[]>{
-    return this.createGetRequestByParams<CityDto[]>('GetCities', {letters})
-    .pipe(map(data => <CityDto[]>data));
-  }
-
-  public getAddressByCityIdStreet(id: number, streetLetters: string): Observable<AddressDto[]>{
-    return this.createGetRequestByParams<AddressDto[]>('GetAddress', {id, streetLetters})
-    .pipe(map(data => <AddressDto[]>data));
-  }
-
 }

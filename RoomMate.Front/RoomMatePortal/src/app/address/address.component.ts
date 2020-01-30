@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CityDto } from './dto/city-dto';
-import { AddressDto } from './dto/address-dto';
+import { AddressFlatDto } from './dto/address-dto';
 import { FormControl, AbstractControl, ValidatorFn, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { FlatAddressService } from './flat-address.service';
 export class AddressComponent implements OnInit {
   listOfCitiesToSelect: CityDto[] = [];
   listOfStreetsToSelect: string[] = [];
-  citySelectionDto: AddressDto = new AddressDto();
+  citySelectionDto: AddressFlatDto = new AddressFlatDto();
   citySelected = false;
   streetSelected: boolean;
 
@@ -26,7 +26,11 @@ export class AddressComponent implements OnInit {
   streetList: Observable<string[]>;
   disabledButton = true;
   form: FormGroup;
-  flatDetails: AddressDto = new AddressDto();
+  flatDetails: AddressFlatDto = new AddressFlatDto();
+
+  userExistInList: boolean = false;
+
+
 
   constructor(
     public flatAddressService: FlatAddressService
@@ -97,10 +101,6 @@ export class AddressComponent implements OnInit {
   }
 
   getStreet(street: string): string[] {
-    if (this.streetSelected) {
-      // this will block another getRequest after selecting the cities.
-      return this.listOfStreetsToSelect;
-    }
     this.listOfStreetsToSelect = new Array<string>();
     this.flatAddressService.getStreet(this.citySelectionDto.cityId, street)
     .subscribe(response => {
@@ -120,7 +120,7 @@ export class AddressComponent implements OnInit {
 
   searchForFlat() {
     this.disabledButton = true;
-    const flatDetailsGetReq = new AddressDto();
+    const flatDetailsGetReq = new AddressFlatDto();
     flatDetailsGetReq.houseNumber = this.form.value.houseNumber;
     flatDetailsGetReq.flatNumber = this.form.value.flatNumber;
     flatDetailsGetReq.street = this.streetControl.value;
@@ -129,8 +129,16 @@ export class AddressComponent implements OnInit {
       this.flatAddressService.getAddressByFlatHouseNumb(flatDetailsGetReq).subscribe(response => {
           this.disabledButton = false;
           if (response != null) {
+            this.userExistInList = false;
             this.flatDetails = response;
-          }
+            const loginCurrentUser = JSON.parse(localStorage.getItem("login"));
+            this.flatDetails.loggedUserName = loginCurrentUser;
+            this.flatDetails.users.forEach(element => {
+              if (element.login.toLowerCase() === loginCurrentUser.toLowerCase() && !this.userExistInList) {
+                this.userExistInList = true;
+              }
+          });
+         }
         });
     }
 }

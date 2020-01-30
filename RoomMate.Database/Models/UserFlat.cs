@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using RoomMate.Database.Models.Enums;
 
 namespace RoomMate.Database.Models
 {
@@ -13,5 +11,7 @@ namespace RoomMate.Database.Models
         public Flat Flat { get; set; }
 
         public int FlatId { get; set; }
+
+        public virtual RoleTypeEnum RoleType { get; set; }
     }
 }

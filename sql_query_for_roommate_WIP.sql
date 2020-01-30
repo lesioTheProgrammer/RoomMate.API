@@ -136,7 +136,10 @@ select * from Addresses
 select * from City
 
 
-update Addresses set CityId = 6 where Addresses.Id = 1003
+delete UserFlats from UserFlats where UserFlats.Id = 1017;
 
 
+--address first
+--flat later
+--userflats with user role admin
 

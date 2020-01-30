@@ -5,8 +5,6 @@ using RoomMate.Domain.Services.Implements;
 using RoomMate.Repository;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace RoomMate.Domain.Test.Services
@@ -15,13 +13,24 @@ namespace RoomMate.Domain.Test.Services
     {
         Mock<IRepository<Flat>> flatRepository;
         Mock<IRepository<UserFlat>>  userFlatRepository;
-        FlatService flatService;
+        Mock<IRepository<User>> userRepository;
+        Mock<IRepository<Address>> addressRepository;
+        Mock<IRepository<City>> cityRepository;
+
+
+        AddressService addressService;
+        UserService userService;
         List<Flat> mockedObject;
+
 
         public FlatServiceTest()
         {
             this.flatRepository = new Mock<IRepository<Flat>>();
             this.userFlatRepository = new Mock<IRepository<UserFlat>>();
+            this.userRepository = new Mock<IRepository<User>>();
+            this.addressRepository = new Mock<IRepository<Address>>();
+            this.cityRepository = new Mock<IRepository<City>>();
+
 
             this.mockedObject = new List<Flat>() { new Flat(){
                 Active = true,
@@ -43,19 +52,17 @@ namespace RoomMate.Domain.Test.Services
         public void GetCountOfFlatsTest()
         {
             flatRepository.Setup(x => x.GetList(null)).Returns(this.mockedObject);
-            flatService = new FlatService(flatRepository.Object, userFlatRepository.Object);
+            addressService = new AddressService(addressRepository.Object, cityRepository.Object, flatRepository.Object, userFlatRepository.Object, userRepository.Object, userService);
 
-            Assert.Equal(1, this.flatService.GetCountOfFlats());
+            Assert.Equal(1, this.addressService.GetCountOfFlats());
         }
         [Fact]
         public void GetFlatByIdTest()
         {
             //// Any predicat - return object from list (TO REMEMBER!!!!!)
             flatRepository.Setup(x => x.GetFirst(It.IsAny<Func<Flat, bool>>())).Returns(this.mockedObject[0]);
-
-            flatService = new FlatService(flatRepository.Object, userFlatRepository.Object);
-
-            Assert.IsType<FlatDto>(flatService.GetFlatById(1));
+            addressService = new AddressService(addressRepository.Object, cityRepository.Object, flatRepository.Object, userFlatRepository.Object, userRepository.Object, userService);
+            Assert.IsType<AddressFlatDto>(addressService.GetFlatById(1));
         }
     }
 }
