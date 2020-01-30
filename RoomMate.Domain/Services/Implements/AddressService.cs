@@ -135,9 +135,24 @@ namespace RoomMate.Domain.Services.Implements
         }
 
 
+
+        private AddressFlatDto ConvertToAddrDto(Flat flat)
+        {
+            return new AddressFlatDto()
+            {
+                AddressId = flat.Address.Id,
+                CityId = flat.Address.City.Id,
+                CityName = flat.Address.City.CityName,
+                Street = flat.Address.Street,
+                HouseNumber = flat.Address.HouseNumber,
+                FlatNumber = flat.Address.FlatNumber,
+                FlatName = flat.FlatName,
+                Id = flat.Id
+            };
+        }
+
+
         // flats
-
-
         public AddressFlatDto AddNewFlat(AddressFlatDto addressFlatDto)
         {
             //return good flat 
@@ -227,21 +242,30 @@ namespace RoomMate.Domain.Services.Implements
             return null;
         }
 
-        public List<Flat> GetUserFlat(int userId)
+        public List<AddressFlatDto> GetUserFlat(string login)
         {
-            var userFlatIdList = this._userFlatRepository.GetList(x => x.UserId == userId && x.Active == true).Select(x => x.FlatId);
-
-            if (userFlatIdList.Any())
+            var user = this._userRepository.GetFirst(x => x.Login.ToLower() == login.ToLower());
+            if (user != null)
             {
-                var userFlat = this._flatRepository.GetList(x => x.Active == true && userFlatIdList.Contains(x.Id));
+                var userFlatIdList = this._userFlatRepository.GetList(x => x.UserId == user.Id && x.Active == true).Select(x => x.FlatId);
 
-                if (userFlat.Any())
+                if (userFlatIdList.Any())
                 {
-                    return userFlat.ToList();
+                    var userFlat = this._flatRepository.GetListWithInclude(x => x.Active == true && userFlatIdList.Contains(x.Id), a => a.Address, c => c.Address.City);
+
+                    if (userFlat.Any())
+                    {
+                        var userFlatDto = new List<AddressFlatDto>();
+
+                        foreach (var item in userFlat)
+                        {
+                            userFlatDto.Add(ConvertToAddrDto(item));
+                        }
+                        return userFlatDto;
+                    }
                 }
             }
-
-            return null;
+            return new List<AddressFlatDto>();
         }
 
 
@@ -266,10 +290,10 @@ namespace RoomMate.Domain.Services.Implements
                                 addresss.Active = true;
                                 this._addressRepository.SaveChanges();
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
-
-                                throw;
+                                return false;
+                                throw ex;
                             }
                         }
                     }

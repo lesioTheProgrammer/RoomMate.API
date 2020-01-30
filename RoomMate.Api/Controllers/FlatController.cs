@@ -7,7 +7,7 @@ namespace RoomMate.Api.Controllers
 {
 
     [Route("api/Flat")]
-    [Authorize]  
+    [Authorize]
     public class FlatController : Controller
     {
         private readonly IAddressService _addressService;
@@ -34,9 +34,11 @@ namespace RoomMate.Api.Controllers
 
         [HttpGet]
         [Route("GetUserFlat")]
-        public IActionResult GetUserFlat([FromBody]int id)
+        public IActionResult GetUserFlat(string loggedUserName)
         {
-            var userFlat = _addressService.GetUserFlat(id);
+
+            var userFlat = _addressService.GetUserFlat(loggedUserName);
+            // return addresflatdto?
             return this.Ok(userFlat);
         }
 
