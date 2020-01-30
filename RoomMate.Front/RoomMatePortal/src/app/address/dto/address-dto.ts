@@ -18,4 +18,5 @@ import { RolesEnum } from "src/app/user-controll-panel/dto/RolesEnum";
   public flatAddressId: number;
   public flatOwnerId: number;
   public area: number; // ent
+  public active: boolean;
 }

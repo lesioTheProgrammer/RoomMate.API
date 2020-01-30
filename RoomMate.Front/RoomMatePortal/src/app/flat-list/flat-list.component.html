@@ -89,14 +89,14 @@
     </form>
   </div>
 
-  <div *ngIf="flatDetails.addressId && !joinedFlat && !userExistInList" style="margin-left: 90%;">
+  <div *ngIf="flatDetails.addressId  && !userExistInList" style="margin-left: 90%;">
     <button class = "joinTheFlat"
     (click)= "joinTheFlat()"
     type="submit">
      Join the flat!
     </button>
   </div>
-  <div *ngIf="userExistInList" style="margin-left: 90%;">
+  <div *ngIf="userExistInList && flatDetails.addressId" style="margin-left: 90%;">
     <button class = "leaveTheFlat"
     (click)= "leaveTheFlat()"
     type="submit">

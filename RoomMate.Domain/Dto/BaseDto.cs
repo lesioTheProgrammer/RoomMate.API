@@ -32,5 +32,10 @@ namespace RoomMate.Domain.Dto
             }
             return true;
         }
+
+        public bool IsActive()
+        {
+            return this.Active;
+        }
     }
 }

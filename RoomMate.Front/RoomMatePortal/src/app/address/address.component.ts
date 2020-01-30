@@ -30,6 +30,8 @@ export class AddressComponent implements OnInit {
 
   userExistInList: boolean = false;
 
+
+
   constructor(
     public flatAddressService: FlatAddressService
   ) {}
@@ -99,10 +101,6 @@ export class AddressComponent implements OnInit {
   }
 
   getStreet(street: string): string[] {
-    if (this.streetSelected) {
-      // this will block another getRequest after selecting the cities.
-      return this.listOfStreetsToSelect;
-    }
     this.listOfStreetsToSelect = new Array<string>();
     this.flatAddressService.getStreet(this.citySelectionDto.cityId, street)
     .subscribe(response => {

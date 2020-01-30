@@ -23,5 +23,7 @@ namespace RoomMate.Domain.Services.Interfaces
 
         AddressFlatDto AddNewFlat(AddressFlatDto addressFlatDto);
 
+        bool RemoveFlat(AddressFlatDto addressFlatDto);
+
     }
 }

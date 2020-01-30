@@ -16,6 +16,7 @@ export class FlatListComponent implements OnInit {
   joinedFlat: boolean = false;
   flatExtraDetails: boolean = false;
 
+
   form: FormGroup;
 
   @Input() flatDetails: AddressFlatDto;
@@ -53,8 +54,7 @@ export class FlatListComponent implements OnInit {
   }
 
   addTheFlat() {
-    // user have to insert all details required
-    // move the button
+    this.joinedFlat = false;
     this.flatExtraDetails = true;
     this.flatDetails.roleType = RolesEnum.FlatMateAdmin;
     this.flatDetails.flatName = this.form.value.flatName;
@@ -64,9 +64,11 @@ export class FlatListComponent implements OnInit {
     .subscribe(response => {
       if (response.addressId !== 0) {
         response.loggedUserName = response.users[0].login;
+        this.joinedFlat = true;
         this.flatExtraDetails = false;
-        this.userExistInList = true;
+        this.updateList.emit();
         this.flatDetails = response;
+        this.openSnackBar('You entered the flat', 'Ok');
       }
     });
   }
@@ -75,13 +77,17 @@ export class FlatListComponent implements OnInit {
     if (this.userExistInList) {
       this.openSnackBar('You cant enter the flat becasue you are already inside!', 'Ok');
     } else {
-      this.flatDetails.roleType = RolesEnum.Flatmate;
+      if (this.flatDetails.users.length > 0) {
+        this.flatDetails.roleType = RolesEnum.Flatmate;
+      } else {
+        this.flatDetails.roleType = RolesEnum.FlatMateAdmin;
+      }
       this.flatAddressService.assignUserToFlat(this.flatDetails)
         .subscribe(response => {
           if (response) {
-            this.openSnackBar('You entered the flat', 'Ok');
             this.joinedFlat = true;
             this.updateList.emit();
+            this.openSnackBar('You entered the flat', 'Ok');
           } else {
             this.openSnackBar('Something went wrong', 'Ok');
           }
@@ -92,15 +98,15 @@ export class FlatListComponent implements OnInit {
 
 
   leaveTheFlat() {
+    this.joinedFlat = false;
     if (this.userExistInList) {
      this.flatAddressService.leaveflat(this.flatDetails)
      .subscribe(response => {
        if (response) {
          this.userExistInList = false;
-         this.openSnackBar('You have left the flat', 'Ok');
          this.joinedFlat = false;
-         debugger;
          this.updateList.emit();
+         this.openSnackBar('You have left the flat', 'Ok');
        } else {
         this.openSnackBar('Something went wrong', 'Ok');
        }
