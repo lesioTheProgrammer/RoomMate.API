@@ -25,8 +25,10 @@ export class MyRoomComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<AddressFlatDto>;
-  columnsToDisplay = ['City Name', 'Street', 'House Number', 'Flat Number'];
+  columnsToDisplay = ['cityName', 'street', 'houseNumber', 'flatNumber', 'roleType'];
   expandedElement: AddressFlatDto | null;
+  multiDim = [['cityName', 'City Name'], ['street', 'Street'], ['houseNumber', 'House Number'],
+  ['flatNumber', 'Flat Number'], ['roleType', 'Role Type']];
 
   constructor(
     public flatAddressService: FlatAddressService
@@ -45,6 +47,27 @@ export class MyRoomComponent implements OnInit {
       }
     });
 
+    this.dataSource.paginator = this.paginator;
+  }
+
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngAfterViewInit() {
+  }
+
+  ViewUsers(){
+
+  }
+
+  Edit(){
+
+  }
+
+  Remove(){
+
+  }
+
+  Leave(){
+    // go to myFlat and leave there.
   }
 
 

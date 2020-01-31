@@ -36,3 +36,15 @@ tr.example-element-row:not(.example-expanded-row):active {
 .example-element-description-attribution {
   opacity: 0.5;
 }
+
+.mat-paginator {
+  width: 100%;
+}
+
+
+.button {
+  display:inline-block;
+  margin-right: 100%;
+}
+
+
