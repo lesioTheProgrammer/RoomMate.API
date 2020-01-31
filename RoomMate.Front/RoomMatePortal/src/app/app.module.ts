@@ -94,7 +94,7 @@ export function tokenGetter() {
   [CookieService],
   [AuthGuard],
 ],
-  bootstrap: [AppComponent, FlatListComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
 platformBrowserDynamic().bootstrapModule(AppModule);
