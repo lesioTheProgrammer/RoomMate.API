@@ -88,7 +88,6 @@ export class FlatAddressService {
 
     public getAllFlats(loggedUserName: string): Observable<AddressFlatDto[]> {
       const route =  "GetUserFlat";
-      debugger;
       const paramsAsObj: Object = { loggedUserName };
 
       return this.httpClient.get<AddressFlatDto[]>(this.wwwPath + "/" + route, {

@@ -136,7 +136,7 @@ namespace RoomMate.Domain.Services.Implements
 
 
 
-        private AddressFlatDto ConvertToAddrDto(Flat flat)
+        private AddressFlatDto ConvertToAddrDto(Flat flat, RoleTypeEnum role)
         {
             return new AddressFlatDto()
             {
@@ -147,7 +147,9 @@ namespace RoomMate.Domain.Services.Implements
                 HouseNumber = flat.Address.HouseNumber,
                 FlatNumber = flat.Address.FlatNumber,
                 FlatName = flat.FlatName,
-                Id = flat.Id
+                Id = flat.Id,
+                RoleType = role
+                
             };
         }
 
@@ -247,11 +249,16 @@ namespace RoomMate.Domain.Services.Implements
             var user = this._userRepository.GetFirst(x => x.Login.ToLower() == login.ToLower());
             if (user != null)
             {
-                var userFlatIdList = this._userFlatRepository.GetList(x => x.UserId == user.Id && x.Active == true).Select(x => x.FlatId);
+                var userFlatIdList = this._userFlatRepository.GetList(x => x.UserId == user.Id &&
+                x.Active == true).Select(x => x.FlatId);
 
                 if (userFlatIdList.Any())
                 {
-                    var userFlat = this._flatRepository.GetListWithInclude(x => x.Active == true && userFlatIdList.Contains(x.Id), a => a.Address, c => c.Address.City);
+                    var userFlat = this._flatRepository.GetListWithInclude(x => x.Active == true &&
+                    userFlatIdList.Contains(x.Id),
+                    a => a.Address, c => c.Address.City, z=>z.UserFlats);
+
+
 
                     if (userFlat.Any())
                     {
@@ -259,7 +266,10 @@ namespace RoomMate.Domain.Services.Implements
 
                         foreach (var item in userFlat)
                         {
-                            userFlatDto.Add(ConvertToAddrDto(item));
+                            // add role
+                            var role = item.UserFlats.SingleOrDefault(x => x.UserId == user.Id).RoleType;
+
+                            userFlatDto.Add(ConvertToAddrDto(item, role));
                         }
                         return userFlatDto;
                     }

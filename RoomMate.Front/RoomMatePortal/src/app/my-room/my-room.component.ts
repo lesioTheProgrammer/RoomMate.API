@@ -4,6 +4,7 @@ import { FlatAddressService } from '../address/flat-address.service';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { RolesEnum } from '../user-controll-panel/dto/RolesEnum';
 
 @Component({
   selector: 'app-my-room',
@@ -43,7 +44,18 @@ export class MyRoomComponent implements OnInit {
     // get all flats by userID on init (userflats)
     this.flatAddressService.getAllFlats(this.userName).subscribe( response => {
       if (response.length > 0 && response[0].id !== 0) {
+        for (let item of response) {
+          debugger;
+          let wrr = this.getEnumKeyByEnumValue(RolesEnum, item.roleType);
+
+
+          item.roleType = (<any>RolesEnum)[this.getEnumKeyByEnumValue(RolesEnum, item.roleType)];
+          console.log(item.roleType);
+        }
+        // grab the role:
+
          this.dataSource.data = response;
+
       }
     });
 
@@ -54,21 +66,31 @@ export class MyRoomComponent implements OnInit {
   ngAfterViewInit() {
   }
 
-  ViewUsers(){
+  ViewUsers() {
 
   }
 
-  Edit(){
+  Edit() {
 
   }
 
-  Remove(){
+  Remove() {
 
   }
 
-  Leave(){
+  Leave() {
     // go to myFlat and leave there.
   }
+
+   getEnumKeyByEnumValue(myEnum, enumValue) {
+     // myEnumMirrored is myEnum but keys are values and values are keys.
+     const myEnumMirrored = Object.keys(myEnum);
+     for (const value in myEnumMirrored) {
+       if (Number(value) === enumValue) {
+         return myEnumMirrored[value];
+       }
+     }
+}
 
 
 }
