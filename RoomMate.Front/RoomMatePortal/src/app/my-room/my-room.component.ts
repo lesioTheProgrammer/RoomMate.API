@@ -44,27 +44,25 @@ export class MyRoomComponent implements OnInit {
     // get all flats by userID on init (userflats)
     this.flatAddressService.getAllFlats(this.userName).subscribe( response => {
       if (response.length > 0 && response[0].id !== 0) {
-        for (let item of response) {
-          debugger;
-          let wrr = this.getEnumKeyByEnumValue(RolesEnum, item.roleType);
-
-
-          item.roleType = (<any>RolesEnum)[this.getEnumKeyByEnumValue(RolesEnum, item.roleType)];
-          console.log(item.roleType);
-        }
-        // grab the role:
-
          this.dataSource.data = response;
-
       }
     });
 
     this.dataSource.paginator = this.paginator;
   }
 
-  // tslint:disable-next-line: use-life-cycle-interface
-  ngAfterViewInit() {
+  typeOf(value) {
+    return typeof value;
   }
+
+  getNameofRole(roleNumber: number) {
+    if (roleNumber === 0) {
+      return "Flatmate";
+    }
+    return "Flatmate Admin";
+  }
+
+
 
   ViewUsers() {
 
@@ -82,15 +80,7 @@ export class MyRoomComponent implements OnInit {
     // go to myFlat and leave there.
   }
 
-   getEnumKeyByEnumValue(myEnum, enumValue) {
-     // myEnumMirrored is myEnum but keys are values and values are keys.
-     const myEnumMirrored = Object.keys(myEnum);
-     for (const value in myEnumMirrored) {
-       if (Number(value) === enumValue) {
-         return myEnumMirrored[value];
-       }
-     }
-}
+
 
 
 }

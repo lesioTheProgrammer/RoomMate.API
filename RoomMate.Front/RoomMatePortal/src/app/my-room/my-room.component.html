@@ -18,7 +18,16 @@
           <th mat-header-cell *matHeaderCellDef class="headerName">
             {{ column[1] }}
           </th>
-          <td mat-cell *matCellDef="let element">{{ element[column[0]] }}</td>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="typeOf(element[column[0]]) == 'number'; else notRole">
+                {{ getNameofRole(element[column[0]])  }}
+              </ng-container>
+              <ng-template #notRole>
+                {{ element[column[0]] }}
+              </ng-template>
+              </td>
+
+
         </ng-container>
 
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
