@@ -47,4 +47,10 @@ tr.example-element-row:not(.example-expanded-row):active {
   margin-right: 100%;
 }
 
+.divider{
+  width:5px;
+  height:auto;
+  display:inline-block;
+}
+
 

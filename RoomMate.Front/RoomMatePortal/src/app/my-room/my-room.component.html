@@ -18,16 +18,16 @@
           <th mat-header-cell *matHeaderCellDef class="headerName">
             {{ column[1] }}
           </th>
-            <td mat-cell *matCellDef="let element">
-              <ng-container *ngIf="typeOf(element[column[0]]) == 'number'; else notRole">
-                {{ getNameofRole(element[column[0]])  }}
-              </ng-container>
-              <ng-template #notRole>
-                {{ element[column[0]] }}
-              </ng-template>
-              </td>
-
-
+          <td mat-cell *matCellDef="let element">
+            <ng-container
+              *ngIf="typeOf(element[column[0]]) == 'number'; else notRole"
+            >
+              {{ getNameofRole(element[column[0]]) }}
+            </ng-container>
+            <ng-template #notRole>
+              {{ element[column[0]] }}
+            </ng-template>
+          </td>
         </ng-container>
 
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
@@ -49,13 +49,33 @@
                   -- Flat Name
                 </span>
                 <div class="buttonGroup">
-                  <button (click)="Edit()">
+                  <div class="divider"></div>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="Edit()"
+                    *ngIf="element.roleType == 1"
+                    style="background-color:rgb(13, 206, 100)"
+                  >
                     Edit
                   </button>
-                  <button (click)="Leave()">
+                  <div class="divider"></div>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="Leave()"
+                    style="background-color:rgb(236, 185, 15)"
+                  >
                     Leave
                   </button>
-                  <button (click)="Remove()">
+                  <div class="divider"></div>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="Remove()"
+                    *ngIf="element.roleType == 1"
+                    style="background-color:rgba(212, 48, 48, 0.918)"
+                  >
                     Remove
                   </button>
                 </div>
@@ -92,6 +112,4 @@
       <app-user-list></app-user-list>
     </div>
   </div>
-
-
 </div>
