@@ -148,7 +148,8 @@ namespace RoomMate.Domain.Services.Implements
                 FlatNumber = flat.Address.FlatNumber,
                 FlatName = flat.FlatName,
                 Id = flat.Id,
-                RoleType = role
+                RoleType = role,
+
                 
             };
         }

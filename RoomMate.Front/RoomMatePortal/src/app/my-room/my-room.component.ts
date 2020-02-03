@@ -5,6 +5,9 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { RolesEnum } from '../user-controll-panel/dto/RolesEnum';
+import { UserListDto } from '../user-controll-panel/dto/user-list-dto';
+import { UserListComponent } from '../user-list/user-list.component';
+
 
 @Component({
   selector: 'app-my-room',
@@ -24,7 +27,11 @@ export class MyRoomComponent implements OnInit {
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(UserListComponent) userlistChild: UserListComponent;
 
+  users: UserListDto[] = [];
+
+  selectedFlatId: number;
   dataSource: MatTableDataSource<AddressFlatDto>;
   columnsToDisplay = ['cityName', 'street', 'houseNumber', 'flatNumber', 'roleType'];
   expandedElement: AddressFlatDto | null;
@@ -63,9 +70,12 @@ export class MyRoomComponent implements OnInit {
   }
 
 
+  // co tu zrobic
+  // mam flat id na kilk,
+  // zawolac metode ktora zrobi requesta w child
 
-  ViewUsers() {
-
+  ViewUsers(flatid: number) {
+    this.userlistChild.getUserList(flatid);
   }
 
   Edit() {
