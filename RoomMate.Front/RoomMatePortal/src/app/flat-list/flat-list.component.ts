@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from "@angular/core";
 import { AddressFlatDto } from "../address/dto/address-dto";
-import { MatSnackBar } from "@angular/material";
 import { FlatAddressService } from "../address/flat-address.service";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { RolesEnum } from "../user-controll-panel/dto/RolesEnum";
+import { MatSnackBar } from "@angular/material";
 
 @Component({
   selector: "app-flat-list",
@@ -16,14 +16,16 @@ export class FlatListComponent implements OnInit {
   joinedFlat: boolean = false;
   flatExtraDetails: boolean = false;
 
-
   form: FormGroup;
+
 
   @Input() flatDetails: AddressFlatDto;
   @Input() userExistInList: boolean;
+  @Input() flatDetailsFromMyRoomComponent: AddressFlatDto;
   constructor(
-    private _snackBar: MatSnackBar,
-    public flatAddressService: FlatAddressService
+    public flatAddressService: FlatAddressService,
+    private _snackBar: MatSnackBar
+
   ) {}
 
 
@@ -43,14 +45,14 @@ export class FlatListComponent implements OnInit {
     });
   }
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 3000
-    });
+  get f() {
+    return this.form.controls;
   }
 
-  get f(){
-    return this.form.controls;
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000
+    });
   }
 
   addTheFlat() {
@@ -87,15 +89,13 @@ export class FlatListComponent implements OnInit {
           if (response) {
             this.joinedFlat = true;
             this.updateList.emit();
-            this.openSnackBar('You entered the flat', 'Ok');
+            this.openSnackBar('You have left the flat', 'Ok');
           } else {
             this.openSnackBar('Something went wrong', 'Ok');
           }
         });
     }
   }
-
-
 
   leaveTheFlat() {
     this.joinedFlat = false;

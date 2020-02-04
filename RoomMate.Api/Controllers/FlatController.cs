@@ -72,9 +72,9 @@ namespace RoomMate.Api.Controllers
         }
 
 
-        [HttpDelete]
+        [HttpPost]
         [Route("LeaveFlat")]
-        public IActionResult LeaveFlat(AddressFlatDto addressDto)
+        public IActionResult LeaveFlat([FromBody]AddressFlatDto addressDto)
         {
             if (addressDto.DoesFlatExist())
             {

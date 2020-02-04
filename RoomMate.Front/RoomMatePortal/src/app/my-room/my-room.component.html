@@ -53,7 +53,7 @@
                   <button
                     mat-raised-button
                     color="primary"
-                    (click)="Edit()"
+                    (click)="edit()"
                     *ngIf="element.roleType == 1"
                     style="background-color:rgb(13, 206, 100)"
                   >
@@ -63,7 +63,7 @@
                   <button
                     mat-raised-button
                     color="primary"
-                    (click)="Leave()"
+                    (click)="leave(element)"
                     style="background-color:rgb(236, 185, 15)"
                   >
                     Leave
@@ -72,7 +72,7 @@
                   <button
                     mat-raised-button
                     color="primary"
-                    (click)="Remove()"
+                    (click)="remove()"
                     *ngIf="element.roleType == 1"
                     style="background-color:rgba(212, 48, 48, 0.918)"
                   >
@@ -92,7 +92,7 @@
           [class.example-expanded-row]="expandedElement === element"
           (click)="
             expandedElement = expandedElement === element ? null : element;
-            ViewUsers(element.id)
+            viewUsers(element.id)
           "
         ></tr>
         <tr
@@ -109,7 +109,7 @@
 
   <div class="card shadow col-lg-4" style="margin:10px;">
     <div class="card-body">
-      <app-user-list></app-user-list>
+      <app-user-list  [refreshFlatId]="refreshFlatId"></app-user-list>
     </div>
   </div>
 </div>

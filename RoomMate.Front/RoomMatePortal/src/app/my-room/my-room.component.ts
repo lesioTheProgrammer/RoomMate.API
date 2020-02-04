@@ -1,15 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
 import { AddressFlatDto } from '../address/dto/address-dto';
 import { FlatAddressService } from '../address/flat-address.service';
-import { MatTableDataSource, MatPaginator } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
+import { MatTableDataSource, MatPaginator, MatSnackBar } from '@angular/material';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import { RolesEnum } from '../user-controll-panel/dto/RolesEnum';
 import { UserListDto } from '../user-controll-panel/dto/user-list-dto';
+import { FlatListComponent } from '../flat-list/flat-list.component';
 import { UserListComponent } from '../user-list/user-list.component';
 
 
+
 @Component({
+  providers: [FlatListComponent],
   selector: 'app-my-room',
   templateUrl: './my-room.component.html',
   styleUrls: ['./my-room.component.css'],
@@ -26,8 +27,11 @@ import { UserListComponent } from '../user-list/user-list.component';
 export class MyRoomComponent implements OnInit {
 
 
+  @Output()
+    public flatDtoOutput = new EventEmitter<AddressFlatDto>();
+
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(UserListComponent) userlistChild: UserListComponent;
 
   users: UserListDto[] = [];
 
@@ -38,12 +42,17 @@ export class MyRoomComponent implements OnInit {
   multiDim = [['cityName', 'City Name'], ['street', 'Street'], ['houseNumber', 'House Number'],
   ['flatNumber', 'Flat Number'], ['roleType', 'Role Type']];
 
+  hasLeft: boolean;
   constructor(
-    public flatAddressService: FlatAddressService
+    public flatAddressService: FlatAddressService,
+    private flatListComponent: FlatListComponent,
+    private _snackBar: MatSnackBar
   ) { }
 
   userName: string;
+  refreshFlatId = new EventEmitter<Number>();
 
+  @ViewChild (UserListComponent) userlistChild: UserListComponent;
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource();
@@ -58,6 +67,12 @@ export class MyRoomComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000
+    });
+  }
+
   typeOf(value) {
     return typeof value;
   }
@@ -69,31 +84,44 @@ export class MyRoomComponent implements OnInit {
     return "Flatmate Admin";
   }
 
-
-  // co tu zrobic
-  // mam flat id na kilk,
-  // zawolac metode ktora zrobi requesta w child
-
-  ViewUsers(flatid: number) {
+  viewUsers(flatid: number) {
     this.userlistChild.getUserList(flatid);
   }
 
-  Edit() {
+  edit() {
 
   }
 
-  Remove() {
-
+  remove() {
   }
 
-  Leave() {
-    // go to myFlat and leave there.
+  leave(flatDto: AddressFlatDto) {
+    const loginCurrentUser = JSON.parse(localStorage.getItem("login"));
+    flatDto.loggedUserName = loginCurrentUser;
+    this.flatAddressService.leaveflat(flatDto)
+     .subscribe(response => {
+       if (response) {
+         this.setFlatId(flatDto.id);
+         // remove item from list:
+         this.deleteItemFromDataSource(flatDto);
+         this.openSnackBar('You have left the flat', 'Ok');
+       } else {
+        this.openSnackBar('Something went wrong', 'Ok');
+       }
+     });
+  }
+
+  deleteItemFromDataSource(flatDto: AddressFlatDto) {
+    let index = this.dataSource.data.indexOf(flatDto);
+    if (index !== -1) {
+      this.dataSource.data.splice(index, 1);
+      this.dataSource.data = this.dataSource.data.slice(); //slice to update list
+    }
   }
 
 
-
-
+  setFlatId(selectedId: number) {
+    this.selectedFlatId = selectedId;
+    this.refreshFlatId.emit(this.selectedFlatId);
+  }
 }
-
-
-
