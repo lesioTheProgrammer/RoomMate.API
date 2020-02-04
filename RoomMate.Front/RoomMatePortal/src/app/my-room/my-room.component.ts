@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { AddressFlatDto } from '../address/dto/address-dto';
 import { FlatAddressService } from '../address/flat-address.service';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
@@ -25,9 +25,9 @@ import { UserListComponent } from '../user-list/user-list.component';
 })
 export class MyRoomComponent implements OnInit {
 
+  refreshFlatId = new EventEmitter<Number>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(UserListComponent) userlistChild: UserListComponent;
 
   users: UserListDto[] = [];
 
@@ -69,13 +69,16 @@ export class MyRoomComponent implements OnInit {
     return "Flatmate Admin";
   }
 
-
+  setFlatId(selectedId:number){
+    this.selectedFlatId = selectedId;
+    this.refreshFlatId.emit(this.selectedFlatId);
+  }
   // co tu zrobic
   // mam flat id na kilk,
   // zawolac metode ktora zrobi requesta w child
 
   ViewUsers(flatid: number) {
-    this.userlistChild.getUserList(flatid);
+    // this.userlistChild.getUserList(flatid);
   }
 
   Edit() {

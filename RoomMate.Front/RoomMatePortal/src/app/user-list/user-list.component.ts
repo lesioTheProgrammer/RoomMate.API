@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UserManagementService } from '../user-controll-panel/user-management.service';
 import { UserListDto } from '../user-controll-panel/dto/user-list-dto';
 
@@ -9,27 +9,16 @@ import { UserListDto } from '../user-controll-panel/dto/user-list-dto';
 })
 export class UserListComponent implements OnInit {
   userList: Array<UserListDto>;
-
+  @Input() refreshFlatId = new EventEmitter<Number>();
 
   constructor(public userManagementService: UserManagementService) { }
 
   ngOnInit() {
-    // this.userManagementService.getUserByFlatId(this.flatId).subscribe(response=>{
-    //   this.userList = response;
-    // });
+    this.refreshFlatId.subscribe(flatId =>{
+      this.userManagementService.getUserByFlatId(flatId).subscribe(response=>{
+        this.userList = response;
+      });
+    })
 
   }
-
-  getUserList(flatid: number) {
-    this.userManagementService.getUserByFlatId(flatid).subscribe(response=>{
-      this.userList = response;
-    });
-  }
-
-
-
-
-
-
-
 }
