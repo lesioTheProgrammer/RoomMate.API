@@ -124,15 +124,17 @@ select uf.FlatId, uf.UserId from UserFlats as uf
 
 insert into UserFlats (FlatId, UserId, Active, CreatedDate, ModificatedDate)  values (5, 26, 1, GETDATE(), GETDATE())
 
-select * from UserFlats
 
-select * from Users
 
 select * from Flats
 
 
 
+select * from UserFlats
+select * from Users
 select * from Addresses
+
+
 select * from City
 
 

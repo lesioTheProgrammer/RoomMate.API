@@ -92,7 +92,19 @@ export class MyRoomComponent implements OnInit {
 
   }
 
-  remove() {
+  remove(flatDto: AddressFlatDto) {
+    const loginCurrentUser = JSON.parse(localStorage.getItem("login"));
+    flatDto.loggedUserName = loginCurrentUser;
+    this.flatAddressService.removeFlat(flatDto)
+    .subscribe(response => {
+      if (response) {
+        this.setFlatId(flatDto.id);
+        this.deleteItemFromDataSource(flatDto);
+        this.openSnackBar('You have left the flat', 'Ok');
+      } else {
+        this.openSnackBar('Something went wrong', 'Ok');
+      }
+    });
   }
 
   leave(flatDto: AddressFlatDto) {

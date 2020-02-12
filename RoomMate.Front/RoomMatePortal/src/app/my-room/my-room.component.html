@@ -59,8 +59,9 @@
                   >
                     Edit
                   </button>
-                  <div class="divider"></div>
+                  <div class="divider" *ngIf="element.roleType == 0"></div>
                   <button
+                   *ngIf="element.roleType == 0"
                     mat-raised-button
                     color="primary"
                     (click)="leave(element)"
@@ -68,12 +69,12 @@
                   >
                     Leave
                   </button>
-                  <div class="divider"></div>
+                  <div class="divider" *ngIf="element.roleType == 1"></div>
                   <button
+                    *ngIf="element.roleType == 1"
                     mat-raised-button
                     color="primary"
-                    (click)="remove()"
-                    *ngIf="element.roleType == 1"
+                    (click)="remove(element)"
                     style="background-color:rgba(212, 48, 48, 0.918)"
                   >
                     Remove

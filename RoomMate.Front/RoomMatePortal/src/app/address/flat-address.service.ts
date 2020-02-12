@@ -78,6 +78,18 @@ export class FlatAddressService {
       });
     }
 
+    public removeFlat(addressDto: AddressFlatDto): Observable<boolean> {
+      const route = "RemoveFlat";
+      return this.httpClient.put<boolean>(this.wwwPath + "/" + route,
+      JSON.stringify(addressDto),
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      });
+    }
+
     public addTheFlat(addressDto: AddressFlatDto): Observable<AddressFlatDto> {
       const route = "AddNewFlat";
       return this.httpClient.post<AddressFlatDto>(this.wwwPath + "/" + route,

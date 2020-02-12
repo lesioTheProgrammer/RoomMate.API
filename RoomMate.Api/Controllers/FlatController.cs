@@ -64,11 +64,14 @@ namespace RoomMate.Api.Controllers
 
         [HttpPut]
         [Route("RemoveFlat")]
-        public IActionResult RemoveFlat(AddressFlatDto addressDto)
+        public IActionResult RemoveFlat([FromBody]AddressFlatDto addressDto)
         {
             //TODO: Usunięcie - active na false
-            return this.Ok(this._addressService.RemoveFlat(addressDto));
-
+            if (addressDto.DoesFlatExist())
+            {
+                return this.Ok(this._addressService.RemoveFlat(addressDto));
+            }
+            return this.Ok(false);
         }
 
 
