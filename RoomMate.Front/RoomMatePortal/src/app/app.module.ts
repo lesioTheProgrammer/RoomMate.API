@@ -31,6 +31,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { RemoveAccountComponent } from './user-profile/remove-account/remove-account.component';
 import { AddressComponent } from './address/address.component';
 import { FlatListComponent } from './flat-list/flat-list.component';
+import { MyRoomEditComponent } from './my-room-edit/my-room-edit.component';
 
 const routes: Routes =  [
   { path: '', component: MyRoomComponent},
@@ -65,6 +66,7 @@ export function tokenGetter() {
     RemoveAccountComponent,
     AddressComponent,
     FlatListComponent,
+    MyRoomEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -86,7 +88,8 @@ export function tokenGetter() {
     MatTableModule,
     MatToolbarModule
   ],
-  entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent, FlatListComponent],
+  entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent,
+     FlatListComponent, MyRoomEditComponent],
   providers:
   [[DashboardService],
   [{provide: MatDialogRef, useValue: {}}],

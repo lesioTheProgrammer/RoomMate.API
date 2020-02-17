@@ -122,13 +122,23 @@ update Addresses set FlatNumber = '3' where Addresses.Id = 3;
 select uf.FlatId, uf.UserId from UserFlats as uf
 
 
-insert into UserFlats (FlatId, UserId, Active, CreatedDate, ModificatedDate)  values (5, 26, 1, GETDATE(), GETDATE())
 
 
+--- inserty do UF user jako matie
+--- logged user id to 40
+
+
+
+select * from Flats where Flats.FlatName = 'Kurt Ville';
+
+insert into UserFlats (FlatId, UserId, Active, CreatedDate, ModificatedDate, RoleType)  values (1087, 1, 1, GETDATE(), GETDATE(), 1)
+
+
+select * from UserFlats as uf where FlatId = 1087;
+
+update UserFlats set RoleType = 0 where Id = 1270;
 
 select * from Flats
-
-
 
 select * from UserFlats
 select * from Users
@@ -145,3 +155,5 @@ delete UserFlats from UserFlats where UserFlats.Id = 1017;
 --flat later
 --userflats with user role admin
 
+
+delete Flats from Flats where Flats.FlatName = 'ww';

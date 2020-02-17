@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
 import { AddressFlatDto } from '../address/dto/address-dto';
 import { FlatAddressService } from '../address/flat-address.service';
-import { MatTableDataSource, MatPaginator, MatSnackBar } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSnackBar, MatDialog } from '@angular/material';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { UserListDto } from '../user-controll-panel/dto/user-list-dto';
 import { FlatListComponent } from '../flat-list/flat-list.component';
 import { UserListComponent } from '../user-list/user-list.component';
+import { FormGroup } from '@angular/forms';
+import {Router} from '@angular/router';
+import { MyRoomEditComponent } from '../my-room-edit/my-room-edit.component';
 
 
 
@@ -27,6 +30,7 @@ import { UserListComponent } from '../user-list/user-list.component';
 export class MyRoomComponent implements OnInit {
 
 
+
   @Output()
     public flatDtoOutput = new EventEmitter<AddressFlatDto>();
 
@@ -43,10 +47,13 @@ export class MyRoomComponent implements OnInit {
   ['flatNumber', 'Flat Number'], ['roleType', 'Role Type']];
 
   hasLeft: boolean;
+  showChildEdit: boolean = false;
   constructor(
     public flatAddressService: FlatAddressService,
     private flatListComponent: FlatListComponent,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private router: Router,
+    public dialog: MatDialog
   ) { }
 
   userName: string;
@@ -66,6 +73,9 @@ export class MyRoomComponent implements OnInit {
 
     this.dataSource.paginator = this.paginator;
   }
+
+
+
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -89,8 +99,15 @@ export class MyRoomComponent implements OnInit {
   }
 
   edit() {
-
+      const dialogRef = this.dialog.open(MyRoomEditComponent, {
+        width: '450px'
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+      });
   }
+
+
 
   remove(flatDto: AddressFlatDto) {
     const loginCurrentUser = JSON.parse(localStorage.getItem("login"));
