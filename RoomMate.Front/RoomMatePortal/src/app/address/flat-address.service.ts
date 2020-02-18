@@ -102,6 +102,18 @@ export class FlatAddressService {
       });
     }
 
+    public editTheFlat(addressDto: AddressFlatDto): Observable<boolean> {
+      const route = "EditFlat";
+      return this.httpClient.put<boolean>(this.wwwPath + "/" + route,
+      JSON.stringify(addressDto),
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      });
+    }
+
 
     public getAllFlats(loggedUserName: string): Observable<AddressFlatDto[]> {
       const route =  "GetUserFlat";

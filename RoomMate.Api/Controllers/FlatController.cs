@@ -75,6 +75,14 @@ namespace RoomMate.Api.Controllers
         }
 
 
+        [HttpPut]
+        [Route("EditFlat")]
+        public IActionResult EditFlat([FromBody]AddressFlatDto addressDto)
+        {
+            return this.Ok(true);
+        }
+
+
         [HttpPost]
         [Route("LeaveFlat")]
         public IActionResult LeaveFlat([FromBody]AddressFlatDto addressDto)

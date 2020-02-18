@@ -98,9 +98,13 @@ export class MyRoomComponent implements OnInit {
     this.userlistChild.getUserList(flatid);
   }
 
-  edit() {
+  edit(flatid: number) { // pass selected flat id
       const dialogRef = this.dialog.open(MyRoomEditComponent, {
-        width: '450px'
+        width: '450px',
+        data: {
+          flatId: flatid,
+          userName: this.userName
+        }
       });
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was closed');
