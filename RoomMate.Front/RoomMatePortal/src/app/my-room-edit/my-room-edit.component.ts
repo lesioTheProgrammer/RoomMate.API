@@ -29,10 +29,10 @@ export class MyRoomEditComponent implements OnInit {
         validators: [Validators.required]
       }),
       area: new FormControl('', {
-        validators: [Validators.required]
+        validators: [Validators.required, Validators.min(1)]
       }),
       roomCount: new FormControl('', {
-        validators: [Validators.required]
+        validators: [Validators.required, Validators.min(1)]
       })
     });
 
@@ -47,12 +47,15 @@ export class MyRoomEditComponent implements OnInit {
   }
 
   edit() {
+    debugger;
     // method to get edit details etc pass it to service
     this.flatEditDetails.flatName = this.form.value.flatName;
     this.flatEditDetails.area = this.form.value.area;
     this.flatEditDetails.roomCount = this.form.value.roomCount;
     this.flatEditDetails.id = this.data.flatId;
     this.flatEditDetails.loggedUserName = this.data.userName;
+    this.flatEditDetails.active = this.data.active;
+    this.flatEditDetails.roleType = this.data.roleType;
     //sub
     this.flatAddressService.editTheFlat(this.flatEditDetails)
     .subscribe(response => {

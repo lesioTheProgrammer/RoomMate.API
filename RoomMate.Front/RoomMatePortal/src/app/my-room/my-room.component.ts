@@ -98,12 +98,14 @@ export class MyRoomComponent implements OnInit {
     this.userlistChild.getUserList(flatid);
   }
 
-  edit(flatid: number) { // pass selected flat id
+  edit(flat: AddressFlatDto) { // pass selected flat id
       const dialogRef = this.dialog.open(MyRoomEditComponent, {
         width: '450px',
         data: {
-          flatId: flatid,
-          userName: this.userName
+          flatId: flat.id,
+          userName: this.userName,
+          active: flat.active,
+          roleType: flat.roleType
         }
       });
       dialogRef.afterClosed().subscribe(result => {

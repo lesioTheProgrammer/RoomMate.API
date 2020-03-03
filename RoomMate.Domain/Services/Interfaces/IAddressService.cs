@@ -24,5 +24,7 @@ namespace RoomMate.Domain.Services.Interfaces
 
         bool RemoveFlat(AddressFlatDto addressFlatDto);
 
+        bool EditFlat(AddressFlatDto addressFlatDto);
+
     }
 }

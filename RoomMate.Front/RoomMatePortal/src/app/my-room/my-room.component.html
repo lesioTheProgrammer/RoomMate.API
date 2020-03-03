@@ -29,7 +29,7 @@
             </ng-template>
           </td>
         </ng-container>
-
+        <!-- element is flataddresDto -->
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
         <ng-container matColumnDef="expandedDetail">
           <td
@@ -53,7 +53,7 @@
                   <button
                     mat-raised-button
                     color="primary"
-                    (click)="edit(element.id)"
+                    (click)="edit(element)"
                     *ngIf="element.roleType == 1"
                     style="background-color:rgb(13, 206, 100)"
                   >

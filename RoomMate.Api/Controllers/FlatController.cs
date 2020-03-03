@@ -79,7 +79,12 @@ namespace RoomMate.Api.Controllers
         [Route("EditFlat")]
         public IActionResult EditFlat([FromBody]AddressFlatDto addressDto)
         {
-            return this.Ok(true);
+            if (addressDto.DoesFlatExist())
+            {
+                return this.Ok(_addressService.EditFlat(addressDto));
+            }
+            return this.Ok(false);
+
         }
 
 

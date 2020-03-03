@@ -157,3 +157,5 @@ delete UserFlats from UserFlats where UserFlats.Id = 1017;
 
 
 delete Flats from Flats where Flats.FlatName = 'ww';
+
+
