@@ -24,7 +24,7 @@
         {
             return (IsEmpty(this.Login) && IsEmpty(this.Name)
                 && IsEmpty(this.Surname)  && ValidationDto.IsValidPassword(this.Password)
-                && ValidationDto.IsValidEmail(this.Email) && IsValidId(this.AddressDto.CityId));
+                && ValidationDto.IsValidEmail(this.Email));
         }
     }
 }

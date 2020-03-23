@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import {MAT_DIALOG_DATA} from '@angular/material';
 import { AddressFlatDto } from '../address/dto/address-dto';
@@ -12,14 +12,17 @@ import { FlatAddressService } from '../address/flat-address.service';
 })
 export class MyRoomEditComponent implements OnInit {
 
-  errorShow: boolean = false;
+  errorShow: false;
   flatEditDetails: AddressFlatDto = new AddressFlatDto;
   userName: string;
+
+  @Output() updateDetails = new EventEmitter();
 
   constructor(
     public dialogRef: MatDialogRef<MyRoomEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public flatAddressService: FlatAddressService,
+    private _snackBar: MatSnackBar
   ) { }
 
   form: FormGroup;
@@ -38,6 +41,8 @@ export class MyRoomEditComponent implements OnInit {
 
   }
 
+
+
   get f () {
     return this.form.controls;
   }
@@ -47,7 +52,6 @@ export class MyRoomEditComponent implements OnInit {
   }
 
   edit() {
-    debugger;
     // method to get edit details etc pass it to service
     this.flatEditDetails.flatName = this.form.value.flatName;
     this.flatEditDetails.area = this.form.value.area;
@@ -56,17 +60,23 @@ export class MyRoomEditComponent implements OnInit {
     this.flatEditDetails.loggedUserName = this.data.userName;
     this.flatEditDetails.active = this.data.active;
     this.flatEditDetails.roleType = this.data.roleType;
-    //sub
     this.flatAddressService.editTheFlat(this.flatEditDetails)
     .subscribe(response => {
       if (response) {
-        let xd = ""
-        debugger;
+        // refresh and close modal
+        this.closeModal();
+        this.updateDetails.emit();
+
+      } else {
+        // snackbar with notification that something went wrong
+        this.openSnackBar('Edit action has failed', 'Ok');
       }
-      else {
-        let xd = ""
-        debugger;
-      }
+    });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000
     });
   }
 }

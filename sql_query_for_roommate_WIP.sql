@@ -136,11 +136,15 @@ insert into UserFlats (FlatId, UserId, Active, CreatedDate, ModificatedDate, Rol
 
 select * from UserFlats as uf where FlatId = 1087;
 
-update UserFlats set RoleType = 0 where Id = 1270;
+update UserFlats set RoleType = 1 where Id = 1242;
 
 select * from Flats
 
 select * from UserFlats
+
+
+
+
 select * from Users
 select * from Addresses
 

@@ -47,7 +47,7 @@ export class MyRoomComponent implements OnInit {
   ['flatNumber', 'Flat Number'], ['roleType', 'Role Type']];
 
   hasLeft: boolean;
-  showChildEdit: boolean = false;
+  showChildEdit = false;
   constructor(
     public flatAddressService: FlatAddressService,
     private flatListComponent: FlatListComponent,
@@ -110,6 +110,7 @@ export class MyRoomComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was closed');
+
       });
   }
 
