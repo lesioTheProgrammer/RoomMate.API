@@ -1,4 +1,3 @@
-
 <div>
   <span style="text-align: center"> </span>
   <h1 mat-dialog-title>Edit the flat details!</h1>
@@ -8,8 +7,8 @@
         <strong>Błąd!</strong> Wystąpił błąd podczas zapisu.
       </div>
     </div>
-    <div class="mb-3" >
-      <form [formGroup] = "form">
+    <div class="mb-3">
+      <form [formGroup]="form">
         <div class="mb-3 form-group">
           <label for="flatName">Flat name</label>
           <input
@@ -31,7 +30,7 @@
           <label for="area">Area m<sup>2</sup> </label>
           <input
             type="number"
-            min= "1"
+            min="1"
             id="area"
             class="form-control"
             formControlName="area"
@@ -40,10 +39,10 @@
           />
           <div *ngIf="f.area.errors" class="invalid-feedback">
             <div *ngIf="f.area.errors.required">
-             Area is required.
+              Area is required.
             </div>
             <div *ngIf="f.area.errors.min">
-             Enter number greater than 1.
+              Enter number greater than 1.
             </div>
           </div>
         </div>
@@ -52,7 +51,7 @@
           <label for="roomCount">Room count</label>
           <input
             type="number"
-            min= "1"
+            min="1"
             id="roomCount"
             class="form-control"
             formControlName="roomCount"
@@ -64,23 +63,30 @@
               Room count is required.
             </div>
             <div *ngIf="f.roomCount.errors.min">
-             Enter number greater than 1.
+              Enter number greater than 1.
             </div>
           </div>
         </div>
-        <button class="flatAdd"
-      style="margin-left: 0%;"
-      (click)= "!form.valid || edit()"
-      type="submit">
-       Edit the flat!
-      </button>
+        <button
+          mat-raised-button
+          class="flatAdd"
+          color="primary"
+          style="margin-left: 0%; background-color: rgb(13, 206, 100);"
+          (click)="!form.valid || edit()"
+          type="submit"
+        >
+          Save changes!
+        </button>
+        <div class="divider"></div>
+        <button
+          mat-raised-button
+          color="primary"
+          style="background-color:rgba(212, 48, 48, 0.918);"
+          (click)="closeModal()"
+        >
+          Anuluj
+        </button>
       </form>
     </div>
-
-  </div>
-  <div mat-dialog-actions style="float:right">
-    <button mat-button (click)="closeModal()">Anuluj</button>
-    <!-- <button mat-button cdkFocusInitial (click)="edit()">Save changes</button> -->
   </div>
 </div>
-
