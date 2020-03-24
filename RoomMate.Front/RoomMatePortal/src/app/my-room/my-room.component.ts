@@ -98,11 +98,11 @@ export class MyRoomComponent implements OnInit {
     this.userlistChild.getUserList(flatid);
   }
 
-  edit(flat: AddressFlatDto) { // pass selected flat id
+  edit(flat: AddressFlatDto, id: number) { // pass selected flat id
       const dialogRef = this.dialog.open(MyRoomEditComponent, {
         width: '450px',
         data: {
-          flatId: flat.id,
+          flatId: id,
           userName: this.userName,
           active: flat.active,
           roleType: flat.roleType
@@ -110,7 +110,13 @@ export class MyRoomComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was closed');
+        flat = dialogRef.componentInstance.flatEditDetails; // flat that has arrived
 
+        let indexOfElement = this.dataSource.data.findIndex(x => x.id === id);
+
+
+
+        console.log(dialogRef.componentInstance.flatEditDetails);
       });
   }
 
@@ -151,7 +157,7 @@ export class MyRoomComponent implements OnInit {
     let index = this.dataSource.data.indexOf(flatDto);
     if (index !== -1) {
       this.dataSource.data.splice(index, 1);
-      this.dataSource.data = this.dataSource.data.slice(); //slice to update list
+      this.dataSource.data = this.dataSource.data.slice(); // slice to update list
     }
   }
 

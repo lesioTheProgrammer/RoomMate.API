@@ -83,7 +83,7 @@ namespace RoomMate.Api.Controllers
             {
                 return this.Ok(_addressService.EditFlat(addressDto));
             }
-            return this.Ok(false);
+            return this.Ok(new AddressFlatDto());
 
         }
 

@@ -162,9 +162,19 @@ namespace RoomMate.Domain.Services.Implements
             var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == addressDto.HouseNumber && x.FlatNumber == addressDto.FlatNumber
             && x.Street.ToLower() == addressDto.Street.ToLower() && x.CityId == addressDto.CityId && x.Active == true, u => u.City, f => f.Flat);
             // get users in flat 
-            if (address != null)
+            if (address != null || addressDto.Id != 0)
             {
-                userDtoList = this.userService.GetUserByFlatId(address.Flat.Id);
+                if (address != null)
+                {
+                    userDtoList = this.userService.GetUserByFlatId(address.Flat.Id);
+                }
+                else 
+                {
+                    // to use in edit flat
+                    userDtoList = this.userService.GetUserByFlatId(addressDto.Id);
+                    Flat flat = this._flatRepository.GetFirst(x => x.Id == addressDto.Id);
+                    address = this._addressRepository.GetFirst(x => x.Id == flat.AddressId); 
+                }
             }
             else
             {
@@ -365,7 +375,7 @@ namespace RoomMate.Domain.Services.Implements
             return false;
         }
 
-        public bool EditFlat(AddressFlatDto addressFlatDto)
+        public AddressFlatDto EditFlat(AddressFlatDto addressFlatDto)
         {
             if (addressFlatDto.Id != 0 && addressFlatDto != null)
             {
@@ -382,7 +392,6 @@ namespace RoomMate.Domain.Services.Implements
                         {
                             try
                             {
-                                // chceck if area, flatname and roomcount are not empty/null
                                 if (addressFlatDto.Area > 0 && addressFlatDto.RoomCount >= 0 && !string.IsNullOrEmpty(addressFlatDto.FlatName))
                                 {
                                     flatToUpdate.Area = addressFlatDto.Area;
@@ -390,24 +399,23 @@ namespace RoomMate.Domain.Services.Implements
                                     flatToUpdate.RoomCount = addressFlatDto.RoomCount;
                                     flatToUpdate.ModificatedBy = userID;
                                     flatToUpdate.ModificatedDate = DateTime.Now;
-
                                     _flatRepository.SaveChanges();
-                                    return true;
+                                    return GetAddressByFlatHouseNumb(addressFlatDto); // here <<<
                                 }
                             }
                             catch (Exception ex)
                             {
-                                throw ex;
+                                return new AddressFlatDto();
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    return false;
+                    return new AddressFlatDto();
                 }
             }
-            return false;
+            return new AddressFlatDto();
         }
 
 

@@ -47,7 +47,8 @@ export class MyRoomEditComponent implements OnInit {
     return this.form.controls;
   }
 
-  closeModal(): void {
+  closeModal(editedDetails: AddressFlatDto): void {
+    this.flatEditDetails = editedDetails;
     this.dialogRef.close();
   }
 
@@ -62,13 +63,10 @@ export class MyRoomEditComponent implements OnInit {
     this.flatEditDetails.roleType = this.data.roleType;
     this.flatAddressService.editTheFlat(this.flatEditDetails)
     .subscribe(response => {
-      if (response) {
+      if (response.addressId !== 0) {
         // refresh and close modal
-        this.closeModal();
-        this.updateDetails.emit();
-
+        this.closeModal(response);
       } else {
-        // snackbar with notification that something went wrong
         this.openSnackBar('Edit action has failed', 'Ok');
       }
     });
