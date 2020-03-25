@@ -41,8 +41,6 @@ export class MyRoomEditComponent implements OnInit {
 
   }
 
-
-
   get f () {
     return this.form.controls;
   }

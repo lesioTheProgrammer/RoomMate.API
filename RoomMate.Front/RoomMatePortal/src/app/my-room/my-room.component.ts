@@ -74,9 +74,6 @@ export class MyRoomComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
-
-
-
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000
@@ -98,29 +95,32 @@ export class MyRoomComponent implements OnInit {
     this.userlistChild.getUserList(flatid);
   }
 
-  edit(flat: AddressFlatDto, id: number) { // pass selected flat id
+  edit(flat: AddressFlatDto) { // pass selected flat id
       const dialogRef = this.dialog.open(MyRoomEditComponent, {
         width: '450px',
         data: {
-          flatId: id,
+          flatId: flat.id,
           userName: this.userName,
           active: flat.active,
           roleType: flat.roleType
         }
       });
       dialogRef.afterClosed().subscribe(result => {
+        const flatReturned = dialogRef.componentInstance.flatEditDetails;
+        const indexOfElement = this.dataSource.data.findIndex(x => x.id === flat.id);
+        debugger;
+        flatReturned.roleType = flat.roleType; // stays the same, no need to integrate with api about that
+        this.dataSource.data[indexOfElement] = flatReturned; // flat that has arrived
+        if (flatReturned.addressId) { // if not undefined
+          this.refreshTable();
+        }
         console.log('The dialog was closed');
-        flat = dialogRef.componentInstance.flatEditDetails; // flat that has arrived
-
-        let indexOfElement = this.dataSource.data.findIndex(x => x.id === id);
-
-
-
-        console.log(dialogRef.componentInstance.flatEditDetails);
       });
   }
 
-
+  private refreshTable() {
+    this.dataSource.paginator = this.paginator;
+  }
 
   remove(flatDto: AddressFlatDto) {
     const loginCurrentUser = JSON.parse(localStorage.getItem("login"));
@@ -154,13 +154,12 @@ export class MyRoomComponent implements OnInit {
   }
 
   deleteItemFromDataSource(flatDto: AddressFlatDto) {
-    let index = this.dataSource.data.indexOf(flatDto);
+    const index = this.dataSource.data.indexOf(flatDto);
     if (index !== -1) {
       this.dataSource.data.splice(index, 1);
       this.dataSource.data = this.dataSource.data.slice(); // slice to update list
     }
   }
-
 
   setFlatId(selectedId: number) {
     this.selectedFlatId = selectedId;

@@ -124,14 +124,15 @@ select uf.FlatId, uf.UserId from UserFlats as uf
 
 
 
---- inserty do UF user jako matie
---- logged user id to 40
+--- inserty do UF user as matie
+--- logged user id to 41 // updated 24.03
 
 
 
 select * from Flats where Flats.FlatName = 'Kurt Ville';
 
-insert into UserFlats (FlatId, UserId, Active, CreatedDate, ModificatedDate, RoleType)  values (1087, 1, 1, GETDATE(), GETDATE(), 1)
+insert into UserFlats (FlatId, UserId, Active, CreatedDate, ModificatedDate, RoleType)  
+values (1020, 41, 1, GETDATE(), GETDATE(), 0)
 
 
 select * from UserFlats as uf where FlatId = 1087;
