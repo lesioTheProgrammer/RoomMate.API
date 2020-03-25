@@ -66,16 +66,16 @@ namespace RoomMate.Domain.Services.Implements
         {
             return new AddressFlatDto()
             {
+                Active = addr.Active,
                 AddressId = addr.Id,
                 CityId = addr.CityId,
-                Active = addr.Active,
-                HouseNumber = addr.HouseNumber,
-                FlatNumber = addr.FlatNumber,
-                Street = addr.Street,
                 CityName = addr.City.CityName,
                 CreatedBy = addr.Flat.CreatedBy,
-                RoomCount = addr.Flat.RoomCount,
                 FlatName = addr.Flat.FlatName,
+                FlatNumber = addr.FlatNumber,
+                HouseNumber = addr.HouseNumber,
+                Street = addr.Street,
+                RoomCount = addr.Flat.RoomCount,
                 Users = userDtoList
             };
         }
@@ -97,16 +97,16 @@ namespace RoomMate.Domain.Services.Implements
         {
             return new AddressFlatDto()
             {
-                Id = flat.Id,
+                Active = flat.Active,
                 AddressId = flat.Address.Id,
                 CityId = flat.Address.City.Id,
                 CityName = flat.Address.City.CityName,
-                Street = flat.Address.Street,
-                HouseNumber = flat.Address.HouseNumber,
-                FlatNumber = flat.Address.FlatNumber,
                 FlatName = flat.FlatName,
+                FlatNumber = flat.Address.FlatNumber,
+                HouseNumber = flat.Address.HouseNumber,
+                Id = flat.Id,
+                Street = flat.Address.Street,
                 RoleType = role,
-                Active = flat.Active
             };
         }
 

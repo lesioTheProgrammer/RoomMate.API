@@ -108,9 +108,8 @@ export class MyRoomComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         const flatReturned = dialogRef.componentInstance.flatEditDetails;
         const indexOfElement = this.dataSource.data.findIndex(x => x.id === flat.id);
-        debugger;
         flatReturned.roleType = flat.roleType; // stays the same, no need to integrate with api about that
-        this.dataSource.data[indexOfElement] = flatReturned; // flat that has arrived
+        this.dataSource.data[indexOfElement].flatName = flatReturned.flatName; // flat that has arrived
         if (flatReturned.addressId) { // if not undefined
           this.refreshTable();
         }
