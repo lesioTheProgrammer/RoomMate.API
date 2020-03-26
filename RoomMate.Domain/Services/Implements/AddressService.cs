@@ -345,7 +345,7 @@ namespace RoomMate.Domain.Services.Implements
             // change flat and address to unactive:
             var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressFlatDto.AddressId && x.Active == true).Id;
             var addressID = addressFlatDto.AddressId;
-            if (flatID != 0 || addressID != 0)
+            if ((flatID != 0 || addressID != 0) && addressFlatDto.RoleType == RoleTypeEnum.FlatMateAdmin )
             {
                 try
                 {
@@ -377,7 +377,7 @@ namespace RoomMate.Domain.Services.Implements
 
         public AddressFlatDto EditFlat(AddressFlatDto addressFlatDto)
         {
-            if (addressFlatDto.Id != 0 && addressFlatDto != null)
+            if (addressFlatDto.Id != 0 && addressFlatDto != null && addressFlatDto.RoleType == RoleTypeEnum.FlatMateAdmin)
             {
                 try
                 {

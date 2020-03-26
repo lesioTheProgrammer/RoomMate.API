@@ -109,11 +109,13 @@ export class MyRoomComponent implements OnInit {
         const flatReturned = dialogRef.componentInstance.flatEditDetails;
         const indexOfElement = this.dataSource.data.findIndex(x => x.id === flat.id);
         flatReturned.roleType = flat.roleType; // stays the same, no need to integrate with api about that
-        this.dataSource.data[indexOfElement].flatName = flatReturned.flatName; // flat that has arrived
         if (flatReturned.addressId) { // if not undefined
+          this.dataSource.data[indexOfElement].flatName = flatReturned.flatName; // flat that has arrived
           this.refreshTable();
+          this.openSnackBar('You have edited the flat', 'Ok');
+        } else {
+          this.openSnackBar('Something went wrong', 'Ok'); // this will also trigger if you click next to the dialogbox just to close it. ;c
         }
-        console.log('The dialog was closed');
       });
   }
 
