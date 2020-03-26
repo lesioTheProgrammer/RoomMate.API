@@ -345,7 +345,7 @@ namespace RoomMate.Domain.Services.Implements
             // change flat and address to unactive:
             var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressFlatDto.AddressId && x.Active == true).Id;
             var addressID = addressFlatDto.AddressId;
-            if ((flatID != 0 || addressID != 0) && addressFlatDto.RoleType == RoleTypeEnum.FlatMateAdmin )
+            if ((flatID != 0 || addressID != 0)) // dont check the role because last user can be also a flatmate
             {
                 try
                 {
