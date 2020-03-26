@@ -1,33 +1,116 @@
 <div class="row">
-  <div class="card shadow  col-lg-4" style="margin:10px;">
+  <div class="card shadow  col-lg-7" style="margin:10px;">
     <div class="card-body">
       <span style="text-align: center">
-        <h2>Flat Data</h2>
+        <h2>List of your flats!</h2>
       </span>
-      <form style="min-width: 150px;max-width: 500px;width: 100%;">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        multiTemplateDataRows
+        class="mat-elevation-z8"
+        style="position: relative;"
+      >
+        <ng-container
+          matColumnDef="{{ column[0] }}"
+          *ngFor="let column of multiDim"
+        >
+          <th mat-header-cell *matHeaderCellDef class="headerName">
+            {{ column[1] }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <ng-container
+              *ngIf="typeOf(element[column[0]]) == 'number'; else notRole"
+            >
+              {{ getNameofRole(element[column[0]]) }}
+            </ng-container>
+            <ng-template #notRole>
+              {{ element[column[0]] }}
+            </ng-template>
+          </td>
+        </ng-container>
+        <!-- element is flataddresDto -->
+        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+        <ng-container matColumnDef="expandedDetail">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [attr.colspan]="multiDim.length"
+          >
+            <div
+              class="example-element-detail"
+              [@detailExpand]="
+                element == expandedElement ? 'expanded' : 'collapsed'
+              "
+            >
+              <div class="example-element-description">
+                {{ element.flatName }}
+                <span class="example-element-description-attribution">
+                  -- Flat Name
+                </span>
+                <div class="buttonGroup">
+                  <div class="divider"></div>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="edit(element)"
+                    *ngIf="element.roleType == 1"
+                    style="background-color:rgb(13, 206, 100)"
+                  >
+                    Edit
+                  </button>
+                  <div class="divider" *ngIf="element.roleType == 0"></div>
+                  <button
+                   *ngIf="element.roleType == 0"
+                    mat-raised-button
+                    color="primary"
+                    (click)="leave(element)"
+                    style="background-color:rgb(236, 185, 15)"
+                  >
+                    Leave
+                  </button>
+                  <div class="divider" *ngIf="element.roleType == 1"></div>
+                  <button
+                    *ngIf="element.roleType == 1"
+                    mat-raised-button
+                    color="primary"
+                    (click)="remove(element)"
+                    style="background-color:rgba(212, 48, 48, 0.918)"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          </td>
+        </ng-container>
 
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Flat name" value="Melina na prądzyna">
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <input matInput placeholder="City" value="Wrocław">
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Street" value="Prądzyńskiego">
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <input matInput placeholder="House number" value="47">
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Flat number" value="12">
-        </mat-form-field>
-        <button mat-button style="float:right;">Save</button>
-      </form>
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr
+          mat-row
+          *matRowDef="let element; columns: columnsToDisplay"
+          class="example-element-row"
+          [class.example-expanded-row]="expandedElement === element"
+          (click)="
+            expandedElement = expandedElement === element ? null : element;
+            viewUsers(element.id)
+          "
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: ['expandedDetail']"
+          class="example-detail-row"
+        ></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" class="mat-paginator">
+      </mat-paginator>
     </div>
   </div>
-  <div class="card shadow col-lg-7" style="margin:10px;">
+
+  <div class="card shadow col-lg-4" style="margin:10px;">
     <div class="card-body">
-      <app-user-list></app-user-list>
+      <app-user-list  [refreshFlatId]="refreshFlatId"></app-user-list>
     </div>
   </div>
 </div>

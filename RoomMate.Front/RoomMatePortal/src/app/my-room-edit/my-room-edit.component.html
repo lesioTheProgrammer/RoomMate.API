@@ -1,0 +1,92 @@
+<div>
+  <span style="text-align: center"> </span>
+  <h1 mat-dialog-title>Edit the flat details!</h1>
+  <div mat-dialog-content>
+    <div class="mb-3" *ngIf="errorShow">
+      <div class="alert alert-danger" role="alert">
+        <strong>Błąd!</strong> Wystąpił błąd podczas zapisu.
+      </div>
+    </div>
+    <div class="mb-3">
+      <form [formGroup]="form">
+        <div class="mb-3 form-group">
+          <label for="flatName">Flat name</label>
+          <input
+            type="text"
+            id="flatName"
+            class="form-control"
+            formControlName="flatName"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': f.flatName.errors }"
+          />
+          <div *ngIf="f.flatName.errors" class="invalid-feedback">
+            <div *ngIf="f.flatName.errors.required">
+              Flat name is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 form-group">
+          <label for="area">Area m<sup>2</sup> </label>
+          <input
+            type="number"
+            min="1"
+            id="area"
+            class="form-control"
+            formControlName="area"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': f.area.errors }"
+          />
+          <div *ngIf="f.area.errors" class="invalid-feedback">
+            <div *ngIf="f.area.errors.required">
+              Area is required.
+            </div>
+            <div *ngIf="f.area.errors.min">
+              Enter number greater than 1.
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 form-group">
+          <label for="roomCount">Room count</label>
+          <input
+            type="number"
+            min="1"
+            id="roomCount"
+            class="form-control"
+            formControlName="roomCount"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': f.flatName.errors }"
+          />
+          <div *ngIf="f.roomCount.errors" class="invalid-feedback">
+            <div *ngIf="f.roomCount.errors.required">
+              Room count is required.
+            </div>
+            <div *ngIf="f.roomCount.errors.min">
+              Enter number greater than 1.
+            </div>
+          </div>
+        </div>
+        <button
+          mat-raised-button
+          class="flatAdd"
+          color="primary"
+          style="margin-left: 0%; background-color: rgb(13, 206, 100);"
+          (click)="!form.valid || edit()"
+          type="submit"
+        >
+          Save changes!
+        </button>
+        <div class="divider"></div>
+        <button
+          mat-raised-button
+          color="primary"
+          style="background-color:rgba(212, 48, 48, 0.918);"
+          (click)="closeModal()"
+        >
+          Anuluj
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

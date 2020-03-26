@@ -68,9 +68,26 @@ export class FlatAddressService {
 
     public leaveflat(addressDto: AddressFlatDto): Observable<boolean> {
       const route = "LeaveFlat";
-      return this.httpClient.delete<boolean>(this.wwwPath + "/" + route,
-      {params: <any>addressDto}
-      );
+      return this.httpClient.post<boolean>(this.wwwPath + "/" + route,
+      JSON.stringify(addressDto),
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      });
+    }
+
+    public removeFlat(addressDto: AddressFlatDto): Observable<boolean> {
+      const route = "RemoveFlat";
+      return this.httpClient.put<boolean>(this.wwwPath + "/" + route,
+      JSON.stringify(addressDto),
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      });
     }
 
     public addTheFlat(addressDto: AddressFlatDto): Observable<AddressFlatDto> {
@@ -85,5 +102,25 @@ export class FlatAddressService {
       });
     }
 
+    public editTheFlat(addressDto: AddressFlatDto): Observable<AddressFlatDto> {
+      const route = "EditFlat";
+      return this.httpClient.put<AddressFlatDto>(this.wwwPath + "/" + route,
+      JSON.stringify(addressDto),
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      });
+    }
 
+
+    public getAllFlats(loggedUserName: string): Observable<AddressFlatDto[]> {
+      const route =  "GetUserFlat";
+      const paramsAsObj: Object = { loggedUserName };
+
+      return this.httpClient.get<AddressFlatDto[]>(this.wwwPath + "/" + route, {
+        params: <any>paramsAsObj
+      });
+    }
 }

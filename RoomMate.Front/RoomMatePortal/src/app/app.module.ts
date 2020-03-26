@@ -7,7 +7,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MatNativeDateModule, MatDialogModule, MatDialogRef, MatAutocompleteModule } from '@angular/material';
+import { MatDialogModule, MatDialogRef, MatAutocompleteModule, MatTableModule, MatToolbarModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModules } from './material-module/material.module';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
@@ -31,6 +31,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { RemoveAccountComponent } from './user-profile/remove-account/remove-account.component';
 import { AddressComponent } from './address/address.component';
 import { FlatListComponent } from './flat-list/flat-list.component';
+import { MyRoomEditComponent } from './my-room-edit/my-room-edit.component';
 
 const routes: Routes =  [
   { path: '', component: MyRoomComponent},
@@ -65,6 +66,7 @@ export function tokenGetter() {
     RemoveAccountComponent,
     AddressComponent,
     FlatListComponent,
+    MyRoomEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -82,9 +84,12 @@ export function tokenGetter() {
     MatDialogModule,
     AppMaterialModules,
     ReactiveFormsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatTableModule,
+    MatToolbarModule
   ],
-  entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent],
+  entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent,
+     FlatListComponent, MyRoomEditComponent],
   providers:
   [[DashboardService],
   [{provide: MatDialogRef, useValue: {}}],

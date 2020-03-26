@@ -50,6 +50,9 @@ namespace RoomMate.Domain.Services.Implements
             }
             return cityDtoList;
         }
+
+        // converts:
+        #region
         private CityDto ConvertToCityDto(City city)
         {
             return new CityDto()
@@ -59,66 +62,22 @@ namespace RoomMate.Domain.Services.Implements
             };
         }
 
-        public AddressFlatDto GetAddressByFlatHouseNumb(AddressFlatDto addressDto)
-        {
-            var addressDtoReturned = new AddressFlatDto();
-            var userDtoList = new List<UserListDto>();
-            var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == addressDto.HouseNumber && x.FlatNumber == addressDto.FlatNumber
-            && x.Street.ToLower() == addressDto.Street.ToLower() && x.CityId == addressDto.CityId && x.Active == true, u => u.City, f => f.Flat);
-            // get users in flat 
-            if (address != null)
-            {
-                userDtoList = this.userService.GetUserByFlatId(address.Flat.Id);
-            }
-            else
-            {
-                return new AddressFlatDto()
-                {
-                    HouseNumber = addressDto.HouseNumber,
-                    FlatNumber = addressDto.FlatNumber,
-                    Street = addressDto.Street,
-                    CityName = _cityRepository.GetFirst(x => x.Id == addressDto.CityId).CityName,
-                    CityId = addressDto.CityId
-                };
-            }
-            try
-            {
-                addressDtoReturned = ConvertToAddressUsersDto(address, userDtoList);
-
-            }
-            catch (Exception ex)
-            {
-                string mess = ex.Message;
-            }
-            return addressDtoReturned;
-        }
-
         public AddressFlatDto ConvertToAddressUsersDto(Address addr, List<UserListDto> userDtoList)
         {
             return new AddressFlatDto()
             {
                 Active = addr.Active,
                 AddressId = addr.Id,
-                HouseNumber = addr.HouseNumber,
-                FlatNumber = addr.FlatNumber,
-                Street = addr.Street,
+                CityId = addr.CityId,
                 CityName = addr.City.CityName,
                 CreatedBy = addr.Flat.CreatedBy,
-                RoomCount = addr.Flat.RoomCount,
                 FlatName = addr.Flat.FlatName,
-                CityId = addr.CityId,
+                FlatNumber = addr.FlatNumber,
+                HouseNumber = addr.HouseNumber,
+                Street = addr.Street,
+                RoomCount = addr.Flat.RoomCount,
                 Users = userDtoList
             };
-        }
-
-        public IList<string> GetStreetsDistincted(int id, string streetLetters)
-        {
-            var distinctStreets = _addressRepository.GetDistinct(pred => pred.CityId == id && pred.Active == true  && pred.Street.ToLower().Contains(streetLetters.ToLower()), x => x.Street);
-            if (distinctStreets.Any())
-            {
-                return distinctStreets;
-            }
-            return new List<string>();
         }
 
         private AddressFlatDto ConvertToAddrDto(Address address)
@@ -134,36 +93,21 @@ namespace RoomMate.Domain.Services.Implements
             };
         }
 
-
-        // flats
-
-
-        public AddressFlatDto AddNewFlat(AddressFlatDto addressFlatDto)
+        private AddressFlatDto ConvertToAddrDto(Flat flat, RoleTypeEnum role)
         {
-            //return good flat 
-           var user = _userRepository.GetFirst(x => x.Login.ToLower() == addressFlatDto.LoggedUserName && x.Active == true);
-           if (user != null)
+            return new AddressFlatDto()
             {
-                try
-                {
-                    var address = ConvertToTarget(addressFlatDto,  user);
-                    _addressRepository.InsertOrUpdate(address);
-                    
-                    var flat = ConvertToTarget(addressFlatDto, address.Id, user);
-                    _flatRepository.InsertOrUpdate(flat);
-
-                    var userflat = ConvertToTarget(flat.Id,  user.Id, addressFlatDto.RoleType);
-                    _userFlatRepository.InsertOrUpdate(userflat);
-
-                    //return same dto as you ask for when you click search
-                    return GetAddressByFlatHouseNumb(addressFlatDto);
-                }
-                catch (Exception ex)
-                {
-
-                }
-            }
-                return new AddressFlatDto();
+                Active = flat.Active,
+                AddressId = flat.Address.Id,
+                CityId = flat.Address.City.Id,
+                CityName = flat.Address.City.CityName,
+                FlatName = flat.FlatName,
+                FlatNumber = flat.Address.FlatNumber,
+                HouseNumber = flat.Address.HouseNumber,
+                Id = flat.Id,
+                Street = flat.Address.Street,
+                RoleType = role,
+            };
         }
 
         private Address ConvertToTarget(AddressFlatDto addressFlatDto, User user)
@@ -197,12 +141,106 @@ namespace RoomMate.Domain.Services.Implements
                 RoomCount = addressFlatDto.RoomCount
             };
         }
-            
-        
+       
+        public UserFlat ConvertToTarget(int flatID, int userID, RoleTypeEnum role)
+        {
+            return new UserFlat
+            {
+                UserId = userID,
+                FlatId = flatID,
+                RoleType = role
+            };
+        }
+
+        //converts end
+        #endregion
+
+        public AddressFlatDto GetAddressByFlatHouseNumb(AddressFlatDto addressDto)
+        {
+            var addressDtoReturned = new AddressFlatDto();
+            var userDtoList = new List<UserListDto>();
+            var address = _addressRepository.GetFirstWithInclude(x => x.HouseNumber == addressDto.HouseNumber && x.FlatNumber == addressDto.FlatNumber
+            && x.Street.ToLower() == addressDto.Street.ToLower() && x.CityId == addressDto.CityId && x.Active == true, u => u.City, f => f.Flat);
+            // get users in flat 
+            if (address != null || addressDto.Id != 0)
+            {
+                if (address != null)
+                {
+                    userDtoList = this.userService.GetUserByFlatId(address.Flat.Id);
+                }
+                else 
+                {
+                    // to use in edit flat
+                    userDtoList = this.userService.GetUserByFlatId(addressDto.Id);
+                    Flat flat = this._flatRepository.GetFirst(x => x.Id == addressDto.Id);
+                    address = this._addressRepository.GetFirst(x => x.Id == flat.AddressId); 
+                }
+            }
+            else
+            {
+                return new AddressFlatDto()
+                {
+                    HouseNumber = addressDto.HouseNumber,
+                    FlatNumber = addressDto.FlatNumber,
+                    Street = addressDto.Street,
+                    CityName = _cityRepository.GetFirst(x => x.Id == addressDto.CityId).CityName,
+                    CityId = addressDto.CityId
+                };
+            }
+            try
+            {
+                addressDtoReturned = ConvertToAddressUsersDto(address, userDtoList);
+
+            }
+            catch (Exception ex)
+            {
+                string mess = ex.Message;
+            }
+            return addressDtoReturned;
+        }
+
+        public IList<string> GetStreetsDistincted(int id, string streetLetters)
+        {
+            var distinctStreets = _addressRepository.GetDistinct(pred => pred.CityId == id && pred.Active == true && pred.Street.ToLower().Contains(streetLetters.ToLower()), x => x.Street);
+            if (distinctStreets.Any())
+            {
+                return distinctStreets;
+            }
+            return new List<string>();
+        }
+
+        // flats
+        public AddressFlatDto AddNewFlat(AddressFlatDto addressFlatDto)
+        {
+            //return good flat 
+            var user = _userRepository.GetFirst(x => x.Login.ToLower() == addressFlatDto.LoggedUserName && x.Active == true);
+            if (user != null)
+            {
+                try
+                {
+                    var address = ConvertToTarget(addressFlatDto, user);
+                    _addressRepository.InsertOrUpdate(address);
+
+                    var flat = ConvertToTarget(addressFlatDto, address.Id, user);
+                    _flatRepository.InsertOrUpdate(flat);
+
+                    var userflat = ConvertToTarget(flat.Id, user.Id, addressFlatDto.RoleType);
+                    _userFlatRepository.InsertOrUpdate(userflat);
+
+                    //return same dto as you ask for when you click search
+                    return GetAddressByFlatHouseNumb(addressFlatDto);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return new AddressFlatDto();
+        }
 
         public int GetCountOfFlats()
         {
-            var allFlats = _flatRepository.GetList(x=>x.Active == true);
+            var allFlats = _flatRepository.GetList(x => x.Active == true);
 
             return allFlats.Count();
         }
@@ -227,23 +265,39 @@ namespace RoomMate.Domain.Services.Implements
             return null;
         }
 
-        public List<Flat> GetUserFlat(int userId)
+        public List<AddressFlatDto> GetUserFlat(string login)
         {
-            var userFlatIdList = this._userFlatRepository.GetList(x => x.UserId == userId && x.Active == true).Select(x => x.FlatId);
-
-            if (userFlatIdList.Any())
+            var user = this._userRepository.GetFirst(x => x.Login.ToLower() == login.ToLower());
+            if (user != null)
             {
-                var userFlat = this._flatRepository.GetList(x => x.Active == true && userFlatIdList.Contains(x.Id));
+                var userFlatIdList = this._userFlatRepository.GetList(x => x.UserId == user.Id &&
+                x.Active == true).Select(x => x.FlatId);
 
-                if (userFlat.Any())
+                if (userFlatIdList.Any())
                 {
-                    return userFlat.ToList();
+                    var userFlat = this._flatRepository.GetListWithInclude(x => x.Active == true &&
+                    userFlatIdList.Contains(x.Id),
+                    a => a.Address, c => c.Address.City, z => z.UserFlats);
+
+
+
+                    if (userFlat.Any())
+                    {
+                        var userFlatDto = new List<AddressFlatDto>();
+
+                        foreach (var item in userFlat)
+                        {
+                            // add role
+                            var role = item.UserFlats.SingleOrDefault(x => x.UserId == user.Id).RoleType;
+
+                            userFlatDto.Add(ConvertToAddrDto(item, role));
+                        }
+                        return userFlatDto;
+                    }
                 }
             }
-
-            return null;
+            return new List<AddressFlatDto>();
         }
-
 
         public bool AddFlatToUser(AddressFlatDto addressDto)
         {
@@ -251,7 +305,7 @@ namespace RoomMate.Domain.Services.Implements
             {
                 try
                 {
-                     var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressDto.AddressId ).Id;
+                    var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressDto.AddressId).Id;
                     if (addressDto.Users.Count == 0)
                     {
                         if (flatID != 0 && addressDto.AddressId != 0 && addressDto.Active == false)
@@ -266,10 +320,10 @@ namespace RoomMate.Domain.Services.Implements
                                 addresss.Active = true;
                                 this._addressRepository.SaveChanges();
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
-
-                                throw;
+                                return false;
+                                throw ex;
                             }
                         }
                     }
@@ -286,23 +340,12 @@ namespace RoomMate.Domain.Services.Implements
             return false;
         }
 
-        public UserFlat ConvertToTarget(int flatID, int userID, RoleTypeEnum role)
-        {
-            return new UserFlat
-            {
-                UserId = userID,
-                FlatId = flatID,
-                RoleType = role
-            };
-        }
-
-
         public bool RemoveFlat(AddressFlatDto addressFlatDto)
         {
             // change flat and address to unactive:
             var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressFlatDto.AddressId && x.Active == true).Id;
             var addressID = addressFlatDto.AddressId;
-            if (flatID != 0 || addressID != 0)
+            if ((flatID != 0 || addressID != 0) && addressFlatDto.RoleType == RoleTypeEnum.FlatMateAdmin )
             {
                 try
                 {
@@ -313,6 +356,15 @@ namespace RoomMate.Domain.Services.Implements
                     var addresss = this._addressRepository.GetFirst(x => x.Id == addressID);
                     addresss.Active = false;
                     this._addressRepository.SaveChanges();
+
+                    var listOfusers = this.userService.GetUserByFlatId(flatID);
+                    foreach (var item in listOfusers)
+                    {
+                        // removing all user flat users also
+                        var userFlat = this._userFlatRepository.GetFirst(x => x.UserId == item.UserId && x.FlatId == flatID);
+                        this._userFlatRepository.Delete(userFlat);
+                        _userFlatRepository.SaveChanges();
+                    }
                     return true;
                 }
                 catch (Exception ex)
@@ -321,6 +373,49 @@ namespace RoomMate.Domain.Services.Implements
                 }
             }
             return false;
+        }
+
+        public AddressFlatDto EditFlat(AddressFlatDto addressFlatDto)
+        {
+            if (addressFlatDto.Id != 0 && addressFlatDto != null && addressFlatDto.RoleType == RoleTypeEnum.FlatMateAdmin)
+            {
+                try
+                {
+                    // update only room, area and flatname, only if flatuserID = userID
+                    var userID = this._userRepository.GetFirst(x => x.Login == addressFlatDto.LoggedUserName).Id;
+
+                    if (this._userFlatRepository.GetFirst(x  => x.UserId == userID &&
+                    x.FlatId == addressFlatDto.Id && x.Active == true && x.RoleType.ToString().Contains(addressFlatDto.RoleType.ToString())) != null)
+                    {
+                        var flatToUpdate = this._flatRepository.GetFirst(x => x.Id == addressFlatDto.Id);
+                        if (flatToUpdate != null)
+                        {
+                            try
+                            {
+                                if (addressFlatDto.Area > 0 && addressFlatDto.RoomCount >= 0 && !string.IsNullOrEmpty(addressFlatDto.FlatName))
+                                {
+                                    flatToUpdate.Area = addressFlatDto.Area;
+                                    flatToUpdate.FlatName = addressFlatDto.FlatName;
+                                    flatToUpdate.RoomCount = addressFlatDto.RoomCount;
+                                    flatToUpdate.ModificatedBy = userID;
+                                    flatToUpdate.ModificatedDate = DateTime.Now;
+                                    _flatRepository.SaveChanges();
+                                    return GetAddressByFlatHouseNumb(addressFlatDto); // here <<<
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                return new AddressFlatDto();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return new AddressFlatDto();
+                }
+            }
+            return new AddressFlatDto();
         }
 
 
@@ -342,11 +437,20 @@ namespace RoomMate.Domain.Services.Implements
                         listOfusers = this.userService.GetUserByFlatId(flatID);
                         if (listOfusers.Count == 1 || listOfusers == null)
                         {
+                            addressDto.Users = listOfusers;
                             RemoveFlat(addressDto);
-                            this._userFlatRepository.Delete(userFlat);
                             return true;
                         }
-                        this._userFlatRepository.Delete(userFlat);
+                        else if (userFlat.RoleType == RoleTypeEnum.FlatMateAdmin && listOfusers.Count > 1)
+                        {
+                            // remove all flat, every user_flat etc
+                            // won't happen if I remove leafe flat button on many users on view
+                            addressDto.Users = listOfusers;
+                            RemoveFlat(addressDto);
+                            return true;
+                        }
+                        this._userFlatRepository.Delete(userFlat); // if many users but logged is just a flatmate
+                        this._addressRepository.SaveChanges();
                         return true;
                     }
                 }
@@ -357,7 +461,5 @@ namespace RoomMate.Domain.Services.Implements
             }
             return false;
         }
-
-
     }
 }

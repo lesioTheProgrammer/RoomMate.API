@@ -46,16 +46,4 @@ export class LoginComponent implements OnInit {
       }
     );
   }
-  // addHousework() {
-  //   this.dashboardService.addHouseWork(this.houseworkDto).subscribe(
-  //     response => {
-  //       if (response) {
-  //         this.closeModal();
-  //       }
-  //     },
-  //     error => {
-  //       this.errorShow = true;
-  //     }
-  //   );
-  // }
 }

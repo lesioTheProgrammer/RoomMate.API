@@ -7,7 +7,7 @@ namespace RoomMate.Api.Controllers
 {
 
     [Route("api/Flat")]
-    [Authorize]  
+    [Authorize]
     public class FlatController : Controller
     {
         private readonly IAddressService _addressService;
@@ -34,9 +34,11 @@ namespace RoomMate.Api.Controllers
 
         [HttpGet]
         [Route("GetUserFlat")]
-        public IActionResult GetUserFlat([FromBody]int id)
+        public IActionResult GetUserFlat(string loggedUserName)
         {
-            var userFlat = _addressService.GetUserFlat(id);
+
+            var userFlat = _addressService.GetUserFlat(loggedUserName);
+            // return addresflatdto?
             return this.Ok(userFlat);
         }
 
@@ -62,17 +64,33 @@ namespace RoomMate.Api.Controllers
 
         [HttpPut]
         [Route("RemoveFlat")]
-        public IActionResult RemoveFlat(AddressFlatDto addressDto)
+        public IActionResult RemoveFlat([FromBody]AddressFlatDto addressDto)
         {
             //TODO: Usunięcie - active na false
-            return this.Ok(this._addressService.RemoveFlat(addressDto));
+            if (addressDto.DoesFlatExist())
+            {
+                return this.Ok(this._addressService.RemoveFlat(addressDto));
+            }
+            return this.Ok(false);
+        }
+
+
+        [HttpPut]
+        [Route("EditFlat")]
+        public IActionResult EditFlat([FromBody]AddressFlatDto addressDto)
+        {
+            if (addressDto.DoesFlatExist())
+            {
+                return this.Ok(_addressService.EditFlat(addressDto));
+            }
+            return this.Ok(new AddressFlatDto());
 
         }
 
 
-        [HttpDelete]
+        [HttpPost]
         [Route("LeaveFlat")]
-        public IActionResult LeaveFlat(AddressFlatDto addressDto)
+        public IActionResult LeaveFlat([FromBody]AddressFlatDto addressDto)
         {
             if (addressDto.DoesFlatExist())
             {

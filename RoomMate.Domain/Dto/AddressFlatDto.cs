@@ -40,7 +40,7 @@ namespace RoomMate.Domain.Dto
 
         public bool DoesFlatExist()
         {
-            return (IsEmpty(this.LoggedUserName) && IsValidId(this.AddressId) && IsActive());
+            return (IsEmpty(this.LoggedUserName) && (IsValidId(this.AddressId) || IsValidId(this.Id)) && IsActive());
         }
     }
 }

@@ -15,7 +15,6 @@ import { RolesEnum } from "src/app/user-controll-panel/dto/RolesEnum";
   public users: UserListDto[];
   public loggedUserName: string; // login
   public roleType: RolesEnum;
-  public flatAddressId: number;
   public flatOwnerId: number;
   public area: number; // ent
   public active: boolean;

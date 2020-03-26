@@ -3,11 +3,6 @@ import { RegisterDto } from "./dto/register-dto";
 import { MatDialogRef, MatSnackBar } from "@angular/material";
 import { UserManagementService } from "../user-management.service";
 import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from "@angular/forms";
-import { RolesEnum } from "../dto/RolesEnum";
-import { Observable } from "rxjs";
-import { startWith, map, debounceTime } from "rxjs/operators";
-import { CityDto } from "src/app/address/dto/city-dto";
-import { AddressFlatDto } from "src/app/address/dto/address-dto";
 
 @Component({
   selector: "app-register",
