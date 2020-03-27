@@ -30,6 +30,8 @@ export class AddHouseworkModalComponent implements OnInit {
   }
 
   addHousework() {
+
+
     this.houseworkDto.username = JSON.parse(localStorage.getItem("login"));
     this.dashboardService.addHouseWork(this.houseworkDto).subscribe(
       response => {
