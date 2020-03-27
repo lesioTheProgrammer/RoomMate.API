@@ -11,7 +11,6 @@ import { PassBetweenComponService } from '../PassBetweenComponService';
 })
 export class DashboardComponent implements OnInit {
 
-  isLoggex: boolean;
   constructor(public dialog: MatDialog, private data: PassBetweenComponService) {}
 
   ngOnInit()  {

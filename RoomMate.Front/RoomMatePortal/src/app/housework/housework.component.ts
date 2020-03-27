@@ -12,16 +12,16 @@ import { AddHouseworkModalComponent } from './modal/add-housework-modal/add-hous
 })
 export class HouseworkComponent implements OnInit {
 
-  public houseworkList : HouseworkDto[] = new Array<HouseworkDto>();
+  public houseworkList: HouseworkDto[] = new Array<HouseworkDto>();
 
   constructor(public dashboardService: DashboardService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.dashboardService.getHouseWorkByFlatId(1, WorkTypeEnum.Clean).subscribe(response => {
-      this.houseworkList = response
+      this.houseworkList = response;
     });
   }
-
+ // to sie dzieje wszystko w tabelce xD
   editHouseWork(houseworkDto: HouseworkDto){
     const dialogRef = this.dialog.open(AddHouseworkModalComponent, {
       width: "450px",

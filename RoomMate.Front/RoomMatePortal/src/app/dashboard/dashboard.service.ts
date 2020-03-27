@@ -28,7 +28,7 @@ export class DashboardService extends RequestHelperService {
     return this.createGetRequestByParams<HouseworkDto[]>('GetHouseWorkByUserId',
       {userId: userId, workType : workType}).pipe(map(data => <HouseworkDto[]>data));
   }
-//post reeeeeeeeeeeeee
+//post reeeeeeeeeeeeeeB
   public addHouseWork(housework : HouseworkDto): Observable<boolean>{
     return this.createPostRequest('AddHouseWork', housework).pipe(map(data => <boolean>data));
   }
