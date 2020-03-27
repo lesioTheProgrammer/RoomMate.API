@@ -167,3 +167,7 @@ delete Flats from Flats where Flats.FlatName = 'ww';
 -- houswork
 
 select * from Houseworks
+
+select * from WorkPrices
+
+select * from WorkType

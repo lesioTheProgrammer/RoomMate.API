@@ -13,15 +13,24 @@ namespace RoomMate.Domain.Services.Implements
     {
         private readonly IRepository<Housework> houseWorkRepository;
         private readonly IRepository<WorkPrice> workPricekRepository;
+        private readonly IRepository<User> userRepository;
 
-        public HouseworkService(IRepository<Housework> houseWorkRepository, IRepository<WorkPrice> workPricekRepository)
+        public HouseworkService(IRepository<Housework> houseWorkRepository, 
+            IRepository<WorkPrice> workPricekRepository, IRepository<User> userRepository)
         {
             this.houseWorkRepository = houseWorkRepository;
             this.workPricekRepository = workPricekRepository;
+            this.userRepository = userRepository;
         }
 
         public bool AddNewHouseWork(HouseWorkDto houseWorkDto)
         {
+            // get userID? why here, not in angular - do I have to inejcty userRepo to every 
+            // service just to get userid? lol
+            var userID = this.userRepository.GetFirst(x => x.Login.ToLower() == houseWorkDto.Username.ToLower()).Id;
+
+            // flatID - trzeba wybrac swoje mieszkanko w tej liscie dropdownowej ;)
+
             try
             {
                 var houseWork = this.ConverterToTarget(houseWorkDto);
