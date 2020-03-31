@@ -7,7 +7,7 @@
       <mat-select placeholder="Select your flat" (selectionChange)= onSelectedOption($event) >
         <mat-option></mat-option>
         <mat-option *ngFor="let flat of flatAddressDto; let i = index" [value]="flat.id">
-            {{flat.flatName + "----" + flat.cityName + flat.street + flat.houseNumber + flat.flatNumber}}
+            {{flat.flatName + " ~~ " + flat.cityName +" "+ flat.street +" "+ flat.houseNumber +"/"+  flat.flatNumber}}
         </mat-option>
     </mat-select>
     </div>

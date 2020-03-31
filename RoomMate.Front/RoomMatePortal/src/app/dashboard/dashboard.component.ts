@@ -43,12 +43,10 @@ export class DashboardComponent implements OnInit {
 
 
   public showModalToAdd() {
-    // here selected flat data goes to addhousework as flatID
     const dialogRef = this.dialog.open(AddHouseworkModalComponent, {
       width: '450px',
-      // pass only one id
       data: {
-        flatAddressDto: this.flatAddressDto
+        flatID: this.flatID
       }
     });
     dialogRef.afterClosed().subscribe(result => {

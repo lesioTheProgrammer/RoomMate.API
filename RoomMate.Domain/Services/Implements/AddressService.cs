@@ -19,8 +19,6 @@ namespace RoomMate.Domain.Services.Implements
         private readonly IRepository<User> _userRepository;
 
         private readonly IUserService userService;
-
-
         public AddressService(IRepository<Address> address, IRepository<City> city, IRepository<Flat> flat, IRepository<UserFlat> userFlat,
            IRepository<User> user,
            IUserService userService)
@@ -32,7 +30,6 @@ namespace RoomMate.Domain.Services.Implements
             this._userRepository = user;
             this.userService = userService;
         }
-
 
         public List<CityDto> GetCitiesByName(string letters)
         {
@@ -79,7 +76,6 @@ namespace RoomMate.Domain.Services.Implements
                 Users = userDtoList
             };
         }
-
         private AddressFlatDto ConvertToAddrDto(Address address)
         {
             return new AddressFlatDto()
@@ -109,7 +105,6 @@ namespace RoomMate.Domain.Services.Implements
                 RoleType = role,
             };
         }
-
         private Address ConvertToTarget(AddressFlatDto addressFlatDto, User user)
         {
             return new Address
@@ -141,7 +136,6 @@ namespace RoomMate.Domain.Services.Implements
                 RoomCount = addressFlatDto.RoomCount
             };
         }
-       
         public UserFlat ConvertToTarget(int flatID, int userID, RoleTypeEnum role)
         {
             return new UserFlat
@@ -173,23 +167,39 @@ namespace RoomMate.Domain.Services.Implements
                     // to use in edit flat
                     userDtoList = this.userService.GetUserByFlatId(addressDto.Id);
                     Flat flat = this._flatRepository.GetFirst(x => x.Id == addressDto.Id);
-                    address = this._addressRepository.GetFirst(x => x.Id == flat.AddressId); 
+                    if (flat == null)
+                    {
+                        return new AddressFlatDto();
+                    }
+                    else
+                    {
+                        address = this._addressRepository.GetFirst(x => x.Id == flat.AddressId); 
+                    }
                 }
             }
             else
             {
-                return new AddressFlatDto()
+                // GET CITY:
+                var city = _cityRepository.GetFirst(x => x.Id == addressDto.CityId);
+                if (city != null)
                 {
-                    HouseNumber = addressDto.HouseNumber,
-                    FlatNumber = addressDto.FlatNumber,
-                    Street = addressDto.Street,
-                    CityName = _cityRepository.GetFirst(x => x.Id == addressDto.CityId).CityName,
-                    CityId = addressDto.CityId
-                };
+                    return new AddressFlatDto()
+                    {
+                        HouseNumber = addressDto.HouseNumber,
+                        FlatNumber = addressDto.FlatNumber,
+                        Street = addressDto.Street,
+                        CityName = city.CityName,
+                        CityId = addressDto.CityId
+                    };
+                }
+               
             }
             try
             {
-                addressDtoReturned = ConvertToAddressUsersDto(address, userDtoList);
+                if (address != null)
+                {
+                    addressDtoReturned = ConvertToAddressUsersDto(address, userDtoList);
+                }
 
             }
             catch (Exception ex)
@@ -278,9 +288,6 @@ namespace RoomMate.Domain.Services.Implements
                     var userFlat = this._flatRepository.GetListWithInclude(x => x.Active == true &&
                     userFlatIdList.Contains(x.Id),
                     a => a.Address, c => c.Address.City, z => z.UserFlats);
-
-
-
                     if (userFlat.Any())
                     {
                         var userFlatDto = new List<AddressFlatDto>();
@@ -305,20 +312,22 @@ namespace RoomMate.Domain.Services.Implements
             {
                 try
                 {
-                    var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressDto.AddressId).Id;
+                    var flat = this._flatRepository.GetFirst(x => x.AddressId == addressDto.AddressId);
                     if (addressDto.Users.Count == 0)
                     {
-                        if (flatID != 0 && addressDto.AddressId != 0 && addressDto.Active == false)
+                        if (flat != null && addressDto.AddressId != 0 && addressDto.Active == false)
                         {
                             try
                             {
-                                var flat = _flatRepository.GetFirst(x => x.AddressId == addressDto.AddressId);
                                 flat.Active = true;
                                 _flatRepository.SaveChanges();
 
-                                var addresss = this._addressRepository.GetFirst(x => x.Id == addressDto.AddressId);
-                                addresss.Active = true;
-                                this._addressRepository.SaveChanges();
+                                var address = this._addressRepository.GetFirst(x => x.Id == addressDto.AddressId);
+                                if (address != null)
+                                {
+                                   address.Active = true;
+                                   this._addressRepository.SaveChanges(); 
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -327,10 +336,12 @@ namespace RoomMate.Domain.Services.Implements
                             }
                         }
                     }
-
-                    var userID = this._userRepository.GetFirst(x => x.Login.ToLower() == addressDto.LoggedUserName.ToLower()).Id;
-                    this._userFlatRepository.InsertOrUpdate(ConvertToTarget(flatID, userID, addressDto.RoleType));
-                    return true;
+                    var user = this._userRepository.GetFirst(x => x.Login.ToLower() == addressDto.LoggedUserName.ToLower());
+                    if (user != null)
+                    {
+                      this._userFlatRepository.InsertOrUpdate(ConvertToTarget(flat.Id, user.Id, addressDto.RoleType));
+                      return true;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -343,27 +354,32 @@ namespace RoomMate.Domain.Services.Implements
         public bool RemoveFlat(AddressFlatDto addressFlatDto)
         {
             // change flat and address to unactive:
-            var flatID = this._flatRepository.GetFirst(x => x.AddressId == addressFlatDto.AddressId && x.Active == true).Id;
+            var flat = this._flatRepository.GetFirst(x => x.AddressId == addressFlatDto.AddressId && x.Active == true);
             var addressID = addressFlatDto.AddressId;
-            if ((flatID != 0 || addressID != 0)) // dont check the role because last user can be also a flatmate
+            if ((flat != null || addressID != 0)) // dont check the role because last user can be also a flatmate
             {
                 try
                 {
-                    var flat = this._flatRepository.GetFirst(x => x.Id == flatID);
                     flat.Active = false;
                     this._flatRepository.SaveChanges();
 
                     var addresss = this._addressRepository.GetFirst(x => x.Id == addressID);
+                    if (addresss != null)
+                    {
                     addresss.Active = false;
                     this._addressRepository.SaveChanges();
+                    }
 
-                    var listOfusers = this.userService.GetUserByFlatId(flatID);
+                    var listOfusers = this.userService.GetUserByFlatId(flat.Id);
                     foreach (var item in listOfusers)
                     {
                         // removing all user flat users also
-                        var userFlat = this._userFlatRepository.GetFirst(x => x.UserId == item.UserId && x.FlatId == flatID);
-                        this._userFlatRepository.Delete(userFlat);
-                        _userFlatRepository.SaveChanges();
+                        var userFlat = this._userFlatRepository.GetFirst(x => x.UserId == item.UserId && x.FlatId == flat.Id);
+                        if (userFlat != null)
+                        {
+                            this._userFlatRepository.Delete(userFlat);
+                            _userFlatRepository.SaveChanges();
+                        }
                     }
                     return true;
                 }

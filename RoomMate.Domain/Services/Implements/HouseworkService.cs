@@ -27,21 +27,23 @@ namespace RoomMate.Domain.Services.Implements
         {
             // get userID? why here, not in angular - do I have to inejcty userRepo to every 
             // service just to get userid? lol
-            var userID = this.userRepository.GetFirst(x => x.Login.ToLower() == houseWorkDto.Username.ToLower()).Id;
-
-            // flatID - trzeba wybrac swoje mieszkanko w tej liscie dropdownowej ;)
-
-            try
+            var user = this.userRepository.GetFirst(x => x.Login.ToLower() == houseWorkDto.Username.ToLower());
+            if (user != null)
             {
-                var houseWork = this.ConverterToTarget(houseWorkDto);
-                this.houseWorkRepository.InsertOrUpdate(houseWork);
+                houseWorkDto.UserId = user.Id;
+                try
+                {
+                    var houseWork = this.ConverterToTarget(houseWorkDto);
+                    this.houseWorkRepository.InsertOrUpdate(houseWork);
 
-                return true;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
             }
-            catch(Exception ex)
-            {
-                return false;
-            }
+            return false;
         }
 
         public HouseWorkDto ConverterToDto(Housework houseWork)
@@ -99,7 +101,6 @@ namespace RoomMate.Domain.Services.Implements
                     houseWorkList.Add(this.ConverterToDto(houseWork));
                 }
             }
-
             return houseWorkList;
         }
 
@@ -116,7 +117,6 @@ namespace RoomMate.Domain.Services.Implements
                     houseWorkList.Add(this.ConverterToDto(houseWork));
                 }
             }
-
             return houseWorkList;
         }
     }
