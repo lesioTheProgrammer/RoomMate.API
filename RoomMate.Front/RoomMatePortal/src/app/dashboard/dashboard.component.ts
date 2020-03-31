@@ -17,6 +17,9 @@ export class DashboardComponent implements OnInit {
   public flatAddressService: FlatAddressService) {}
   userName: string;
   flatAddressDto: AddressFlatDto[];
+  flatID: number;
+  buttonDisabled: boolean = true;
+
 
   ngOnInit()  {
     this.userName = JSON.parse(localStorage.getItem("login"));
@@ -28,10 +31,22 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  // selected dropdown
+  onSelectedOption(event): void {
+    this.flatID = event.value;
+    if (this.flatID) {
+      this.buttonDisabled = false;
+    } else {
+      this.buttonDisabled = true;
+    }
+  }
+
+
   public showModalToAdd() {
     // here selected flat data goes to addhousework as flatID
     const dialogRef = this.dialog.open(AddHouseworkModalComponent, {
       width: '450px',
+      // pass only one id
       data: {
         flatAddressDto: this.flatAddressDto
       }

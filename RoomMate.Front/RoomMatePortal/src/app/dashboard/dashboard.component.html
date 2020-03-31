@@ -3,12 +3,17 @@
     <span style="text-align: center">
       <h4>Zarządzaj</h4>
     </span>
-    <button class="btn btn-lg btn-dark" (click)="showModalToAdd()">
+    <div class = "mb-3">
+      <mat-select placeholder="Select your flat" (selectionChange)= onSelectedOption($event) >
+        <mat-option></mat-option>
+        <mat-option *ngFor="let flat of flatAddressDto; let i = index" [value]="flat.id">
+            {{flat.flatName + "----" + flat.cityName + flat.street + flat.houseNumber + flat.flatNumber}}
+        </mat-option>
+    </mat-select>
+    </div>
+    <button class="btn btn-lg btn-dark" (click)="showModalToAdd()" [disabled] = "buttonDisabled">
       Dodaj
     </button>
-    <div>
-      Select your flat
-    </div>
   </div>
 </div>
 <br />
