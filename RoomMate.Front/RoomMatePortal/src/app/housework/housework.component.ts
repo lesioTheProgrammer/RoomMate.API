@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { DashboardService } from '../dashboard/dashboard.service';
 import { HouseworkDto } from './dto/housework-dto';
 import { WorkTypeEnum } from './dto/work-type-enum.enum';
@@ -17,10 +17,20 @@ export class HouseworkComponent implements OnInit {
   constructor(public dashboardService: DashboardService, public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.dashboardService.getHouseWorkByFlatId(1, WorkTypeEnum.Clean).subscribe(response => {
-      this.houseworkList = response;
-    });
+
   }
+
+  // nie on init tylko dopiero po wybraniu mieszkania
+  refreshFlatList(flatID: number){
+    if (flatID != null) {
+      this.dashboardService.getHouseWorkByFlatId(flatID, WorkTypeEnum.Clean).subscribe(response => {
+        this.houseworkList = response;
+      });
+    }
+
+  }
+
+
  // to sie dzieje wszystko w tabelce xD
   editHouseWork(houseworkDto: HouseworkDto){
     const dialogRef = this.dialog.open(AddHouseworkModalComponent, {

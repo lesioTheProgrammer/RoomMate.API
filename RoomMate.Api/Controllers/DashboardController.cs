@@ -21,7 +21,7 @@ namespace RoomMate.Api.Controllers
         [Route("GetHouseWorkByFlatId")]
         [HttpGet]
         public IActionResult GetHouseWorkByFlatId(int flatId, WorkTypeEnum workType)
-        {
+      {
             return this.Ok(this.houseworkService.GetHouseWorkListForFlat(flatId, workType));
         }
 

@@ -11,13 +11,11 @@ import { catchError, map, tap } from 'rxjs/operators';
 })
 export class DashboardService extends RequestHelperService {
   protected getApiRoute(): string {
-    //ta nazwa mowi do jakiego kontrolera wlaimy strzlaa elo
     return 'Dashboard';
   }
   constructor(private httpClient: HttpClient) {
     super(httpClient);
   }
-//pajpow nie pisac, observejbel po to zeby api wiedzial co zwroce
   public getHouseWorkByFlatId(flatId: number, workType: WorkTypeEnum): Observable<HouseworkDto[]>{
     return this.createGetRequestByParams<HouseworkDto[]>('GetHouseWorkByFlatId',
       {flatId: flatId, workType : workType}).pipe(map(data => <HouseworkDto[]>data));
@@ -28,7 +26,6 @@ export class DashboardService extends RequestHelperService {
     return this.createGetRequestByParams<HouseworkDto[]>('GetHouseWorkByUserId',
       {userId: userId, workType : workType}).pipe(map(data => <HouseworkDto[]>data));
   }
-//post reeeeeeeeeeeeeeB
   public addHouseWork(housework : HouseworkDto): Observable<boolean>{
     return this.createPostRequest('AddHouseWork', housework).pipe(map(data => <boolean>data));
   }

@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from './dashboard.service';
 import { AddHouseworkModalComponent } from '../housework/modal/add-housework-modal/add-housework-modal.component';
 import { MatDialog } from '@angular/material';
 import { PassBetweenComponService } from '../PassBetweenComponService';
 import { FlatAddressService } from '../address/flat-address.service';
 import { AddressFlatDto } from '../address/dto/address-dto';
+import { HouseworkComponent } from '../housework/housework.component';
+import { ShoppingComponent } from '../shopping/shopping.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,6 +22,8 @@ export class DashboardComponent implements OnInit {
   flatID: number;
   buttonDisabled: boolean = true;
 
+  @ViewChild(HouseworkComponent) houseWorkTableChild: HouseworkComponent;
+  @ViewChild(ShoppingComponent) shoppingTableChild: ShoppingComponent;
 
   ngOnInit()  {
     this.userName = JSON.parse(localStorage.getItem("login"));
@@ -28,14 +32,16 @@ export class DashboardComponent implements OnInit {
          this.flatAddressDto = response;
       }
     });
-
   }
-
   // selected dropdown
   onSelectedOption(event): void {
     this.flatID = event.value;
     if (this.flatID) {
       this.buttonDisabled = false;
+      // pass data to housework component and shopping
+      this.houseWorkTableChild.refreshFlatList(this.flatID);
+      this.shoppingTableChild.refreshFlatList(this.flatID);
+
     } else {
       this.buttonDisabled = true;
     }

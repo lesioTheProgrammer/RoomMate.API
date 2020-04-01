@@ -12,17 +12,23 @@ import { MatDialog } from '@angular/material';
 })
 export class ShoppingComponent implements OnInit {
 
-  public houseworkList : HouseworkDto[] = new Array<HouseworkDto>();
+  public houseworkList: HouseworkDto[] = new Array<HouseworkDto>();
 
-  constructor(public dashboardService : DashboardService, public dialog : MatDialog) { }
+  constructor(public dashboardService: DashboardService, public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.dashboardService.getHouseWorkByFlatId(1, WorkTypeEnum.Shopping).subscribe(response => this.houseworkList = response);
 
   }
 
-  editHouseWork(houseworkDto : HouseworkDto){
-    debugger;
+  refreshFlatList(flatID: number) {
+    if (flatID != null) {
+      this.dashboardService.getHouseWorkByFlatId(flatID, WorkTypeEnum.Shopping).subscribe(response => {
+        this.houseworkList = response;
+      });
+    }
+  }
+
+  editHouseWork(houseworkDto: HouseworkDto) {
     const dialogRef = this.dialog.open(AddHouseworkModalComponent, {
       width: "450px",
       data:{houseworkDto : houseworkDto }
