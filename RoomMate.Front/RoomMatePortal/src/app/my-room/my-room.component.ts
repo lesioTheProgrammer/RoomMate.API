@@ -17,8 +17,6 @@ import { MyRoomEditComponent } from '../my-room-edit/my-room-edit.component';
   selector: 'app-my-room',
   templateUrl: './my-room.component.html',
   styleUrls: ['./my-room.component.css'],
-
-
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0'})),
