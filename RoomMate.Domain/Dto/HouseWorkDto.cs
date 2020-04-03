@@ -18,5 +18,7 @@ namespace RoomMate.Domain.Dto
         public WorkTypeEnum WorkType { get; set; }
 
         public double? Prices { get; set; }
+
+        public string Login { get; set; }
     }
 }

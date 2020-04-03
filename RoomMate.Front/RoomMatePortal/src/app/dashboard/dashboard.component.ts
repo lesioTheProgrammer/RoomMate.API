@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(public dialog: MatDialog,
   public flatAddressService: FlatAddressService) {}
-  userName: string;
+  login: string;
   flatAddressDto: AddressFlatDto[];
   flatID: number;
   buttonDisabled: boolean = true;
@@ -26,8 +26,8 @@ export class DashboardComponent implements OnInit {
   @ViewChild(ShoppingComponent) shoppingTableChild: ShoppingComponent;
 
   ngOnInit()  {
-    this.userName = JSON.parse(localStorage.getItem("login"));
-    this.flatAddressService.getAllFlats(this.userName).subscribe( response => {
+    this.login = JSON.parse(localStorage.getItem("login"));
+    this.flatAddressService.getAllFlats(this.login).subscribe( response => {
       if (response.length > 0 && response[0].id !== 0) {
          this.flatAddressDto = response;
       }
@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
     if (this.flatID) {
       this.buttonDisabled = false;
       // pass data to housework component and shopping
-      this.houseWorkTableChild.refreshFlatList(this.flatID);
+      this.houseWorkTableChild.refreshFlatList(this.flatID, this.login);
       this.shoppingTableChild.refreshFlatList(this.flatID);
 
     } else {

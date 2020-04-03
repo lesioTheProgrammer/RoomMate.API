@@ -62,7 +62,8 @@ namespace RoomMate.Domain.Services.Implements
                 UserId = houseWork.UserId,
                 Username = houseWork.User.Name + " " + houseWork.User.Surname,
                 Prices = houseWork.WorkPriceId != null ? houseWork.WorkPrice.Prices : 0,
-                WorkType = houseWork.WorkType
+                WorkType = houseWork.WorkType,
+                Login = houseWork.User.Login
             };
         }
 

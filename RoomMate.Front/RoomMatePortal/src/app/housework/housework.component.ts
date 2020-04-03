@@ -25,7 +25,8 @@ export class HouseworkComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataSource: MatTableDataSource<HouseworkDto>;
   expandedElement: HouseworkDto | null;
-  increasingNumber: number = 0; // added to manage index in the table
+  increasingNumber = 0; // added to manage index in the table
+  loginHWComponent: string;
 
   columnsToDisplay = ['increasingNumber', 'houseWorkDate', 'username', 'description'];
   multiDim = [['increasingNumber', 'No.'], ['houseWorkDate', 'Kiedy'], ['username', 'Kto'],
@@ -39,11 +40,12 @@ export class HouseworkComponent implements OnInit {
   }
 
   // nie on init tylko dopiero po wybraniu mieszkania
-  refreshFlatList(flatID: number){
+  refreshFlatList(flatID: number, login: string) {
     this.dataSource = new MatTableDataSource();
     if (flatID != null) {
       this.dashboardService.getHouseWorkByFlatId(flatID, WorkTypeEnum.Clean).subscribe(response => {
         this.houseworkList = response;
+        this.loginHWComponent = login;
         // new table
         this.dataSource.data = response;
         this.dataSource.paginator = this.paginator;
