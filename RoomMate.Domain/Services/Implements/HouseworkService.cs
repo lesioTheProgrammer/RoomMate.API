@@ -99,7 +99,10 @@ namespace RoomMate.Domain.Services.Implements
             {
                 foreach (var houseWork in houseWorks)
                 {
-                    houseWorkList.Add(this.ConverterToDto(houseWork));
+                    if (houseWork.Active == true)
+                    {
+                      houseWorkList.Add(this.ConverterToDto(houseWork));
+                    }
                 }
             }
             return houseWorkList;
