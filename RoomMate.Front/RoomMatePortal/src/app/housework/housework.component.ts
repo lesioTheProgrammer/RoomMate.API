@@ -25,13 +25,11 @@ export class HouseworkComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataSource: MatTableDataSource<HouseworkDto>;
   expandedElement: HouseworkDto | null;
-
-  increasingNumber: number = 0;
+  increasingNumber: number = 0; // added to manage index in the table
 
   columnsToDisplay = ['increasingNumber', 'houseWorkDate', 'username', 'description'];
-  multiDim = [['increasingNumber', 'Number'], ['houseWorkDate', 'Kiedy'], ['username', 'Kto'],
+  multiDim = [['increasingNumber', 'No.'], ['houseWorkDate', 'Kiedy'], ['username', 'Kto'],
   ['description', 'Opis']];
-
 
 
   constructor(public dashboardService: DashboardService, public dialog: MatDialog) { }
@@ -48,8 +46,6 @@ export class HouseworkComponent implements OnInit {
         this.houseworkList = response;
         // new table
         this.dataSource.data = response;
-        // foreach item in response add increasing number property?
-
         this.dataSource.paginator = this.paginator;
       });
     }
