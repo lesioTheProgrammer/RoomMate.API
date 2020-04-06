@@ -13,26 +13,37 @@ namespace RoomMate.Domain.Services.Implements
     {
         private readonly IRepository<Housework> houseWorkRepository;
         private readonly IRepository<WorkPrice> workPricekRepository;
+        private readonly IRepository<User> userRepository;
 
-        public HouseworkService(IRepository<Housework> houseWorkRepository, IRepository<WorkPrice> workPricekRepository)
+        public HouseworkService(IRepository<Housework> houseWorkRepository, 
+            IRepository<WorkPrice> workPricekRepository, IRepository<User> userRepository)
         {
             this.houseWorkRepository = houseWorkRepository;
             this.workPricekRepository = workPricekRepository;
+            this.userRepository = userRepository;
         }
 
         public bool AddNewHouseWork(HouseWorkDto houseWorkDto)
         {
-            try
+            // get userID? why here, not in angular - do I have to inejcty userRepo to every 
+            // service just to get userid? lol
+            var user = this.userRepository.GetFirst(x => x.Login.ToLower() == houseWorkDto.Username.ToLower());
+            if (user != null)
             {
-                var houseWork = this.ConverterToTarget(houseWorkDto);
-                this.houseWorkRepository.InsertOrUpdate(houseWork);
+                houseWorkDto.UserId = user.Id;
+                try
+                {
+                    var houseWork = this.ConverterToTarget(houseWorkDto);
+                    this.houseWorkRepository.InsertOrUpdate(houseWork);
 
-                return true;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
             }
-            catch(Exception ex)
-            {
-                return false;
-            }
+            return false;
         }
 
         public HouseWorkDto ConverterToDto(Housework houseWork)
@@ -51,7 +62,8 @@ namespace RoomMate.Domain.Services.Implements
                 UserId = houseWork.UserId,
                 Username = houseWork.User.Name + " " + houseWork.User.Surname,
                 Prices = houseWork.WorkPriceId != null ? houseWork.WorkPrice.Prices : 0,
-                WorkType = houseWork.WorkType
+                WorkType = houseWork.WorkType,
+                Login = houseWork.User.Login
             };
         }
 
@@ -87,10 +99,12 @@ namespace RoomMate.Domain.Services.Implements
             {
                 foreach (var houseWork in houseWorks)
                 {
-                    houseWorkList.Add(this.ConverterToDto(houseWork));
+                    if (houseWork.Active == true)
+                    {
+                      houseWorkList.Add(this.ConverterToDto(houseWork));
+                    }
                 }
             }
-
             return houseWorkList;
         }
 
@@ -107,7 +121,6 @@ namespace RoomMate.Domain.Services.Implements
                     houseWorkList.Add(this.ConverterToDto(houseWork));
                 }
             }
-
             return houseWorkList;
         }
     }

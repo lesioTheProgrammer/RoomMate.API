@@ -164,3 +164,22 @@ delete UserFlats from UserFlats where UserFlats.Id = 1017;
 delete Flats from Flats where Flats.FlatName = 'ww';
 
 
+-- houswork
+
+select * from Houseworks
+
+select * from WorkPrices
+
+select * from WorkType
+
+
+select a.Street, f.Id from Flats as f 
+left join Addresses as a on a.Id = f.AddressId
+where a.Street = 'Kurt';
+-- fid = 1087
+
+select * from Houseworks
+
+insert into Houseworks (Active, CreatedBy, CreatedDate, Description, FlatId, HouseWorkDate,
+ModificatedBy, ModificatedDate, UserId, WorkPriceId, WorkType) values (1, null, GETDATE(), 'Dodane extra', 1087, GETDATE(), null, GETDATE(), 40, null, 1);
+

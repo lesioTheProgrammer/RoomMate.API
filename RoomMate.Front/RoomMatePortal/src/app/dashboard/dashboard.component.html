@@ -1,14 +1,22 @@
 <div class="card shadow" style="width:49%;">
   <div class="card-body">
     <span style="text-align: center">
-      <h4>Zarządzaj</h4>
+      <h4>Zarządzaj - wybierz mieszkanie</h4>
     </span>
-    <button class="btn btn-lg btn-dark" (click)="showModalToAdd()">
+    <div class = "mb-3">
+      <mat-select placeholder="Select your flat" (selectionChange)= onSelectedOption($event) >
+        <mat-option></mat-option>
+        <mat-option *ngFor="let flat of flatAddressDto; let i = index" [value]="flat.id">
+            {{flat.flatName + " ~~ " + flat.cityName +" "+ flat.street +" "+ flat.houseNumber +"/"+  flat.flatNumber}}
+        </mat-option>
+    </mat-select>
+    </div>
+    <button class="btn btn-lg btn-dark" (click)="showModalToAdd()" [disabled] = "buttonDisabled">
       Dodaj
     </button>
   </div>
 </div>
-<br>
+<br />
 
 <div class="row">
   <div class="card shadow" style="width:48%; margin:10px">
@@ -27,6 +35,5 @@
       </span>
       <app-shopping></app-shopping>
     </div>
-
   </div>
 </div>

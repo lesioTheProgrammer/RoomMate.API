@@ -18,6 +18,8 @@
           <th mat-header-cell *matHeaderCellDef class="headerName">
             {{ column[1] }}
           </th>
+          <!-- Here depending if the column is role we access RoleName in table -->
+          <!-- else display column as it is -->
           <td mat-cell *matCellDef="let element">
             <ng-container
               *ngIf="typeOf(element[column[0]]) == 'number'; else notRole"
@@ -61,7 +63,7 @@
                   </button>
                   <div class="divider" *ngIf="element.roleType == 0"></div>
                   <button
-                   *ngIf="element.roleType == 0"
+                    *ngIf="element.roleType == 0"
                     mat-raised-button
                     color="primary"
                     (click)="leave(element)"
@@ -110,7 +112,7 @@
 
   <div class="card shadow col-lg-4" style="margin:10px;">
     <div class="card-body">
-      <app-user-list  [refreshFlatId]="refreshFlatId"></app-user-list>
+      <app-user-list [refreshFlatId]="refreshFlatId"></app-user-list>
     </div>
   </div>
 </div>

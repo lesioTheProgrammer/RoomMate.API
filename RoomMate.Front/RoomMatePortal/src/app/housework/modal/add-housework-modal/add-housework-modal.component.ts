@@ -10,8 +10,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 })
 export class AddHouseworkModalComponent implements OnInit {
   @Input('houseworkDto') houseworkDto: HouseworkDto = new HouseworkDto();
-  errorShow: boolean = false;
-  dataLoaded: boolean = false;
+  errorShow = false;
+  dataLoaded = false;
   constructor(
     public dashboardService: DashboardService,
     public dialogRef: MatDialogRef<AddHouseworkModalComponent>,
@@ -19,8 +19,8 @@ export class AddHouseworkModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if(this.data != null && this.data.houseworkDto != null){
-      this.houseworkDto = this.data.houseworkDto;
+    if (this.data != null && this.data.flatID != null) {
+      this.houseworkDto.flatId = this.data.flatID;
     }
     this.dataLoaded = true;
   }
@@ -30,7 +30,8 @@ export class AddHouseworkModalComponent implements OnInit {
   }
 
   addHousework() {
-    debugger;
+    this.houseworkDto.flatId = this.data.flatID;
+    this.houseworkDto.username = JSON.parse(localStorage.getItem("login"));
     this.dashboardService.addHouseWork(this.houseworkDto).subscribe(
       response => {
         if (response) {

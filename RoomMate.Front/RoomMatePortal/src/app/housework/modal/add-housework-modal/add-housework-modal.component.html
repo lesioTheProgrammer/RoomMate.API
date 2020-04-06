@@ -5,9 +5,13 @@
       <strong>Błąd!</strong> Wystąpił błąd podczas zapisu.
     </div>
   </div>
-  <div class="mb-3" >
+  <div class="mb-3">
     <label for="workType">Typ akcji</label>
-    <select class="form-control" id="workType" [(ngModel)]="houseworkDto.workType">
+    <select
+      class="form-control"
+      id="workType"
+      [(ngModel)]="houseworkDto.workType"
+    >
       <option value="0">-</option>
       <option value="1">Sprzątanie</option>
       <option value="2">Zakupy</option>
@@ -16,15 +20,31 @@
   <div *ngIf="houseworkDto.workType != 0">
     <div class="mb-3">
       <label for="houseworkDate">Kiedy</label>
-      <input type="date" id="houseworkDate" class="form-control" [ngModel]="houseworkDto.houseWorkDate | date:'yyyy-MM-dd' ">
+      <input
+        type="date"
+        id="houseworkDate"
+        class="form-control"
+        [ngModel]="houseworkDto.houseWorkDate | date: 'yyyy-MM-dd'"
+        (ngModelChange)="houseworkDto.houseWorkDate = $event"
+      />
     </div>
     <div class="mb-3">
       <label for="description">Opis</label>
-      <input type="text" id="description" class="form-control" [(ngModel)]="houseworkDto.description">
+      <input
+        type="text"
+        id="description"
+        class="form-control"
+        [(ngModel)]="houseworkDto.description"
+      />
     </div>
     <div class="mb-3" *ngIf="houseworkDto.workType == 2">
       <label for="prices">Koszty</label>
-      <input type="number" id="prices" class="form-control" [(ngModel)]="houseworkDto.prices">
+      <input
+        type="number"
+        id="prices"
+        class="form-control"
+        [(ngModel)]="houseworkDto.prices"
+      />
     </div>
   </div>
 </div>

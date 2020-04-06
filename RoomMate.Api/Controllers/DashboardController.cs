@@ -21,7 +21,7 @@ namespace RoomMate.Api.Controllers
         [Route("GetHouseWorkByFlatId")]
         [HttpGet]
         public IActionResult GetHouseWorkByFlatId(int flatId, WorkTypeEnum workType)
-        {
+       {
             return this.Ok(this.houseworkService.GetHouseWorkListForFlat(flatId, workType));
         }
 
@@ -29,7 +29,7 @@ namespace RoomMate.Api.Controllers
         [HttpPost]
         public IActionResult AddHouseWork([FromBody]HouseWorkDto houseWorkDto)
         {
-            ////TODO: How to get logged user 
+            // check validation here
             if (this.houseworkService.AddNewHouseWork(houseWorkDto))
             {
                 return this.Ok(true);
