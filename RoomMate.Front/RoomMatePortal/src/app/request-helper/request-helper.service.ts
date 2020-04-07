@@ -47,4 +47,21 @@ export abstract class RequestHelperService {
       }
     );
   }
+
+
+  public createPutRequest<T>(
+    route: string,
+    requestData: Object
+  ): Observable<T> {
+    return this.http.put<T>(
+      this.wwwPath + "/" + route,
+      JSON.stringify(requestData),
+      {
+        headers:{
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      }
+    )
+  }
 }

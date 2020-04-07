@@ -20,5 +20,7 @@ namespace RoomMate.Domain.Dto
         public double? Prices { get; set; }
 
         public string Login { get; set; }
+
+
     }
 }

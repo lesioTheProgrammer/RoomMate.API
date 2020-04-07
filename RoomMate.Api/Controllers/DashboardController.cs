@@ -21,7 +21,7 @@ namespace RoomMate.Api.Controllers
         [Route("GetHouseWorkByFlatId")]
         [HttpGet]
         public IActionResult GetHouseWorkByFlatId(int flatId, WorkTypeEnum workType)
-       {
+        {
             return this.Ok(this.houseworkService.GetHouseWorkListForFlat(flatId, workType));
         }
 
@@ -35,6 +35,18 @@ namespace RoomMate.Api.Controllers
                 return this.Ok(true);
             }
             return this.BadRequest();
+        }
+
+        [Route("EditHouseWork")]
+        [HttpPut]
+        public IActionResult EditHouseWork([FromBody] HouseWorkDto houseWorkDto)
+        {
+            if (houseWorkDto.IsValidId(houseWorkDto.Id))
+            {
+                return this.Ok(houseworkService.EditHouseWork(houseWorkDto));
+            }
+            return this.Ok(new HouseWorkDto());
+
         }
     }
 }

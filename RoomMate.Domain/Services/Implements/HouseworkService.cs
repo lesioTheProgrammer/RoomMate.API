@@ -15,7 +15,7 @@ namespace RoomMate.Domain.Services.Implements
         private readonly IRepository<WorkPrice> workPricekRepository;
         private readonly IRepository<User> userRepository;
 
-        public HouseworkService(IRepository<Housework> houseWorkRepository, 
+        public HouseworkService(IRepository<Housework> houseWorkRepository,
             IRepository<WorkPrice> workPricekRepository, IRepository<User> userRepository)
         {
             this.houseWorkRepository = houseWorkRepository;
@@ -101,7 +101,7 @@ namespace RoomMate.Domain.Services.Implements
                 {
                     if (houseWork.Active == true)
                     {
-                      houseWorkList.Add(this.ConverterToDto(houseWork));
+                        houseWorkList.Add(this.ConverterToDto(houseWork));
                     }
                 }
             }
@@ -122,6 +122,11 @@ namespace RoomMate.Domain.Services.Implements
                 }
             }
             return houseWorkList;
+        }
+
+        public Housework EditHouseWork(HouseWorkDto houseWorkDto)
+        {
+            return new Housework();
         }
     }
 }

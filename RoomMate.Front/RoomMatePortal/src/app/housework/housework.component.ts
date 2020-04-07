@@ -47,7 +47,6 @@ export class HouseworkComponent implements OnInit {
         this.houseworkList = response;
         this.loginHWComponent = login;
         // new table
-        debugger;
         this.dataSource.data = response;
         this.dataSource.paginator = this.paginator;
       });
@@ -55,7 +54,6 @@ export class HouseworkComponent implements OnInit {
   }
 
   chechModificaitonDate(creationDate: Date, modificationDate: Date): boolean{
-    debugger;
     if (new Date(creationDate).getTime() != new Date(modificationDate).getTime()){ //compare
       return true;
     }
@@ -64,6 +62,13 @@ export class HouseworkComponent implements OnInit {
 
 
   edit(houseworkDto: HouseworkDto){
+    debugger;
+    const dialogRef = this.dialog.open(AddHouseworkModalComponent, {
+      width: '450px',
+      data: {
+        houseworkDto: houseworkDto
+      }
+    });
     let xd = "";
     debugger;
   }

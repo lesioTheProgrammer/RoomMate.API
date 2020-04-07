@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { RequestHelperService } from '../request-helper/request-helper.service';
 import { WorkTypeEnum } from '../housework/dto/work-type-enum.enum';
 import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ export class DashboardService extends RequestHelperService {
   constructor(private httpClient: HttpClient) {
     super(httpClient);
   }
+
   public getHouseWorkByFlatId(flatId: number, workType: WorkTypeEnum): Observable<HouseworkDto[]>{
     return this.createGetRequestByParams<HouseworkDto[]>('GetHouseWorkByFlatId',
       {flatId: flatId, workType : workType}).pipe(map(data => <HouseworkDto[]>data));
@@ -28,6 +30,11 @@ export class DashboardService extends RequestHelperService {
   }
   public addHouseWork(housework : HouseworkDto): Observable<boolean>{
     return this.createPostRequest('AddHouseWork', housework).pipe(map(data => <boolean>data));
+  }
+
+  public editHouseWork(housework: HouseworkDto): Observable<HouseworkDto>{
+    const route = "EditHouseWork";
+    return this.createPutRequest(route, housework).pipe(map(data => <HouseworkDto> data));
   }
 
 }
