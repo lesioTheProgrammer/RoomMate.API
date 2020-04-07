@@ -47,10 +47,19 @@ export class HouseworkComponent implements OnInit {
         this.houseworkList = response;
         this.loginHWComponent = login;
         // new table
+        debugger;
         this.dataSource.data = response;
         this.dataSource.paginator = this.paginator;
       });
     }
+  }
+
+  chechModificaitonDate(creationDate: Date, modificationDate: Date): boolean{
+    debugger;
+    if (new Date(creationDate).getTime() != new Date(modificationDate).getTime()){ //compare
+      return true;
+    }
+    return false;
   }
 
 

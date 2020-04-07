@@ -10,4 +10,6 @@ export class HouseworkDto {
   public prices: number;
   public workType: WorkTypeEnum = WorkTypeEnum.None;
   public login: string;
+  public modificatedDate: Date;
+  public createdDate: Date;
 }
