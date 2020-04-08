@@ -125,7 +125,7 @@ namespace RoomMate.Domain.Services.Implements
             return houseWorkList;
         }
 
-        public Housework EditHouseWork(HouseWorkDto houseWorkDto)
+        public HouseWorkDto EditHouseWork(HouseWorkDto houseWorkDto)
         {
             // TODO: add price here too!
 
@@ -149,7 +149,7 @@ namespace RoomMate.Domain.Services.Implements
                                 }
                                 else
                                 {
-                                    return new Housework(); // return empty if price save will not succeed
+                                    return new HouseWorkDto(); // return empty if price save will not succeed
                                 }
                             }
                             catch (Exception ex)
@@ -164,7 +164,10 @@ namespace RoomMate.Domain.Services.Implements
                         houseWorkToEdit.ModificatedDate = DateTime.Now;
 
                         this.houseWorkRepository.SaveChanges();
-                        return houseWorkToEdit;
+
+
+
+                        return ConverterToDto(houseWorkToEdit);
                     }
                     catch (Exception ex)
                     {
@@ -173,7 +176,7 @@ namespace RoomMate.Domain.Services.Implements
                     }
                 }
             }
-            return new Housework();
+            return new HouseWorkDto();
         }
     }
 }
