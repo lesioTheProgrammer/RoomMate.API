@@ -32,11 +32,9 @@ export class HouseworkComponent implements OnInit {
   multiDim = [['increasingNumber', 'No.'], ['houseWorkDate', 'Kiedy'], ['username', 'Kto'],
   ['description', 'Opis']];
 
-
   constructor(public dashboardService: DashboardService, public dialog: MatDialog) { }
 
   ngOnInit() {
-
   }
 
   // nie on init tylko dopiero po wybraniu mieszkania
@@ -60,7 +58,6 @@ export class HouseworkComponent implements OnInit {
     return false;
   }
 
-
   edit(houseworkDto: HouseworkDto){
     const dialogRef = this.dialog.open(AddHouseworkModalComponent, {
       width: '450px',
@@ -69,29 +66,4 @@ export class HouseworkComponent implements OnInit {
       }
     });
   }
-
-
-
-
-
-
-
-
-
-
-
-
-  // stachu
- // to sie dzieje wszystko w tabelce xD
-  editHouseWork(houseworkDto: HouseworkDto){
-    const dialogRef = this.dialog.open(AddHouseworkModalComponent, {
-      width: "450px",
-      data:{houseworkDto : houseworkDto }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log("The dialog was closed");
-    });
-  }
-
 }

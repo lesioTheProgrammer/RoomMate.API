@@ -1,7 +1,10 @@
 import { HouseworkDto } from './../../dto/housework-dto';
 import { DashboardService } from './../../../dashboard/dashboard.service';
-import { Component, OnInit, Inject, Input } from '@angular/core';
+import { Component, OnInit, Inject, Input, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ShoppingComponent } from 'src/app/shopping/shopping.component';
+import { HouseworkComponent } from '../../housework.component';
+import { WorkTypeEnum } from '../../dto/work-type-enum.enum';
 
 @Component({
   selector: 'app-add-housework-modal',
@@ -20,7 +23,6 @@ export class AddHouseworkModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    debugger;
     if (this.data != null && this.data.flatId != null) { // selected flat
       this.houseworkDto.flatId = this.data.flatID;
     }
@@ -55,22 +57,21 @@ export class AddHouseworkModalComponent implements OnInit {
     }
   }
 
-
-
   editHousework() {
-    debugger;
     if (this.editActionOn) {
       this.dashboardService.editHouseWork(this.houseworkDto).subscribe(
         response => {
-          debugger;
           if (response) {
             this.closeModal();
+            debugger;
+            this.houseworkDto.modificatedDate  = response.modificatedDate;
           }
         },
         error => {
           this.errorShow = true;
         }
       )
+
     }
   }
 }

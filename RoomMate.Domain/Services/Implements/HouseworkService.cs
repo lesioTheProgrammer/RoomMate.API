@@ -35,7 +35,6 @@ namespace RoomMate.Domain.Services.Implements
                 {
                     var houseWork = this.ConverterToTarget(houseWorkDto);
                     this.houseWorkRepository.InsertOrUpdate(houseWork);
-
                     return true;
                 }
                 catch (Exception ex)
@@ -86,7 +85,7 @@ namespace RoomMate.Domain.Services.Implements
                 UserId = houseWork.UserId,
                 WorkType = houseWork.WorkType,
                 WorkPriceId = priceId,
-                ModificatedDate = DateTime.Now   // check it on all occurences
+                ModificatedDate = DateTime.Now  
             };
         }
 
@@ -127,8 +126,6 @@ namespace RoomMate.Domain.Services.Implements
 
         public HouseWorkDto EditHouseWork(HouseWorkDto houseWorkDto)
         {
-            // TODO: add price here too!
-
             var user = this.userRepository.GetFirst(x => x.Login == houseWorkDto.Login);
             if (user != null && user.Id == houseWorkDto.UserId)
             {
@@ -137,7 +134,6 @@ namespace RoomMate.Domain.Services.Implements
                 {
                     try
                     {
-                        // tutaj price id nie bedzie nulem bo bedzie wyciagnieta wiec trzeba zupdejtowac to tylko
                         if (houseWorkDto.WorkType == WorkTypeEnum.Shopping)
                         {
                             try
@@ -157,16 +153,11 @@ namespace RoomMate.Domain.Services.Implements
                                 throw;
                             }
                         }
-
                         houseWorkToEdit.Description = houseWorkDto.Description;
                         houseWorkToEdit.HouseWorkDate = houseWorkDto.HouseWorkDate;
                         houseWorkToEdit.UserId = houseWorkDto.UserId;
                         houseWorkToEdit.ModificatedDate = DateTime.Now;
-
                         this.houseWorkRepository.SaveChanges();
-
-
-
                         return ConverterToDto(houseWorkToEdit);
                     }
                     catch (Exception ex)
