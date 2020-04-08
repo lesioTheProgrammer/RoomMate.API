@@ -132,31 +132,36 @@ namespace RoomMate.Domain.Services.Implements
             var user = this.userRepository.GetFirst(x => x.Login == houseWorkDto.Login);
             if (user != null && user.Id == houseWorkDto.UserId)
             {
-                var houseWorkToEdit = this.houseWorkRepository.GetFirst(x => x.Id == houseWorkDto.Id);
+                var houseWorkToEdit = this.houseWorkRepository.GetFirstWithInclude(x => x.Id == houseWorkDto.Id, p => p.WorkPrice);
                 if (houseWorkToEdit != null)
                 {
                     try
                     {
-
-                        // pudate this price bo gerar
-                        //WorkPriceId = priceId,
-                        int? priceId = null;
+                        // tutaj price id nie bedzie nulem bo bedzie wyciagnieta wiec trzeba zupdejtowac to tylko
                         if (houseWorkDto.WorkType == WorkTypeEnum.Shopping)
                         {
-                            var newPrice = new WorkPrice();
-                            newPrice.Prices = houseWorkDto.Prices.Value;
-                            this.workPricekRepository.InsertOrUpdate(newPrice);
-                            priceId = newPrice.Id;
+                            try
+                            {
+                                if (houseWorkToEdit.WorkPrice != null)
+                                {
+                                    houseWorkToEdit.WorkPrice.Prices = houseWorkDto.Prices.Value;
+                                    this.workPricekRepository.SaveChanges();
+                                }
+                                else
+                                {
+                                    return new Housework(); // return empty if price save will not succeed
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                throw;
+                            }
                         }
-
 
                         houseWorkToEdit.Description = houseWorkDto.Description;
                         houseWorkToEdit.HouseWorkDate = houseWorkDto.HouseWorkDate;
                         houseWorkToEdit.UserId = houseWorkDto.UserId;
                         houseWorkToEdit.ModificatedDate = DateTime.Now;
-                        //houseWorkToEdit.WorkPriceId = PRICE
-
-
 
                         this.houseWorkRepository.SaveChanges();
                         return houseWorkToEdit;

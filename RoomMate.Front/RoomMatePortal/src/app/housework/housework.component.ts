@@ -62,7 +62,6 @@ export class HouseworkComponent implements OnInit {
 
 
   edit(houseworkDto: HouseworkDto){
-    debugger;
     const dialogRef = this.dialog.open(AddHouseworkModalComponent, {
       width: '450px',
       data: {

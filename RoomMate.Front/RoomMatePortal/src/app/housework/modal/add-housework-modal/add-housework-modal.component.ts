@@ -58,9 +58,11 @@ export class AddHouseworkModalComponent implements OnInit {
 
 
   editHousework() {
+    debugger;
     if (this.editActionOn) {
       this.dashboardService.editHouseWork(this.houseworkDto).subscribe(
         response => {
+          debugger;
           if (response) {
             this.closeModal();
           }
