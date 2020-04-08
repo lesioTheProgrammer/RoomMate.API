@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
-  // selected dropdown
+  // selected dropdown - flat
   onSelectedOption(event): void {
     this.flatID = event.value;
     if (this.flatID) {
@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
     const dialogRef = this.dialog.open(AddHouseworkModalComponent, {
       width: '450px',
       data: {
-        flatID: this.flatID
+        flatId: this.flatID
       }
     });
     dialogRef.afterClosed().subscribe(result => {

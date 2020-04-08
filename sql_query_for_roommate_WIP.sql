@@ -44,7 +44,7 @@ select * from Addresses
 select * from City
 
 
-insert into City values (1, 1, GETDATE(), null, GETDATE(), 'Gerara');
+insert into City values (1, 1, GETDATE(), null, GETDATE(), 'Vancover');
 
 insert into City values (1, 1, GETDATE(), null, GETDATE(), 'Germania');
 

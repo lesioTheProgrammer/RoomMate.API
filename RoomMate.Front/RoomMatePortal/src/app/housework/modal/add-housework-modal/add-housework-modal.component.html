@@ -5,6 +5,10 @@
       <strong>Błąd!</strong> Wystąpił błąd podczas zapisu.
     </div>
   </div>
+
+<!-- Here theres add html -->
+
+<div *ngIf="!houseworkDto.id">
   <div class="mb-3">
     <label for="workType">Typ akcji</label>
     <select
@@ -48,7 +52,43 @@
     </div>
   </div>
 </div>
-<div mat-dialog-actions style="float:right">
-  <button mat-button (click)="closeModal()">Anuluj</button>
-  <button mat-button cdkFocusInitial (click)="addHousework()">Dodaj</button>
+
+
+<!-- Here theres edit html  -->
+
+<div *ngIf="editActionOn">
+
+  <div class="mb-3">
+    <label for="houseworkDate">Kiedy</label>
+    <input
+      type="date"
+      id="houseworkDate"
+      class="form-control"
+      [ngModel]="houseworkDto.houseWorkDate | date: 'yyyy-MM-dd'"
+      (ngModelChange)="houseworkDto.houseWorkDate = $event"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="description">Opis</label>
+    <input
+      type="text"
+      id="description"
+      class="form-control"
+      [(ngModel)]="houseworkDto.description"
+    />
+  </div>
+
+
 </div>
+
+
+<div mat-dialog-actions style="float:right">
+  <button mat-button (click)="closeModal()">Cancel</button>
+  <button mat-button cdkFocusInitial (click)="addHousework()">Save</button>
+</div>
+
+
+
+</div>
+
