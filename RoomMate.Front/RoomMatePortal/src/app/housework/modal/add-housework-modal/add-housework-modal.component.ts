@@ -12,7 +12,7 @@ export class AddHouseworkModalComponent implements OnInit {
   @Input('houseworkDto') houseworkDto: HouseworkDto = new HouseworkDto();
   errorShow = false;
   dataLoaded = false;
-  editActionOn = false; // czy wylaczona akcja edycji
+  editActionOn = false; // if editaction is on
   constructor(
     public dashboardService: DashboardService,
     public dialogRef: MatDialogRef<AddHouseworkModalComponent>,
@@ -26,7 +26,7 @@ export class AddHouseworkModalComponent implements OnInit {
     }
     else if (this.data != null && this.data.houseworkDto.id != null){ // edit flat
       this.houseworkDto = this.data.houseworkDto;
-      this.editActionOn = true; // odpal edycje
+      this.editActionOn = true;
     }
     this.dataLoaded = true;
   }
@@ -36,12 +36,10 @@ export class AddHouseworkModalComponent implements OnInit {
   }
 
   addHousework() {
-    debugger;
     this.houseworkDto.username = JSON.parse(localStorage.getItem("login"));
     if (this.editActionOn) {
       this.editHousework();
     }
-    debugger;
     if (!this.editActionOn){ // dont enter if edit in progress
       this.houseworkDto.flatId = this.data.flatId;
       this.dashboardService.addHouseWork(this.houseworkDto).subscribe(
@@ -60,7 +58,6 @@ export class AddHouseworkModalComponent implements OnInit {
 
 
   editHousework() {
-    debugger;
     if (this.editActionOn) {
       this.dashboardService.editHouseWork(this.houseworkDto).subscribe(
         response => {
@@ -73,6 +70,5 @@ export class AddHouseworkModalComponent implements OnInit {
         }
       )
     }
-    this.editActionOn = false; // wylacz edycje po sejwie
   }
 }

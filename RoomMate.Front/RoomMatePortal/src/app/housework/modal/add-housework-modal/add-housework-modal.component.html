@@ -80,6 +80,17 @@
   </div>
 
 
+  <div class="mb-3" *ngIf="houseworkDto.workType == 2">
+    <label for="prices">Koszty</label>
+    <input
+      type="number"
+      id="prices"
+      class="form-control"
+      [(ngModel)]="houseworkDto.prices"
+    />
+  </div>
+
+
 </div>
 
 

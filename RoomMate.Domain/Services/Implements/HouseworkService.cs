@@ -86,6 +86,7 @@ namespace RoomMate.Domain.Services.Implements
                 UserId = houseWork.UserId,
                 WorkType = houseWork.WorkType,
                 WorkPriceId = priceId,
+                ModificatedDate = DateTime.Now   // check it on all occurences
             };
         }
 
@@ -126,8 +127,47 @@ namespace RoomMate.Domain.Services.Implements
 
         public Housework EditHouseWork(HouseWorkDto houseWorkDto)
         {
+            // TODO: add price here too!
+
+            var user = this.userRepository.GetFirst(x => x.Login == houseWorkDto.Login);
+            if (user != null && user.Id == houseWorkDto.UserId)
+            {
+                var houseWorkToEdit = this.houseWorkRepository.GetFirst(x => x.Id == houseWorkDto.Id);
+                if (houseWorkToEdit != null)
+                {
+                    try
+                    {
+
+                        // pudate this price bo gerar
+                        //WorkPriceId = priceId,
+                        int? priceId = null;
+                        if (houseWorkDto.WorkType == WorkTypeEnum.Shopping)
+                        {
+                            var newPrice = new WorkPrice();
+                            newPrice.Prices = houseWorkDto.Prices.Value;
+                            this.workPricekRepository.InsertOrUpdate(newPrice);
+                            priceId = newPrice.Id;
+                        }
 
 
+                        houseWorkToEdit.Description = houseWorkDto.Description;
+                        houseWorkToEdit.HouseWorkDate = houseWorkDto.HouseWorkDate;
+                        houseWorkToEdit.UserId = houseWorkDto.UserId;
+                        houseWorkToEdit.ModificatedDate = DateTime.Now;
+                        //houseWorkToEdit.WorkPriceId = PRICE
+
+
+
+                        this.houseWorkRepository.SaveChanges();
+                        return houseWorkToEdit;
+                    }
+                    catch (Exception ex)
+                    {
+                        var mess = ex.Message;
+                        throw;
+                    }
+                }
+            }
             return new Housework();
         }
     }
