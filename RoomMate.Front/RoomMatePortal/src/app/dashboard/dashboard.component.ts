@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit {
       this.buttonDisabled = false;
       // pass data to housework component and shopping
       this.houseWorkTableChild.refreshFlatList(this.flatID, this.login);
-      this.shoppingTableChild.refreshFlatList(this.flatID);
+      this.shoppingTableChild.refreshFlatList(this.flatID, this.login);
 
     } else {
       this.buttonDisabled = true;

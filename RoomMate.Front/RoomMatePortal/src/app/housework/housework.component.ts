@@ -69,8 +69,6 @@ export class HouseworkComponent implements OnInit {
         houseworkDto: houseworkDto
       }
     });
-    let xd = "";
-    debugger;
   }
 
 
