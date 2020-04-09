@@ -84,4 +84,5 @@ export class AddHouseworkModalComponent implements OnInit {
       )
     }
   }
+
 }

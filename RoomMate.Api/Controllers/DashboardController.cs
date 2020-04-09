@@ -27,7 +27,7 @@ namespace RoomMate.Api.Controllers
 
         [Route("AddHouseWork")]
         [HttpPost]
-        public IActionResult AddHouseWork([FromBody]HouseWorkDto houseWorkDto)
+        public IActionResult AddHouseWork([FromBody] HouseWorkDto houseWorkDto)
         {
             // check validation here
             if (this.houseworkService.AddNewHouseWork(houseWorkDto))
@@ -47,6 +47,18 @@ namespace RoomMate.Api.Controllers
             }
             return this.Ok(new HouseWorkDto());
 
+        }
+
+
+        [Route("RemoveHouseWork")]
+        [HttpPut]
+        public IActionResult RemoveHouseWork([FromBody] HouseWorkDto houseWorkDto)
+        {
+            if (houseWorkDto.IsValidId(houseWorkDto.Id))
+            {
+                return this.Ok(houseworkService.RemoveHouseWork(houseWorkDto));
+            }
+            return this.Ok(false);
         }
     }
 }

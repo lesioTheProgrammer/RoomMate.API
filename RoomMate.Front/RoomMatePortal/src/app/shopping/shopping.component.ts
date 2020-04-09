@@ -3,7 +3,7 @@ import { DashboardService } from '../dashboard/dashboard.service';
 import { HouseworkDto } from '../housework/dto/housework-dto';
 import { WorkTypeEnum } from '../housework/dto/work-type-enum.enum';
 import { AddHouseworkModalComponent } from '../housework/modal/add-housework-modal/add-housework-modal.component';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { trigger, style, transition, state, animate } from '@angular/animations';
 
 @Component({
@@ -32,10 +32,17 @@ export class ShoppingComponent implements OnInit {
   multiDim = [['increasingNumber', 'No.'], ['houseWorkDate', 'Kiedy'], ['username', 'Kto'],
   ['description', 'Opis'], ['prices', 'Koszty']];
 
-  constructor(public dashboardService: DashboardService, public dialog: MatDialog) { }
+  constructor(public dashboardService: DashboardService, public dialog: MatDialog,
+    private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
 
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000
+    });
   }
 
   refreshFlatList(flatID: number, login: string) {
@@ -68,4 +75,27 @@ export class ShoppingComponent implements OnInit {
       }
     });
   }
+
+  remove(houseworkDto: HouseworkDto) {
+    debugger;
+    if (houseworkDto.id != null){
+      this.dashboardService.removeHouseWork(houseworkDto).subscribe(response => {
+        if (response){
+          this.deleteItemFromDataSource(houseworkDto);
+          this.openSnackBar('You removed the House Work', 'Ok');
+        }
+      })
+
+    }
+
+  }
+
+  deleteItemFromDataSource(houseworkDto: HouseworkDto) {
+    const index = this.dataSource.data.indexOf(houseworkDto);
+    if (index !== -1) {
+      this.dataSource.data.splice(index, 1);
+      this.dataSource.data = this.dataSource.data.slice(); // slice to update list
+    }
+  }
+
 }

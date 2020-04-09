@@ -19,16 +19,14 @@ export abstract class RequestHelperService {
     return this.http.get<T>(this.wwwPath + "/" + route + "/" + id);
   }
 
-
   protected createGetRequestByParams<T>(
     route: string,
     requestData: Object
   ): Observable<T> {
     let httpParams = new HttpParams();
-    Object.keys(requestData).forEach(function(key) {
+    Object.keys(requestData).forEach(function (key) {
       httpParams = httpParams.append(key, requestData[key]);
     });
-
     return this.http.get<T>(this.wwwPath + "/" + route, { params: httpParams });
   }
 
@@ -42,12 +40,11 @@ export abstract class RequestHelperService {
       {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
   }
-
 
   public createPutRequest<T>(
     route: string,
@@ -57,11 +54,11 @@ export abstract class RequestHelperService {
       this.wwwPath + "/" + route,
       JSON.stringify(requestData),
       {
-        headers:{
+        headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
-    )
+    );
   }
 }

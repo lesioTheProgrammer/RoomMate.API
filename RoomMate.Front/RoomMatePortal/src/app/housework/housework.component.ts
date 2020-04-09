@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { DashboardService } from '../dashboard/dashboard.service';
 import { HouseworkDto } from './dto/housework-dto';
 import { WorkTypeEnum } from './dto/work-type-enum.enum';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { AddHouseworkModalComponent } from './modal/add-housework-modal/add-housework-modal.component';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 
@@ -32,7 +32,8 @@ export class HouseworkComponent implements OnInit {
   multiDim = [['increasingNumber', 'No.'], ['houseWorkDate', 'Kiedy'], ['username', 'Kto'],
   ['description', 'Opis']];
 
-  constructor(public dashboardService: DashboardService, public dialog: MatDialog) { }
+  constructor(public dashboardService: DashboardService, public dialog: MatDialog,
+    private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
   }
@@ -51,6 +52,20 @@ export class HouseworkComponent implements OnInit {
     }
   }
 
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000
+    });
+  }
+
+  deleteItemFromDataSource(houseworkDto: HouseworkDto) {  //doing same as refresh but in more elegant way
+    const index = this.dataSource.data.indexOf(houseworkDto);
+    if (index !== -1) {
+      this.dataSource.data.splice(index, 1);
+      this.dataSource.data = this.dataSource.data.slice(); // slice to update list
+    }
+  }
+
   chechModificaitonDate(creationDate: Date, modificationDate: Date): boolean{
     if (new Date(creationDate).getTime() != new Date(modificationDate).getTime()){ //compare
       return true;
@@ -65,10 +80,19 @@ export class HouseworkComponent implements OnInit {
         houseworkDto: houseworkDto
       }
     });
-    debugger;
     dialogRef.afterClosed().subscribe(result => {
       console.log("Closed after subscribe")
-      let xd = result;
     })
+  }
+
+  remove (houseworkDto: HouseworkDto){
+    if (houseworkDto.id != null){
+      this.dashboardService.removeHouseWork(houseworkDto).subscribe(response => {
+        if (response){
+          this.deleteItemFromDataSource(houseworkDto);
+          this.openSnackBar('You removed the House Work', 'Ok');
+        }
+      })
+    }
   }
 }

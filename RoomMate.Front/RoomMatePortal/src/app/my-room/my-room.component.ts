@@ -129,7 +129,7 @@ export class MyRoomComponent implements OnInit {
       if (response) {
         this.setFlatId(flatDto.id);
         this.deleteItemFromDataSource(flatDto);
-        this.openSnackBar('You have left the flat', 'Ok');
+        this.openSnackBar('You removed the flat', 'Ok');
       } else {
         this.openSnackBar('Something went wrong', 'Ok');
       }

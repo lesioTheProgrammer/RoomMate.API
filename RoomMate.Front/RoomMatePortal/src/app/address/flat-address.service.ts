@@ -6,7 +6,7 @@ import { environment } from "../../environments/environment";
 import { AddressFlatDto } from "./dto/address-dto";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class FlatAddressService {
   protected getApiRoute(): string {
@@ -24,23 +24,20 @@ export class FlatAddressService {
     const route = "GetCities";
     const paramsAsObj: Object = { letters };
     return this.httpClient.get<CityDto[]>(this.wwwPath + "/" + route, {
-      params: <any>paramsAsObj
+      params: <any>paramsAsObj,
     });
   }
 
-  public getStreet(
-    id: any,
-    streetLetters: string
-  ): Observable<string[]> {
+  public getStreet(id: any, streetLetters: string): Observable<string[]> {
     const route = "GetStreet";
     const body = new HttpParams({
-      fromObject : {
-        id : id,
-        streetLetters : streetLetters
-      }
-    })
+      fromObject: {
+        id: id,
+        streetLetters: streetLetters,
+      },
+    });
     return this.httpClient.get<string[]>(this.wwwPath + "/" + route, {
-      params: body
+      params: body,
     });
   }
 
@@ -49,78 +46,86 @@ export class FlatAddressService {
   ): Observable<AddressFlatDto> {
     const route = "GetFlat";
     return this.httpClient.get<AddressFlatDto>(this.wwwPath + "/" + route, {
-      params: <any>addressDto
+      params: <any>addressDto,
     });
   }
 
-
   public assignUserToFlat(addressDto: AddressFlatDto): Observable<boolean> {
     const route = "AssignMateToFlat";
-    return this.httpClient.post<boolean>(this.wwwPath + "/" + route,
-    JSON.stringify(addressDto),
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      });
-    }
-
-    public leaveflat(addressDto: AddressFlatDto): Observable<boolean> {
-      const route = "LeaveFlat";
-      return this.httpClient.post<boolean>(this.wwwPath + "/" + route,
+    return this.httpClient.post<boolean>(
+      this.wwwPath + "/" + route,
       JSON.stringify(addressDto),
       {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      });
-    }
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
 
-    public removeFlat(addressDto: AddressFlatDto): Observable<boolean> {
-      const route = "RemoveFlat";
-      return this.httpClient.put<boolean>(this.wwwPath + "/" + route,
+  public leaveflat(addressDto: AddressFlatDto): Observable<boolean> {
+    const route = "LeaveFlat";
+    return this.httpClient.post<boolean>(
+      this.wwwPath + "/" + route,
       JSON.stringify(addressDto),
       {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      });
-    }
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
 
-    public addTheFlat(addressDto: AddressFlatDto): Observable<AddressFlatDto> {
-      const route = "AddNewFlat";
-      return this.httpClient.post<AddressFlatDto>(this.wwwPath + "/" + route,
+  public removeFlat(addressDto: AddressFlatDto): Observable<boolean> {
+    const route = "RemoveFlat";
+    return this.httpClient.put<boolean>(
+      this.wwwPath + "/" + route,
       JSON.stringify(addressDto),
       {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      });
-    }
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
 
-    public editTheFlat(addressDto: AddressFlatDto): Observable<AddressFlatDto> {
-      const route = "EditFlat";
-      return this.httpClient.put<AddressFlatDto>(this.wwwPath + "/" + route,
+  public addTheFlat(addressDto: AddressFlatDto): Observable<AddressFlatDto> {
+    const route = "AddNewFlat";
+    return this.httpClient.post<AddressFlatDto>(
+      this.wwwPath + "/" + route,
       JSON.stringify(addressDto),
       {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      });
-    }
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
 
+  public editTheFlat(addressDto: AddressFlatDto): Observable<AddressFlatDto> {
+    const route = "EditFlat";
+    return this.httpClient.put<AddressFlatDto>(
+      this.wwwPath + "/" + route,
+      JSON.stringify(addressDto),
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
 
-    public getAllFlats(loggedUserName: string): Observable<AddressFlatDto[]> {
-      const route =  "GetUserFlat";
-      const paramsAsObj: Object = { loggedUserName };
+  public getAllFlats(loggedUserName: string): Observable<AddressFlatDto[]> {
+    const route = "GetUserFlat";
+    const paramsAsObj: Object = { loggedUserName };
 
-      return this.httpClient.get<AddressFlatDto[]>(this.wwwPath + "/" + route, {
-        params: <any>paramsAsObj
-      });
-    }
+    return this.httpClient.get<AddressFlatDto[]>(this.wwwPath + "/" + route, {
+      params: <any>paramsAsObj,
+    });
+  }
 }

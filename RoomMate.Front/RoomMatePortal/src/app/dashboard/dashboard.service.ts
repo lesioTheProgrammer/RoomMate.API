@@ -37,4 +37,9 @@ export class DashboardService extends RequestHelperService {
     return this.createPutRequest(route, housework).pipe(map(data => <HouseworkDto> data));
   }
 
+  public removeHouseWork(housework: HouseworkDto): Observable<boolean>{
+    const route = "RemoveHouseWork";
+    return this.createPutRequest<boolean>(route, housework).pipe(map(data => <boolean>data));
+  }
+
 }
