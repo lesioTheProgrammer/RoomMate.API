@@ -65,5 +65,10 @@ export class HouseworkComponent implements OnInit {
         houseworkDto: houseworkDto
       }
     });
+    debugger;
+    dialogRef.afterClosed().subscribe(result => {
+      console.log("Closed after subscribe")
+      let xd = result;
+    })
   }
 }

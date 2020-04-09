@@ -172,14 +172,28 @@ select * from WorkPrices
 
 select * from WorkType
 
+select wp.Prices from WorkPrices as wp 
+left join Houseworks as hw on
+wp.Id = hw.WorkPriceId
+
+-- query to update prices depending on hw
+-- have to check if hw has appropierate id first
+update WorkPrices set Prices = 1100 where WorkPrices.Id = (select hw.WorkPriceId  from Houseworks as hw where hw.Id = 14)
+
 
 select a.Street, f.Id from Flats as f 
 left join Addresses as a on a.Id = f.AddressId
 where a.Street = 'Kurt';
 -- fid = 1087
 
-select * from Houseworks
 
 insert into Houseworks (Active, CreatedBy, CreatedDate, Description, FlatId, HouseWorkDate,
 ModificatedBy, ModificatedDate, UserId, WorkPriceId, WorkType) values (1, null, GETDATE(), 'Dodane extra', 1087, GETDATE(), null, GETDATE(), 40, null, 1);
+
+select * from Houseworks
+
+delete Houseworks from Houseworks where Houseworks.Id > 8;
+
+
+CURRENT_TIMESTAMP  
 
