@@ -73,6 +73,7 @@ namespace RoomMate.Domain.Services.Implements
             {
                 var newPrice = new WorkPrice();
                 newPrice.Prices = houseWork.Prices.Value;
+                newPrice.CreatedBy = houseWork.UserId;
                 this.workPricekRepository.InsertOrUpdate(newPrice);
                 priceId = newPrice.Id;
             }
@@ -85,7 +86,8 @@ namespace RoomMate.Domain.Services.Implements
                 UserId = houseWork.UserId,
                 WorkType = houseWork.WorkType,
                 WorkPriceId = priceId,
-                ModificatedDate = DateTime.Now
+                ModificatedDate = DateTime.Now,
+                CreatedBy = houseWork.UserId
             };
         }
 
@@ -146,6 +148,7 @@ namespace RoomMate.Domain.Services.Implements
                                 if (houseWorkToEdit.WorkPrice != null && houseWorkToEdit.WorkPrice.Active == true)
                                 {
                                     houseWorkToEdit.WorkPrice.Prices = houseWorkDto.Prices.Value;
+                                    houseWorkToEdit.WorkPrice.ModificatedBy = houseWorkDto.UserId;
                                     this.workPricekRepository.SaveChanges();
                                 }
                                 else
@@ -162,6 +165,7 @@ namespace RoomMate.Domain.Services.Implements
                         houseWorkToEdit.HouseWorkDate = houseWorkDto.HouseWorkDate;
                         houseWorkToEdit.UserId = houseWorkDto.UserId;
                         houseWorkToEdit.ModificatedDate = DateTime.Now;
+                        houseWorkToEdit.ModificatedBy = houseWorkDto.UserId;
                         this.houseWorkRepository.SaveChanges();
                         return ConverterToDto(houseWorkToEdit);
                     }

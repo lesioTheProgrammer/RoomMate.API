@@ -3,6 +3,7 @@ import { DashboardService } from './../../../dashboard/dashboard.service';
 import { Component, OnInit, Inject, Input, ViewChild, EventEmitter, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { HouseworkComponent } from '../../housework.component';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-housework-modal',
@@ -25,6 +26,7 @@ export class AddHouseworkModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
+
   ngOnInit() {
     if (this.data != null && this.data.flatId != null) { // selected flat
       this.houseworkDto.flatId = this.data.flatID;
@@ -42,13 +44,22 @@ export class AddHouseworkModalComponent implements OnInit {
     this.dialogRef.close();
   }
 
+
+
   addHousework() {
     this.houseworkDto.username = JSON.parse(localStorage.getItem("login"));
     if (this.editActionOn) {
       this.editHousework();
     }
+    debugger;
     if (!this.editActionOn){ // dont enter if edit in progress
       this.houseworkDto.flatId = this.data.flatId;
+
+
+
+
+
+
       this.dashboardService.addHouseWork(this.houseworkDto).subscribe(
       response => {
         if (response) {
