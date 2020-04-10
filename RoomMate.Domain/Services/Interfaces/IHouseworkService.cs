@@ -18,5 +18,9 @@ namespace RoomMate.Domain.Services.Interfaces
         HouseWorkDto ConverterToDto(Housework houseWork);
 
         Housework ConverterToTarget(HouseWorkDto houseWork);
+
+        HouseWorkDto EditHouseWork(HouseWorkDto houseWorkDto);
+
+        bool RemoveHouseWork(HouseWorkDto houseWorkDto);
     }
 }

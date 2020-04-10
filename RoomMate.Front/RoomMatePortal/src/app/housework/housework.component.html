@@ -1,19 +1,82 @@
+<table
+  mat-table
+  [dataSource]="dataSource"
+  matSort
+  multiTemplateDataRows
+  class="mat-elevation-z8"
+  style="position: relative;"
+>
+  <!-- Here theres header -->
+  <ng-container matColumnDef="{{ column[0] }}" *ngFor="let column of multiDim">
+    <th mat-header-cell *matHeaderCellDef  mat-sort-header class="headerName">
+      {{ column[1] }}
+    </th>
+    <!-- Here theres row definition -->
+    <!-- column[0] is first property of multidimArray fex increasingNumber, description etc -->
+    <td mat-cell *matCellDef="let element; let i = dataIndex;">
+      <ng-container *ngIf="column[0] == 'increasingNumber'">
+        {{i+1}}
+      </ng-container>
+      <!-- to throw away date time and save it in nace format -->
+      <ng-container *ngIf="column[0] == 'houseWorkDate'; else notDate">
+        {{element[column[0]] | date: "dd.MM.yyyy"}}
+      </ng-container>
+      <ng-template #notDate>
+        {{ element[column[0]]}}
+      </ng-template>
+    </td>
+  </ng-container>
+  <!-- element is houseworkDto -->
+  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="multiDim.length">
+      <div
+        class="example-element-detail"
+        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
+      >
+        <div class="example-element-description" >
+          <div class="buttonGroup" *ngIf="element.login == loginHWComponent">
+            <div class="divider"></div>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="edit(element)"
+              style="background-color:rgb(13, 206, 100)"
+            >
+              Edit
+            </button>
+            <div class="divider"></div>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="remove(element)"
+              style="background-color:rgba(212, 48, 48, 0.918)"
+            >
+              Remove
+            </button>
+          </div>
+          <div *ngIf="chechModificaitonDate(element.createdDate, element.modificatedDate)">
+            Modification date: {{element.modificatedDate | date: "dd.MM.yyyy HH:mm:ss"}}
+          </div>
+        </div>
+      </div>
+    </td>
+  </ng-container>
 
-  <table class="table table-hover table-responsive-lg">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Kiedy</th>
-        <th>Kto</th>
-        <th>Pomieszczenie</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let work of houseworkList; let i = index" (click)="editHouseWork(work)">
-        <td>{{i +1}}</td>
-        <td>{{work.houseWorkDate | date: 'dd.MM.yyy'}}</td>
-        <td>{{work.username}}</td>
-        <td>{{work.description}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr
+    mat-row
+    *matRowDef="let element; columns: columnsToDisplay"
+    class="example-element-row"
+    [class.example-expanded-row]="expandedElement === element"
+    (click)="expandedElement = expandedElement === element ? null : element"
+  ></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: ['expandedDetail']"
+    class="example-detail-row"
+  ></tr>
+</table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" class="mat-paginator">
+</mat-paginator>

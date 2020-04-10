@@ -17,8 +17,6 @@ import { MyRoomEditComponent } from '../my-room-edit/my-room-edit.component';
   selector: 'app-my-room',
   templateUrl: './my-room.component.html',
   styleUrls: ['./my-room.component.css'],
-
-
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0'})),
@@ -131,7 +129,7 @@ export class MyRoomComponent implements OnInit {
       if (response) {
         this.setFlatId(flatDto.id);
         this.deleteItemFromDataSource(flatDto);
-        this.openSnackBar('You have left the flat', 'Ok');
+        this.openSnackBar('You removed the flat', 'Ok');
       } else {
         this.openSnackBar('Something went wrong', 'Ok');
       }

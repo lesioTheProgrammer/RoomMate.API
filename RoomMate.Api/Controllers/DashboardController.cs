@@ -27,14 +27,38 @@ namespace RoomMate.Api.Controllers
 
         [Route("AddHouseWork")]
         [HttpPost]
-        public IActionResult AddHouseWork([FromBody]HouseWorkDto houseWorkDto)
+        public IActionResult AddHouseWork([FromBody] HouseWorkDto houseWorkDto)
         {
-            ////TODO: How to get logged user 
+            // check validation here
             if (this.houseworkService.AddNewHouseWork(houseWorkDto))
             {
                 return this.Ok(true);
             }
             return this.BadRequest();
+        }
+
+        [Route("EditHouseWork")]
+        [HttpPut]
+        public IActionResult EditHouseWork([FromBody] HouseWorkDto houseWorkDto)
+        {
+            if (houseWorkDto.IsValidId(houseWorkDto.Id))
+            {
+                return this.Ok(houseworkService.EditHouseWork(houseWorkDto));
+            }
+            return this.Ok(new HouseWorkDto());
+
+        }
+
+
+        [Route("RemoveHouseWork")]
+        [HttpPut]
+        public IActionResult RemoveHouseWork([FromBody] HouseWorkDto houseWorkDto)
+        {
+            if (houseWorkDto.IsValidId(houseWorkDto.Id))
+            {
+                return this.Ok(houseworkService.RemoveHouseWork(houseWorkDto));
+            }
+            return this.Ok(false);
         }
     }
 }

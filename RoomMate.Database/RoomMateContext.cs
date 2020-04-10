@@ -7,7 +7,7 @@ namespace RoomMate.Domain
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=localhost;Database=RoomMate;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=DESKTOP-L6PAH58;Database=RoomMate;Trusted_Connection=True;");
         }
 
         public DbSet<Address> Addresses { get; set; }

@@ -70,7 +70,7 @@ export class FlatListComponent implements OnInit {
         this.flatExtraDetails = false;
         this.updateList.emit();
         this.flatDetails = response;
-        this.openSnackBar('You entered the flat', 'Ok');
+        this.openSnackBar('You added the flat', 'Ok');
       }
     });
   }
@@ -89,7 +89,7 @@ export class FlatListComponent implements OnInit {
           if (response) {
             this.joinedFlat = true;
             this.updateList.emit();
-            this.openSnackBar('You have left the flat', 'Ok');
+            this.openSnackBar('You have joined the flat', 'Ok');
           } else {
             this.openSnackBar('Something went wrong', 'Ok');
           }
