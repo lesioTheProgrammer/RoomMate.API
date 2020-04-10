@@ -1,13 +1,14 @@
 <table
   mat-table
   [dataSource]="dataSource"
+  matSort
   multiTemplateDataRows
   class="mat-elevation-z8"
   style="position: relative;"
 >
   <!-- Here theres header -->
   <ng-container matColumnDef="{{ column[0] }}" *ngFor="let column of multiDim">
-    <th mat-header-cell *matHeaderCellDef class="headerName">
+    <th mat-header-cell *matHeaderCellDef  mat-sort-header class="headerName">
       {{ column[1] }}
     </th>
     <!-- Here theres row definition -->

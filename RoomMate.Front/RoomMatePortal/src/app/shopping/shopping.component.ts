@@ -5,6 +5,7 @@ import { WorkTypeEnum } from '../housework/dto/work-type-enum.enum';
 import { AddHouseworkModalComponent } from '../housework/modal/add-housework-modal/add-housework-modal.component';
 import { MatDialog, MatPaginator, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { trigger, style, transition, state, animate } from '@angular/animations';
+import {MatSort} from '@angular/material/sort';
 
 @Component({
   selector: 'app-shopping',
@@ -23,6 +24,8 @@ export class ShoppingComponent implements OnInit {
   public houseworkList: HouseworkDto[] = new Array<HouseworkDto>();
   // expanded table
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   dataSource: MatTableDataSource<HouseworkDto>;
   expandedElement: HouseworkDto | null;
   increasingNumber = 0; // added to manage index in the table
@@ -54,6 +57,7 @@ export class ShoppingComponent implements OnInit {
         // new table
         this.dataSource.data = response;
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       });
     }
   }
