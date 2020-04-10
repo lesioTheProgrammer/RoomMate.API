@@ -33,8 +33,8 @@
         class="example-element-detail"
         [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
       >
-        <div class="example-element-description" *ngIf="element.login == loginHWComponent">
-          <div class="buttonGroup">
+        <div class="example-element-description">
+          <div class="buttonGroup"  *ngIf="element.login == loginHWComponent">
             <div class="divider"></div>
             <button
               mat-raised-button
@@ -53,9 +53,9 @@
             >
               Remove
             </button>
-            <div *ngIf="chechModificaitonDate(element.createdDate, element.modificatedDate)">
-              Modification date: {{element.modificatedDate | date: "dd.MM.yyyy HH:mm:ss"}}
-            </div>
+          </div>
+          <div *ngIf="chechModificaitonDate(element.createdDate, element.modificatedDate)">
+            Modification date: {{element.modificatedDate | date: "dd.MM.yyyy HH:mm:ss"}}
           </div>
         </div>
       </div>
