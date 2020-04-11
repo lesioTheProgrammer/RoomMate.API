@@ -6,22 +6,76 @@
     </div>
   </div>
 
-<!-- Here theres add html -->
+  <!-- Here theres add html -->
 
-<div *ngIf="!houseworkDto.id">
-  <div class="mb-3">
-    <label for="workType">Typ akcji</label>
-    <select
-      class="form-control"
-      id="workType"
-      [(ngModel)]="houseworkDto.workType"
-    >
-      <option value="0">-</option>
-      <option value="1">Sprzątanie</option>
-      <option value="2">Zakupy</option>
-    </select>
+  <div *ngIf="!houseworkDto.id">
+    <div class="mb-3">
+      <label for="workType">Typ akcji</label>
+      <select
+        class="form-control"
+        id="workType"
+        [(ngModel)]="houseworkDto.workType"
+      >
+        <option value="0">-</option>
+        <option value="1">Sprzątanie</option>
+        <option value="2">Zakupy</option>
+      </select>
+    </div>
+    <div *ngIf="houseworkDto.workType != 0">
+      <div class="mb-3">
+        <label for="houseworkDate">Kiedy</label>
+        <input
+          type="date"
+          id="houseworkDate"
+          class="form-control"
+          [ngModel]="houseworkDto.houseWorkDate | date: 'yyyy-MM-dd'"
+          (ngModelChange)="houseworkDto.houseWorkDate = $event"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="description">Opis</label>
+        <input
+          type="text"
+          id="description"
+          class="form-control"
+          required
+          minlength="2"
+          [(ngModel)]="houseworkDto.description"
+          #description="ngModel"
+          (change) = "checkFormErrors(description?.valid)"
+        />
+        <div
+        *ngIf="
+          description.invalid && (description.dirty || description.touched)
+        "
+        class="alert alert-danger"
+      >
+        <div *ngIf="description.errors.required">
+          Description is required.
+        </div>
+        <div *ngIf="description.errors.minlength">
+          Description must be at least 2 characters long
+        </div>
+        {{checkFormErrors(description?.valid)}}
+      </div>
+      </div>
+
+
+      <div class="mb-3" *ngIf="houseworkDto.workType == 2">
+        <label for="prices">Koszty</label>
+        <input
+          type="number"
+          id="prices"
+          class="form-control"
+          [(ngModel)]="houseworkDto.prices"
+        />
+      </div>
+    </div>
   </div>
-  <div *ngIf="houseworkDto.workType != 0">
+
+  <!-- Here theres edit html  -->
+<!--
+  <div *ngIf="editActionOn">
     <div class="mb-3">
       <label for="houseworkDate">Kiedy</label>
       <input
@@ -32,6 +86,7 @@
         (ngModelChange)="houseworkDto.houseWorkDate = $event"
       />
     </div>
+
     <div class="mb-3">
       <label for="description">Opis</label>
       <input
@@ -41,6 +96,7 @@
         [(ngModel)]="houseworkDto.description"
       />
     </div>
+
     <div class="mb-3" *ngIf="houseworkDto.workType == 2">
       <label for="prices">Koszty</label>
       <input
@@ -50,56 +106,19 @@
         [(ngModel)]="houseworkDto.prices"
       />
     </div>
+  </div> -->
+
+  <div mat-dialog-actions style="float: right;">
+    <button mat-button (click)="closeModal()">Cancel</button>
+    <button
+      mat-button
+      cdkFocusInitial
+      [disabled]="(houseworkDto.workType == 0)
+      || disableButton"
+      (click)="addHousework()"
+      >
+      <!-- disableButton on true to block the click but its not changning its status-->
+      Save
+    </button>
   </div>
 </div>
-
-
-<!-- Here theres edit html  -->
-
-<div *ngIf="editActionOn">
-
-  <div class="mb-3">
-    <label for="houseworkDate">Kiedy</label>
-    <input
-      type="date"
-      id="houseworkDate"
-      class="form-control"
-      [ngModel]="houseworkDto.houseWorkDate | date: 'yyyy-MM-dd'"
-      (ngModelChange)="houseworkDto.houseWorkDate = $event"
-    />
-  </div>
-
-  <div class="mb-3">
-    <label for="description">Opis</label>
-    <input
-      type="text"
-      id="description"
-      class="form-control"
-      [(ngModel)]="houseworkDto.description"
-    />
-  </div>
-
-
-  <div class="mb-3" *ngIf="houseworkDto.workType == 2">
-    <label for="prices">Koszty</label>
-    <input
-      type="number"
-      id="prices"
-      class="form-control"
-      [(ngModel)]="houseworkDto.prices"
-    />
-  </div>
-
-
-</div>
-
-
-<div mat-dialog-actions style="float:right">
-  <button mat-button (click)="closeModal()">Cancel</button>
-  <button mat-button cdkFocusInitial (click)="addHousework()">Save</button>
-</div>
-
-
-
-</div>
-

@@ -1,6 +1,6 @@
 import { HouseworkDto } from './../../dto/housework-dto';
 import { DashboardService } from './../../../dashboard/dashboard.service';
-import { Component, OnInit, Inject, Input, ViewChild, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Inject, Input, ViewChild, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { HouseworkComponent } from '../../housework.component';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -8,7 +8,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-add-housework-modal',
   templateUrl: './add-housework-modal.component.html',
-  styleUrls: ['./add-housework-modal.component.css']
+  styleUrls: ['./add-housework-modal.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddHouseworkModalComponent implements OnInit {
 
@@ -20,6 +21,7 @@ export class AddHouseworkModalComponent implements OnInit {
   errorShow = false;
   dataLoaded = false;
   editActionOn = false; // if editaction is on
+  disableButton = false;
   constructor(
     public dashboardService: DashboardService,
     public dialogRef: MatDialogRef<AddHouseworkModalComponent>,
@@ -38,11 +40,23 @@ export class AddHouseworkModalComponent implements OnInit {
     this.dataLoaded = true;
   }
 
-
-
   closeModal(): void {
     this.dialogRef.close();
   }
+
+
+  checkFormErrors(isValid: boolean) {
+    debugger;
+    if (!isValid) {
+      this.disableButton = !isValid;
+    }
+    else {
+      this.disableButton = isValid;
+    }
+
+  }
+
+
 
 
 
@@ -51,15 +65,8 @@ export class AddHouseworkModalComponent implements OnInit {
     if (this.editActionOn) {
       this.editHousework();
     }
-    debugger;
     if (!this.editActionOn){ // dont enter if edit in progress
       this.houseworkDto.flatId = this.data.flatId;
-
-
-
-
-
-
       this.dashboardService.addHouseWork(this.houseworkDto).subscribe(
       response => {
         if (response) {
@@ -95,5 +102,4 @@ export class AddHouseworkModalComponent implements OnInit {
       )
     }
   }
-
 }
