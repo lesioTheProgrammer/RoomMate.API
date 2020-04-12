@@ -56,7 +56,7 @@
         <div *ngIf="description.errors.minlength">
           Description must be at least 2 characters long
         </div>
-        {{checkFormErrors(description?.valid)}}
+        <!-- {{checkFormErrors(description?.valid)}} -->
       </div>
       </div>
 
@@ -113,8 +113,8 @@
     <button
       mat-button
       cdkFocusInitial
-      [disabled]="(houseworkDto.workType == 0)
-      || disableButton"
+      [disabled]="((houseworkDto.workType == 0)
+      || disableButton)"
       (click)="addHousework()"
       >
       <!-- disableButton on true to block the click but its not changning its status-->

@@ -21,7 +21,7 @@ export class AddHouseworkModalComponent implements OnInit {
   errorShow = false;
   dataLoaded = false;
   editActionOn = false; // if editaction is on
-  disableButton = false;
+  disableButton = true;
   constructor(
     public dashboardService: DashboardService,
     public dialogRef: MatDialogRef<AddHouseworkModalComponent>,
@@ -46,12 +46,11 @@ export class AddHouseworkModalComponent implements OnInit {
 
 
   checkFormErrors(isValid: boolean) {
-    debugger;
-    if (!isValid) {
-      this.disableButton = !isValid;
+    if (isValid){
+      this.disableButton = false;
     }
     else {
-      this.disableButton = !isValid;
+      this.disableButton = true;
     }
 
   }
