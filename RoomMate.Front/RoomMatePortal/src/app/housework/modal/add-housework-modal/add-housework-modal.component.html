@@ -15,6 +15,7 @@
         class="form-control"
         id="workType"
         [(ngModel)]="houseworkDto.workType"
+        (ngModelChange)= onSelectedOption()
       >
         <option value="0">-</option>
         <option value="1">Sprzątanie</option>
@@ -42,24 +43,22 @@
           minlength="2"
           [(ngModel)]="houseworkDto.description"
           #description="ngModel"
-          (change) = "checkFormErrors(description?.valid)"
+          (change)="checkFormErrors(description?.valid, prices?.valid)"
         />
         <div
-        *ngIf="
-          description.invalid && (description.dirty || description.touched)
-        "
-        class="alert alert-danger"
-      >
-        <div *ngIf="description.errors.required">
-          Description is required.
+          *ngIf="
+            description.invalid && (description.dirty || description.touched)
+          "
+          class="alert alert-danger"
+        >
+          <div *ngIf="description.errors.required">
+            Description is required.
+          </div>
+          <div *ngIf="description.errors.minlength">
+            Description must be at least 2 characters long
+          </div>
         </div>
-        <div *ngIf="description.errors.minlength">
-          Description must be at least 2 characters long
-        </div>
-        <!-- {{checkFormErrors(description?.valid)}} -->
       </div>
-      </div>
-
 
       <div class="mb-3" *ngIf="houseworkDto.workType == 2">
         <label for="prices">Koszty</label>
@@ -68,13 +67,29 @@
           id="prices"
           class="form-control"
           [(ngModel)]="houseworkDto.prices"
+          #prices="ngModel"
+          required
+          [min]="0"
+          (change)="checkFormErrors(description?.valid, prices?.valid)"
         />
+
+        <div
+          *ngIf="prices.invalid && (prices.dirty || prices.touched)"
+          class="alert alert-danger"
+        >
+          <div *ngIf="prices.errors.required">
+            Price is required.
+          </div>
+          <div *ngIf="prices.errors?.min">
+            Price must be greater than 0
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Here theres edit html  -->
-<!--
+  <!--
   <div *ngIf="editActionOn">
     <div class="mb-3">
       <label for="houseworkDate">Kiedy</label>
@@ -113,11 +128,9 @@
     <button
       mat-button
       cdkFocusInitial
-      [disabled]="((houseworkDto.workType == 0)
-      || disableButton)"
+      [disabled]="houseworkDto.workType == 0 || disableButton"
       (click)="addHousework()"
-      >
-      <!-- disableButton on true to block the click but its not changning its status-->
+    >
       Save
     </button>
   </div>

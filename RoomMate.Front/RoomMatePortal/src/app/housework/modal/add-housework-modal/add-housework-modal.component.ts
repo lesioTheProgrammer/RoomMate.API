@@ -2,8 +2,7 @@ import { HouseworkDto } from './../../dto/housework-dto';
 import { DashboardService } from './../../../dashboard/dashboard.service';
 import { Component, OnInit, Inject, Input, ViewChild, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { HouseworkComponent } from '../../housework.component';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { WorkTypeEnum } from '../../dto/work-type-enum.enum';
 
 @Component({
   selector: 'app-add-housework-modal',
@@ -44,20 +43,21 @@ export class AddHouseworkModalComponent implements OnInit {
     this.dialogRef.close();
   }
 
-
-  checkFormErrors(isValid: boolean) {
-    if (isValid){
-      this.disableButton = false;
-    }
-    else {
+  onSelectedOption(): void {
+    if (this.houseworkDto.workType == 2 ) {
       this.disableButton = true;
     }
-
   }
 
-
-
-
+  checkFormErrors(isValidDescription: boolean, isPriceValid: boolean) {
+    debugger;
+    if (isValidDescription  && this.houseworkDto.workType == 1 || (isValidDescription && isPriceValid)){
+      this.disableButton = false;
+    }
+    else  {
+      this.disableButton = true;
+    }
+  }
 
   addHousework() {
     this.houseworkDto.username = JSON.parse(localStorage.getItem("login"));
