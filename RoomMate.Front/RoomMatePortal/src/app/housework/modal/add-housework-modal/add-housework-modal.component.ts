@@ -51,7 +51,7 @@ export class AddHouseworkModalComponent implements OnInit {
       this.disableButton = !isValid;
     }
     else {
-      this.disableButton = isValid;
+      this.disableButton = !isValid;
     }
 
   }
