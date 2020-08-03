@@ -32,6 +32,7 @@ import { RemoveAccountComponent } from './user-profile/remove-account/remove-acc
 import { AddressComponent } from './address/address.component';
 import { FlatListComponent } from './flat-list/flat-list.component';
 import { MyRoomEditComponent } from './my-room-edit/my-room-edit.component';
+import { CustomFormsModule } from 'ng2-validation'
 
 const routes: Routes =  [
   { path: '', component: MyRoomComponent},
@@ -86,7 +87,8 @@ export function tokenGetter() {
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatTableModule,
-    MatToolbarModule
+    MatToolbarModule,
+    CustomFormsModule
   ],
   entryComponents: [AddHouseworkModalComponent, LoginComponent, RegisterComponent, RemoveAccountComponent,
      FlatListComponent, MyRoomEditComponent],
